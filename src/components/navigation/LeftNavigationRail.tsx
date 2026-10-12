@@ -153,8 +153,8 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
           onClick={() => handleSelect('home')}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-fire-amber to-purple-600 p-0.5 shadow-lg shadow-fire-amber/20 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-cinematic-900 rounded-[14px] flex items-center justify-center">
+          <div className="w-11 h-11 rounded-none bg-gradient-to-tr from-fire-amber to-purple-600 p-0.5 shadow-lg shadow-fire-amber/20 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+            <div className="w-full h-full bg-cinematic-900 rounded-none flex items-center justify-center">
               <Sparkles className="w-6 h-6 text-fire-amber" />
             </div>
           </div>

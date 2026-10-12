@@ -96,7 +96,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
       )}
 
       {/* Fire TV Physical Remote Chassis */}
-      <div className="w-64 rounded-[36px] bg-gradient-to-b from-[#181d29] via-[#10141f] to-[#0c0f17] p-5 border-2 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.9)] flex flex-col items-center select-none backdrop-blur-md">
+      <div className="w-64 rounded-none bg-gradient-to-b from-[#181d29] via-[#10141f] to-[#0c0f17] p-5 border-2 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.9)] flex flex-col items-center select-none backdrop-blur-md">
         
         {/* Remote Header / Brand */}
         <div className="w-full flex items-center justify-between mb-4 px-2">

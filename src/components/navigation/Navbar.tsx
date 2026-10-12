@@ -106,8 +106,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Brand Logo & Fire TV Badge */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => onScreenChange('home')}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-fire-amber to-neon-purple p-0.5 shadow-lg shadow-fire-amber/20 flex items-center justify-center">
-              <div className="w-full h-full bg-[#0d111b] rounded-[10px] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-none bg-gradient-to-tr from-fire-amber to-neon-purple p-0.5 shadow-lg shadow-fire-amber/20 flex items-center justify-center">
+              <div className="w-full h-full bg-[#0d111b] rounded-none flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-fire-amber" />
               </div>
             </div>

@@ -7,6 +7,13 @@
     color-scheme: dark;
   }
 
+  /* Perfect Rectangle Design: All boxes, cards, modals, buttons, badges, inputs, posters, and containers are perfect rectangles */
+  *,
+  *::before,
+  *::after {
+    border-radius: 0px !important;
+  }
+
   body {
     @apply bg-cinematic-950 text-slate-100 font-sans antialiased selection:bg-fire-amber selection:text-black overflow-x-hidden;
     min-height: 100vh;

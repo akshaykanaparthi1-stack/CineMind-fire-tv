@@ -316,8 +316,8 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
       {/* Feature Header with Step Indicator */}
       <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-800 flex-wrap gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-fire-amber p-0.5 shadow-xl shadow-purple-900/30 flex-shrink-0">
-            <div className="w-full h-full bg-cinematic-900 rounded-[14px] flex items-center justify-center">
+          <div className="w-12 h-12 rounded-none bg-gradient-to-tr from-purple-600 via-indigo-600 to-fire-amber p-0.5 shadow-xl shadow-purple-900/30 flex-shrink-0">
+            <div className="w-full h-full bg-cinematic-900 rounded-none flex items-center justify-center">
               <Vote className="w-6 h-6 text-fire-amber" />
             </div>
           </div>
