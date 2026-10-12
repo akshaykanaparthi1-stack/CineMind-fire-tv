@@ -332,7 +332,7 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
               <span className="text-base lg:text-lg font-black tracking-tight font-display text-white">
                 Cine<span className="text-fire-amber">Mind</span>
               </span>
-              <span className="flex items-center gap-1 text-[9px] font-bold tracking-wider uppercase px-1.5 py-0.5 bg-blue-600/25 text-cyan-300 border border-blue-500/40 rounded-none">
+              <span className="flex items-center gap-1 text-[9px] font-bold tracking-wider uppercase px-1.5 py-0.5 bg-slate-800 text-slate-300 border border-slate-700 rounded-none">
                 <Tv className="w-2.5 h-2.5 text-fire-amber" />
                 Fire TV
               </span>
@@ -347,17 +347,17 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
         <div className="relative flex-1 max-w-2xl mx-auto">
           <div
             ref={searchInputFocus.ref as any}
-            className={`relative flex items-center w-full bg-cinematic-900/90 border transition-all rounded-none ${
+            className={`relative flex items-center w-full bg-cinematic-900 border transition-all rounded-none ${
               searchInputFocus.isFocused
-                ? 'border-fire-amber ring-2 ring-fire-amber/60 shadow-[0_0_20px_rgba(255,153,0,0.35)]'
+                ? 'border-amber-500 ring-2 ring-amber-500/50'
                 : isDropdownOpen
-                ? 'border-cyan-500/70 ring-1 ring-cyan-500/30 shadow-lg'
-                : 'border-slate-700/80 hover:border-slate-600'
+                ? 'border-neutral-500 ring-1 ring-neutral-500/30'
+                : 'border-neutral-700 hover:border-neutral-600'
             }`}
           >
             {/* Search Icon */}
             <div className="pl-4 pr-2 text-slate-400 flex items-center pointer-events-none">
-              <Search className={`w-4 h-4 ${query ? 'text-fire-amber' : 'text-slate-400'}`} />
+              <Search className={`w-4 h-4 ${query ? 'text-amber-400' : 'text-slate-400'}`} />
             </div>
 
             {/* Input Field */}
@@ -399,14 +399,14 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
               onClick={handleVoiceSearch}
               className={`flex items-center gap-1 px-2.5 py-1.5 mr-2 text-xs font-semibold rounded-none transition-all ${
                 isVoiceListening
-                  ? 'bg-cyan-500 text-black animate-pulse shadow-md shadow-cyan-500/50'
+                  ? 'bg-sky-500 text-white animate-pulse'
                   : voiceBtnFocus.isFocused
-                  ? 'bg-cyan-600 text-white ring-2 ring-cyan-400'
-                  : 'bg-slate-800/80 hover:bg-slate-700 text-cyan-300 border border-cyan-800/50'
+                  ? 'bg-sky-600 text-white ring-2 ring-white'
+                  : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700'
               }`}
-              title="Simulate Fire TV Alexa Voice Search"
+              title="Fire TV Alexa Voice Search"
             >
-              <Mic className="w-3.5 h-3.5 text-cyan-400" />
+              <Mic className="w-3.5 h-3.5 text-sky-400" />
               <span className="hidden md:inline text-[10px] uppercase font-bold tracking-wider">
                 {isVoiceListening ? 'Listening...' : 'Alexa'}
               </span>
@@ -494,7 +494,7 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
                               <Clock className="w-3 h-3" />
                               {movie.runtimeMinutes}m
                             </span>
-                            <span className="text-cyan-400 hidden sm:inline">
+                            <span className="text-neutral-400 hidden sm:inline">
                               {movie.genres[0]}
                             </span>
                           </div>
@@ -502,8 +502,8 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
 
                         {/* AI Match Badge */}
                         <div className="flex flex-col items-end flex-shrink-0">
-                          <div className="flex items-center gap-1 px-2 py-0.5 bg-cinematic-950 border border-fire-amber/40 text-fire-amber text-[11px] font-bold rounded-none">
-                            <Sparkles className="w-3 h-3 text-fire-amber" />
+                          <div className="flex items-center gap-1 px-2 py-0.5 bg-neutral-950 border border-neutral-700 text-amber-400 text-[11px] font-bold rounded-none">
+                            <Sparkles className="w-3 h-3 text-amber-400" />
                             <span>{movie.aiInsights.matchScore}%</span>
                           </div>
                           <span className="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">
@@ -523,17 +523,17 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
               {/* Action Card: Search with CineMind Assistant */}
               <div
                 onClick={() => handleSubmitSearch(query || 'Find a funny family movie under 100 minutes')}
-                className="p-3 bg-gradient-to-r from-purple-950/60 via-cinematic-900 to-indigo-950/60 border-t border-purple-500/30 hover:border-fire-amber cursor-pointer flex items-center justify-between group transition-all"
+                className="p-3 bg-neutral-900 border-t border-neutral-800 hover:bg-neutral-850 cursor-pointer flex items-center justify-between group transition-all"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-fire-amber rounded-none flex-shrink-0 group-hover:scale-105 transition-transform">
-                    <Sparkles className="w-4 h-4 text-fire-amber" />
+                  <div className="w-8 h-8 bg-neutral-800 border border-neutral-700 flex items-center justify-center text-amber-400 rounded-none flex-shrink-0 group-hover:scale-105 transition-transform">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
                   </div>
                   <div>
                     <span className="text-xs font-bold text-white flex items-center gap-1.5">
                       <span>Ask CineMind Assistant</span>
                       {query.trim() && (
-                        <span className="text-cyan-300 font-normal truncate max-w-xs">
+                        <span className="text-amber-400 font-normal truncate max-w-xs">
                           "{query.trim()}"
                         </span>
                       )}
@@ -543,7 +543,7 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-fire-amber text-xs font-bold px-2.5 py-1 bg-cinematic-950 border border-fire-amber/40 rounded-none group-hover:bg-fire-amber group-hover:text-black transition-colors">
+                <div className="flex items-center gap-1 text-amber-400 text-xs font-bold px-2.5 py-1 bg-neutral-950 border border-neutral-700 rounded-none group-hover:bg-amber-500 group-hover:text-black transition-colors">
                   <span>Explore</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>
@@ -551,9 +551,9 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
 
               {/* Quick Discovery Pills (when query is short or empty) */}
               {!query.trim() && (
-                <div className="p-3 bg-cinematic-950/70 border-t border-slate-800">
+                <div className="p-3 bg-cinematic-950 border-t border-neutral-800">
                   <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
-                    <TrendingUp className="w-3 h-3 text-cyan-400" />
+                    <TrendingUp className="w-3 h-3 text-amber-400" />
                     <span>Quick Discovery Ideas:</span>
                   </div>
                   <div className="flex flex-wrap gap-1.5">

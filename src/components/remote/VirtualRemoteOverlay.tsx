@@ -140,17 +140,17 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
     return (
       <button
         onClick={() => setIsVirtualRemoteOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 remote-pill bg-gradient-to-r from-cinematic-800 to-cinematic-900 border border-fire-amber/40 text-slate-200 hover:text-white shadow-2xl hover:shadow-fire-amber/30 transition-all hover:scale-105 group"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 remote-pill bg-neutral-900 border border-neutral-700 text-slate-200 hover:text-white shadow-xl hover:border-neutral-500 transition-all hover:scale-105 group"
         title="Open Fire TV Remote with Rounded Curves (Press R)"
       >
         <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full remote-circle bg-fire-amber opacity-75"></span>
-          <span className="relative inline-flex remote-circle h-3 w-3 bg-fire-amber"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full remote-circle bg-amber-400 opacity-75"></span>
+          <span className="relative inline-flex remote-circle h-3 w-3 bg-amber-400"></span>
         </span>
         <div className="flex flex-col text-left">
           <span className="text-xs font-semibold text-slate-100 flex items-center gap-1.5">
             Fire TV Remote
-            <span className="px-1.5 py-0.2 bg-fire-amber/20 text-fire-amber text-[10px] remote-btn border border-fire-amber/40 font-mono">
+            <span className="px-1.5 py-0.2 bg-neutral-800 text-amber-400 text-[10px] remote-btn border border-neutral-700 font-mono">
               [R]
             </span>
           </span>
@@ -165,16 +165,16 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
       
       {/* Real Audio-to-Text Voice HUD when active */}
       {isAudioListening && (
-        <div className="mb-4 mr-1 p-5 w-84 max-w-sm remote-hud glass-panel-elevated border-2 border-cyan-400 shadow-[0_15px_50px_rgba(6,182,212,0.4)] animate-fade-in text-left">
+        <div className="mb-4 mr-1 p-5 w-84 max-w-sm remote-hud bg-neutral-900 border border-neutral-700 shadow-2xl animate-fade-in text-left">
           
           {/* Header */}
           <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-neutral-200 text-xs font-bold uppercase tracking-wider">
               <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full remote-circle bg-cyan-400 opacity-75"></span>
-                <span className="relative inline-flex remote-circle h-3 w-3 bg-cyan-400"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full remote-circle bg-sky-400 opacity-75"></span>
+                <span className="relative inline-flex remote-circle h-3 w-3 bg-sky-400"></span>
               </span>
-              <span>Alexa Audio-to-Text Active</span>
+              <span>Alexa Voice Audio Active</span>
             </div>
             <button
               onClick={handleStopVoice}
@@ -187,11 +187,11 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
 
           {/* Real-time Status / Sound Wave Visualizer */}
           <div className="flex items-center gap-2 my-2 text-xs text-slate-300">
-            <div className="flex items-center gap-1 h-5 px-1 bg-cyan-950/60 border border-cyan-800/60 remote-pill">
-              <span className="w-1 h-2.5 bg-cyan-400 animate-pulse remote-pill" style={{ animationDelay: '0ms' }} />
-              <span className="w-1 h-4 bg-cyan-300 animate-pulse remote-pill" style={{ animationDelay: '150ms' }} />
-              <span className="w-1 h-3 bg-cyan-400 animate-pulse remote-pill" style={{ animationDelay: '300ms' }} />
-              <span className="w-1 h-1.5 bg-cyan-500 animate-pulse remote-pill" style={{ animationDelay: '75ms' }} />
+            <div className="flex items-center gap-1 h-5 px-1 bg-neutral-800 border border-neutral-700 remote-pill">
+              <span className="w-1 h-2.5 bg-sky-400 animate-pulse remote-pill" style={{ animationDelay: '0ms' }} />
+              <span className="w-1 h-4 bg-sky-300 animate-pulse remote-pill" style={{ animationDelay: '150ms' }} />
+              <span className="w-1 h-3 bg-sky-400 animate-pulse remote-pill" style={{ animationDelay: '300ms' }} />
+              <span className="w-1 h-1.5 bg-sky-400 animate-pulse remote-pill" style={{ animationDelay: '75ms' }} />
             </div>
             <span className="text-[11px] font-medium text-slate-400 line-clamp-1">
               {voiceStatusText}
@@ -199,14 +199,14 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
           </div>
 
           {/* Live Audio Transcript Box */}
-          <div className="p-3 my-2 bg-slate-900/90 border border-slate-700/80 remote-btn min-h-[52px] flex items-center">
+          <div className="p-3 my-2 bg-neutral-950 border border-neutral-800 remote-btn min-h-[52px] flex items-center">
             {voiceTranscript ? (
               <p className="text-sm font-semibold text-white tracking-wide">
                 "{voiceTranscript}"
               </p>
             ) : (
               <p className="text-xs text-slate-400 italic flex items-center gap-1.5">
-                <Radio className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+                <Radio className="w-3.5 h-3.5 text-sky-400 animate-spin" />
                 Listening to your microphone... Say a movie, mood, or actor
               </p>
             )}
@@ -220,7 +220,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
           )}
 
           {/* Quick Fallback Prompts */}
-          <div className="mt-2 pt-2 border-t border-slate-800/80">
+          <div className="mt-2 pt-2 border-t border-neutral-800">
             <span className="text-[9px] uppercase tracking-wider text-slate-400 block mb-1.5 font-bold">
               Or pick an instant query:
             </span>
@@ -229,7 +229,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
                 <button
                   key={i}
                   onClick={() => handlePickSamplePrompt(prompt)}
-                  className="px-2 py-1 text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 remote-btn hover:border-cyan-400 transition-colors"
+                  className="px-2 py-1 text-[10px] bg-neutral-800 hover:bg-neutral-750 text-slate-200 border border-neutral-700 remote-btn hover:border-neutral-500 transition-colors"
                 >
                   {prompt}
                 </button>
@@ -241,19 +241,19 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
       )}
 
       {/* Fire TV Physical Remote Chassis with Authentic Rounded Curves */}
-      <div className="w-68 remote-curved bg-gradient-to-b from-[#181d29] via-[#10141f] to-[#0c0f17] p-5 border-2 border-slate-700/70 shadow-[0_20px_60px_rgba(0,0,0,0.95)] flex flex-col items-center select-none backdrop-blur-xl">
+      <div className="w-68 remote-curved bg-[#141518] p-5 border border-neutral-700 shadow-2xl flex flex-col items-center select-none backdrop-blur-xl">
         
         {/* Remote Header / Brand */}
         <div className="w-full flex items-center justify-between mb-4 px-2">
           <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 remote-circle bg-fire-amber animate-pulse" />
+            <div className="w-2 h-2 remote-circle bg-amber-400" />
             <span className="text-[11px] font-bold tracking-widest uppercase text-slate-300 font-display">
-              Fire TV <span className="text-fire-amber font-mono text-[9px] px-1 bg-fire-amber/20 remote-btn">REMOTE</span>
+              Fire TV <span className="text-amber-400 font-mono text-[9px] px-1 bg-neutral-800 border border-neutral-700 remote-btn">REMOTE</span>
             </span>
           </div>
           <button
             onClick={() => setIsVirtualRemoteOpen(false)}
-            className="p-1 remote-circle text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1 remote-circle text-slate-400 hover:text-white hover:bg-neutral-800 transition-colors"
             title="Close Remote"
           >
             <X className="w-4 h-4" />
@@ -266,21 +266,21 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
             onClick={handleStartVoice}
             className={`flex items-center justify-center w-14 h-14 remote-circle transition-all active:scale-95 group relative ${
               isAudioListening
-                ? 'bg-gradient-to-tr from-cyan-400 to-blue-500 text-black shadow-xl shadow-cyan-400/50 ring-4 ring-cyan-400/50 scale-105'
-                : 'bg-gradient-to-tr from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/30 hover:scale-105'
+                ? 'bg-sky-500 text-white ring-4 ring-sky-500/40 scale-105'
+                : 'bg-[#00a8e1] hover:bg-[#0094c7] text-white shadow-md hover:scale-105'
             }`}
             title="Alexa Voice Search — Audio to Text"
           >
             <Mic className={`w-7 h-7 transition-transform group-hover:scale-110 ${isAudioListening ? 'animate-pulse' : ''}`} />
           </button>
-          <span className="text-[9px] font-bold text-cyan-400 tracking-wider uppercase mt-1 flex items-center gap-1">
+          <span className="text-[9px] font-bold text-sky-400 tracking-wider uppercase mt-1 flex items-center gap-1">
             <Sparkles className="w-2.5 h-2.5" />
             {isAudioListening ? 'Listening...' : 'Alexa Voice'}
           </span>
         </div>
 
         {/* Circular D-Pad Controller with Ergonomic Rounded Curves */}
-        <div className="relative w-44 h-44 remote-dpad bg-gradient-to-b from-[#22293b] to-[#161a26] border-2 border-slate-600/60 shadow-inner flex items-center justify-center my-2">
+        <div className="relative w-44 h-44 remote-dpad bg-[#1c1d22] border border-neutral-700 shadow-inner flex items-center justify-center my-2">
           
           {/* UP Button */}
           <button
@@ -321,7 +321,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
           {/* CENTER SELECT / OK BUTTON */}
           <button
             onClick={triggerSelect}
-            className="w-[74px] h-[74px] remote-circle bg-gradient-to-b from-[#2e374f] to-[#1a2030] hover:from-fire-amber hover:to-fire-orange text-slate-200 hover:text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center shadow-lg transition-all active:scale-95 border border-slate-500/50"
+            className="w-[74px] h-[74px] remote-circle bg-[#24262e] hover:bg-[#30333c] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center shadow-md transition-all active:scale-95 border border-neutral-600/40"
             title="Select / OK"
           >
             OK
@@ -332,7 +332,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
         <div className="w-full grid grid-cols-3 gap-2.5 mt-5 px-1">
           <button
             onClick={triggerBack}
-            className="flex flex-col items-center justify-center h-12 remote-btn bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95 border border-slate-700/50"
+            className="flex flex-col items-center justify-center h-12 remote-btn bg-[#1b1c22] hover:bg-[#252730] text-slate-300 hover:text-white transition-all active:scale-95 border border-neutral-700/60"
             title="Back (Esc / Backspace)"
           >
             <CornerDownLeft className="w-4 h-4" />
@@ -344,7 +344,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
               playFeedbackSound('select');
               onHomePress();
             }}
-            className="flex flex-col items-center justify-center h-12 remote-btn bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95 border border-slate-700/50"
+            className="flex flex-col items-center justify-center h-12 remote-btn bg-[#1b1c22] hover:bg-[#252730] text-slate-300 hover:text-white transition-all active:scale-95 border border-neutral-700/60"
             title="Home"
           >
             <Home className="w-4 h-4" />
@@ -353,7 +353,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
 
           <button
             onClick={triggerSelect}
-            className="flex flex-col items-center justify-center h-12 remote-btn bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-all active:scale-95 border border-slate-700/50"
+            className="flex flex-col items-center justify-center h-12 remote-btn bg-[#1b1c22] hover:bg-[#252730] text-slate-300 hover:text-white transition-all active:scale-95 border border-neutral-700/60"
             title="Play / Pause"
           >
             <Play className="w-4 h-4" />
@@ -362,7 +362,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
         </div>
 
         {/* Sound & Navigation Help footer */}
-        <div className="w-full flex items-center justify-between mt-4 px-2 pt-3 border-t border-slate-800/80 text-[10px] text-slate-400">
+        <div className="w-full flex items-center justify-between mt-4 px-2 pt-3 border-t border-neutral-800 text-[10px] text-slate-400">
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
             className="flex items-center gap-1.5 hover:text-slate-200 transition-colors"
@@ -370,7 +370,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
           >
             {soundEnabled ? (
               <>
-                <Volume2 className="w-3.5 h-3.5 text-fire-amber" />
+                <Volume2 className="w-3.5 h-3.5 text-amber-400" />
                 <span className="text-slate-300">SFX On</span>
               </>
             ) : (

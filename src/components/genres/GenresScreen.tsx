@@ -33,57 +33,41 @@ interface GenresScreenProps {
 const GENRE_METADATA: Record<GenreType, {
   label: string;
   icon: React.ReactNode;
-  gradient: string;
-  accent: string;
   tagline: string;
 }> = {
   'Action': {
     label: 'Action & Adventure',
     icon: <Zap className="w-6 h-6" />,
-    gradient: 'from-orange-600/30 to-red-900/20 border-orange-500/40 text-orange-400',
-    accent: '#ff6600',
     tagline: 'High octane stunts, adrenaline rushes, and heroic showdowns'
   },
   'Comedy': {
     label: 'Comedy & Laughs',
     icon: <Laugh className="w-6 h-6" />,
-    gradient: 'from-yellow-500/30 to-amber-900/20 border-yellow-500/40 text-yellow-300',
-    accent: '#f59e0b',
     tagline: 'Witty satire, hilarious misadventures, and joyful living room giggles'
   },
   'Drama': {
     label: 'Drama & Heart',
     icon: <Drama className="w-6 h-6" />,
-    gradient: 'from-purple-600/30 to-indigo-900/20 border-purple-500/40 text-purple-300',
-    accent: '#a855f7',
     tagline: 'Deep human emotions, thought-provoking journeys, and unforgettable performances'
   },
   'Thriller': {
     label: 'Thriller & Mystery',
     icon: <Flame className="w-6 h-6" />,
-    gradient: 'from-red-600/30 to-rose-950/20 border-red-500/40 text-red-400',
-    accent: '#ef4444',
     tagline: 'Suspenseful whodunits, nail-biting cat-and-mouse games, and shocking twists'
   },
   'Animation': {
     label: 'Animation & Art',
     icon: <Gamepad2 className="w-6 h-6" />,
-    gradient: 'from-cyan-500/30 to-blue-900/20 border-cyan-500/40 text-cyan-300',
-    accent: '#06b6d4',
     tagline: 'Visual masterpieces, imaginative worlds, and heartwarming timeless art'
   },
   'Science Fiction': {
     label: 'Sci-Fi & Wonder',
     icon: <Rocket className="w-6 h-6" />,
-    gradient: 'from-blue-600/30 to-indigo-950/20 border-blue-500/40 text-blue-300',
-    accent: '#3b82f6',
     tagline: 'Interstellar physics, futuristic marvels, and mind-expanding cosmic epics'
   },
   'Family': {
     label: 'Family & All Ages',
     icon: <HeartHandshake className="w-6 h-6" />,
-    gradient: 'from-emerald-500/30 to-teal-900/20 border-emerald-500/40 text-emerald-300',
-    accent: '#10b981',
     tagline: 'Crowd-tested gems guaranteed safe and delightful for all generations'
   }
 };
@@ -218,10 +202,10 @@ export const GenresScreen: React.FC<GenresScreenProps> = ({
       </div>
 
       {/* Active Genre Showcase Banner */}
-      <div className="p-6 rounded-3xl bg-gradient-to-r from-cinematic-900 via-cinematic-900/90 to-cinematic-950 border border-slate-800 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="p-6 rounded-none bg-cinematic-900 border border-slate-800 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full bg-fire-amber/20 text-fire-amber border border-fire-amber/30 text-xs font-bold uppercase">
+            <span className="px-2.5 py-0.5 rounded-none bg-fire-amber/20 text-fire-amber border border-fire-amber/30 text-xs font-bold uppercase">
               Current Genre
             </span>
             <span className="text-xs text-slate-400 font-mono">
@@ -238,15 +222,15 @@ export const GenresScreen: React.FC<GenresScreenProps> = ({
 
         {/* Runtime & Sort Controls */}
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-xl border border-slate-800 text-xs">
+          <div className="flex items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-none border border-slate-800 text-xs">
             <Clock className="w-3.5 h-3.5 text-slate-400 ml-1.5" />
             <button
               onClick={() => {
                 playFeedbackSound('move');
                 setTimeConstraint(95);
               }}
-              className={`px-2.5 py-1 rounded-lg font-semibold ${
-                timeConstraint === 95 ? 'bg-cyan-500 text-black font-bold' : 'text-slate-300 hover:text-white'
+              className={`px-2.5 py-1 rounded-none font-semibold ${
+                timeConstraint === 95 ? 'bg-white text-black font-bold' : 'text-slate-300 hover:text-white'
               }`}
             >
               &lt; 95m
@@ -256,8 +240,8 @@ export const GenresScreen: React.FC<GenresScreenProps> = ({
                 playFeedbackSound('move');
                 setTimeConstraint(120);
               }}
-              className={`px-2.5 py-1 rounded-lg font-semibold ${
-                timeConstraint === 120 ? 'bg-cyan-500 text-black font-bold' : 'text-slate-300 hover:text-white'
+              className={`px-2.5 py-1 rounded-none font-semibold ${
+                timeConstraint === 120 ? 'bg-white text-black font-bold' : 'text-slate-300 hover:text-white'
               }`}
             >
               &lt; 120m
@@ -267,8 +251,8 @@ export const GenresScreen: React.FC<GenresScreenProps> = ({
                 playFeedbackSound('move');
                 setTimeConstraint(240);
               }}
-              className={`px-2.5 py-1 rounded-lg font-semibold ${
-                timeConstraint === 240 ? 'bg-cyan-500 text-black font-bold' : 'text-slate-300 hover:text-white'
+              className={`px-2.5 py-1 rounded-none font-semibold ${
+                timeConstraint === 240 ? 'bg-white text-black font-bold' : 'text-slate-300 hover:text-white'
               }`}
             >
               All Lengths

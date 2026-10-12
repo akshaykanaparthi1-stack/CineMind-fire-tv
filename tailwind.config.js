@@ -19,24 +19,24 @@ export default {
     extend: {
       colors: {
         cinematic: {
-          950: '#06080e',
-          900: '#0c101a',
-          850: '#111726',
-          800: '#171f33',
-          700: '#232d48',
-          600: '#344065',
-          500: '#4c5b8a',
+          950: '#0c0d10',
+          900: '#131519',
+          850: '#191b21',
+          800: '#20232a',
+          700: '#2c2f38',
+          600: '#3e424d',
+          500: '#585c69',
         },
         fire: {
-          amber: '#ff9900',
-          orange: '#ff6600',
-          gold: '#f59e0b',
-          glow: 'rgba(255, 153, 0, 0.45)',
+          amber: '#f59e0b',
+          orange: '#d97706',
+          gold: '#b45309',
+          glow: 'rgba(245, 158, 11, 0.2)',
         },
         neon: {
-          cyan: '#06b6d4',
-          purple: '#a855f7',
-          pink: '#ec4899',
+          cyan: '#38bdf8',
+          purple: '#94a3b8',
+          pink: '#f43f5e',
           emerald: '#10b981',
           blue: '#3b82f6',
         }
@@ -46,11 +46,11 @@ export default {
         display: ['Outfit', 'sans-serif'],
       },
       boxShadow: {
-        'tv-focus': '0 0 0 3px #ff9900, 0 10px 30px -5px rgba(255, 153, 0, 0.5)',
-        'tv-focus-cyan': '0 0 0 3px #06b6d4, 0 10px 30px -5px rgba(6, 182, 212, 0.5)',
-        'tv-focus-purple': '0 0 0 3px #a855f7, 0 10px 30px -5px rgba(168, 85, 247, 0.5)',
-        'card-glow': '0 12px 35px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(99, 102, 241, 0.15)',
-        'hero-glow': '0 25px 60px -15px rgba(0, 0, 0, 0.9)',
+        'tv-focus': '0 0 0 2px #ffffff, 0 6px 16px rgba(0, 0, 0, 0.6)',
+        'tv-focus-cyan': '0 0 0 2px #ffffff, 0 6px 16px rgba(0, 0, 0, 0.6)',
+        'tv-focus-purple': '0 0 0 2px #ffffff, 0 6px 16px rgba(0, 0, 0, 0.6)',
+        'card-glow': '0 8px 20px -4px rgba(0, 0, 0, 0.7)',
+        'hero-glow': '0 20px 40px -15px rgba(0, 0, 0, 0.85)',
       },
       keyframes: {
         pulseGlow: {

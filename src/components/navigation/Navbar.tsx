@@ -41,11 +41,11 @@ const NavTab: React.FC<{
     <button
       ref={ref as any}
       onClick={onClick}
-      className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl font-medium text-sm transition-all tv-focusable ${
+      className={`relative flex items-center gap-2.5 px-4 py-2.5 rounded-none font-medium text-sm transition-all tv-focusable ${
         active
-          ? 'bg-gradient-to-r from-fire-amber to-fire-orange text-black font-semibold shadow-lg shadow-fire-amber/25'
-          : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-      } ${isFocused ? 'tv-focused ring-2 ring-fire-amber' : ''}`}
+          ? 'bg-amber-500 text-black font-bold'
+          : 'text-slate-300 hover:text-white hover:bg-neutral-800'
+      } ${isFocused ? 'tv-focused ring-2 ring-white' : ''}`}
     >
       <span className={active ? 'text-black' : 'text-slate-400 group-hover:text-white'}>
         {icon}
@@ -53,10 +53,10 @@ const NavTab: React.FC<{
       <span>{label}</span>
       {badge && (
         <span
-          className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+          className={`text-[10px] px-1.5 py-0.5 rounded-none font-bold uppercase tracking-wider ${
             active
-              ? 'bg-black/25 text-black'
-              : 'bg-fire-amber/20 text-fire-amber border border-fire-amber/30'
+              ? 'bg-black text-amber-400'
+              : 'bg-neutral-800 text-neutral-300 border border-neutral-700'
           }`}
         >
           {badge}
@@ -100,24 +100,24 @@ export const Navbar: React.FC<NavbarProps> = ({
   });
 
   return (
-    <header className="sticky top-0 z-40 w-full px-8 py-4 backdrop-blur-xl bg-cinematic-950/85 border-b border-slate-800/70 transition-all">
+    <header className="sticky top-0 z-40 w-full px-8 py-4 backdrop-blur-xl bg-cinematic-950/95 border-b border-neutral-800 transition-all">
       <div className="max-w-[1920px] mx-auto flex items-center justify-between">
         
         {/* Brand Logo & Fire TV Badge */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => onScreenChange('home')}>
-            <div className="w-10 h-10 rounded-none bg-gradient-to-tr from-fire-amber to-neon-purple p-0.5 shadow-lg shadow-fire-amber/20 flex items-center justify-center">
-              <div className="w-full h-full bg-[#0d111b] rounded-none flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-fire-amber" />
+            <div className="w-10 h-10 rounded-none bg-amber-500 p-0.5 flex items-center justify-center">
+              <div className="w-full h-full bg-[#121316] rounded-none flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-amber-400" />
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-extrabold tracking-tight font-display text-white">
-                  Cine<span className="text-fire-amber">Mind</span>
+                  Cine<span className="text-amber-400">Mind</span>
                 </span>
-                <span className="flex items-center gap-1 text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 bg-slate-800 text-slate-300 rounded-md border border-slate-700">
-                  <Tv className="w-3 h-3 text-fire-amber" />
+                <span className="flex items-center gap-1 text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 bg-neutral-800 text-neutral-300 rounded-none border border-neutral-700">
+                  <Tv className="w-3 h-3 text-amber-400" />
                   Fire TV
                 </span>
               </div>
@@ -129,7 +129,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* 10-Foot Navigation Bar Items */}
-        <nav className="flex items-center gap-1.5 p-1 rounded-2xl bg-cinematic-900/90 border border-slate-800/80 shadow-inner">
+        <nav className="flex items-center gap-1.5 p-1 rounded-none bg-cinematic-900 border border-neutral-800">
           <NavTab
             id="nav-home"
             order={0}

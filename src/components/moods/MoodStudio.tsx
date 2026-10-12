@@ -146,7 +146,7 @@ export const MoodStudio: React.FC<MoodStudioProps> = ({
         {/* Available Watch Time Filter */}
         <div>
           <label className="text-xs uppercase font-bold tracking-wider text-slate-300 block mb-2 flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-cyan-400" />
+            <Clock className="w-3.5 h-3.5 text-fire-amber" />
             Available Time
           </label>
           <div className="flex gap-2">
@@ -161,9 +161,9 @@ export const MoodStudio: React.FC<MoodStudioProps> = ({
                   playFeedbackSound('move');
                   setMaxTime(t.val);
                 }}
-                className={`flex-1 py-2 rounded-xl text-xs font-bold ${
+                className={`flex-1 py-2 rounded-none text-xs font-bold ${
                   maxTime === t.val
-                    ? 'bg-cyan-500 text-black shadow-md'
+                    ? 'bg-white text-black font-bold shadow-md'
                     : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                 }`}
               >

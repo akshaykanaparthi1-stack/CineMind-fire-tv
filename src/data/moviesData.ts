@@ -757,7 +757,7 @@ export const MOODS_CONFIG: {
     mood: 'Happy',
     label: 'Feel-Good & Uplifting',
     emoji: '✨',
-    gradient: 'from-amber-500/30 to-yellow-600/10 border-amber-500/40 text-amber-300',
+    gradient: 'border-neutral-700 text-amber-400',
     accentColor: '#f59e0b',
     description: 'Brimming with laughs, warm smiles, and joyful optimism'
   },
@@ -765,7 +765,7 @@ export const MOODS_CONFIG: {
     mood: 'Relaxed',
     label: 'Cozy & Chill',
     emoji: '🍵',
-    gradient: 'from-emerald-500/30 to-teal-600/10 border-emerald-500/40 text-emerald-300',
+    gradient: 'border-neutral-700 text-neutral-300',
     accentColor: '#10b981',
     description: 'Calm pacing, comforting atmospheres, and zero stress'
   },
@@ -773,32 +773,32 @@ export const MOODS_CONFIG: {
     mood: 'Excited',
     label: 'High Energy & Adrenaline',
     emoji: '⚡',
-    gradient: 'from-orange-500/30 to-red-600/10 border-orange-500/40 text-orange-300',
-    accentColor: '#ff6600',
+    gradient: 'border-neutral-700 text-amber-400',
+    accentColor: '#f59e0b',
     description: 'Thrills, fast-paced spectacle, and edge-of-seat excitement'
   },
   {
     mood: 'Curious',
     label: 'Mind-Bending & Intrigued',
     emoji: '🧠',
-    gradient: 'from-cyan-500/30 to-blue-600/10 border-cyan-500/40 text-cyan-300',
-    accentColor: '#06b6d4',
+    gradient: 'border-neutral-700 text-neutral-300',
+    accentColor: '#38bdf8',
     description: 'Clever mysteries, cosmic wonders, and puzzle narratives'
   },
   {
     mood: 'Romantic',
     label: 'Heart & Connection',
     emoji: '💖',
-    gradient: 'from-pink-500/30 to-rose-600/10 border-pink-500/40 text-pink-300',
-    accentColor: '#ec4899',
+    gradient: 'border-neutral-700 text-neutral-300',
+    accentColor: '#f43f5e',
     description: 'Deep chemistry, poetic journeys, and emotional resonance'
   },
   {
     mood: 'Adventurous',
     label: 'Epic Quests & Discovery',
     emoji: '🧭',
-    gradient: 'from-indigo-500/30 to-purple-600/10 border-indigo-500/40 text-indigo-300',
-    accentColor: '#8a2be2',
+    gradient: 'border-neutral-700 text-neutral-300',
+    accentColor: '#64748b',
     description: 'Grand worlds, brave heroes, and mythical expeditions'
   }
 ];

@@ -193,7 +193,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             {activeMoodFilter && (
               <button
                 onClick={() => onNavigateToMoodStudio(activeMoodFilter)}
-                className="text-xs text-neon-cyan hover:underline font-semibold"
+                className="text-xs text-fire-amber hover:underline font-semibold"
               >
                 Deep Tune in Mood Studio →
               </button>
@@ -201,7 +201,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             {selectedGenre !== 'All' && onNavigateToGenre && (
               <button
                 onClick={() => onNavigateToGenre(selectedGenre)}
-                className="text-xs text-neon-cyan hover:underline font-semibold"
+                className="text-xs text-fire-amber hover:underline font-semibold"
               >
                 Explore in Genres Hub →
               </button>
@@ -211,7 +211,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 setSelectedGenre('All');
                 setActiveMoodFilter(null);
               }}
-              className="text-xs text-fire-amber hover:underline font-semibold"
+              className="text-xs text-slate-300 hover:text-white hover:underline font-semibold"
             >
               Clear Filters
             </button>
@@ -239,7 +239,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <MovieRail
         title={`Recommended for You (${activeProfile.name.split(' ')[0]})`}
         subtitle="Curated by CineMind based on your favorite tones, pacing, and rating safety"
-        icon={<Sparkles className="w-5 h-5 text-neon-cyan" />}
+        icon={<Sparkles className="w-5 h-5 text-fire-amber" />}
         movies={recommendedForYou}
         groupName="rail-recommended"
         onSelectMovie={onSelectMovie}
@@ -278,7 +278,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <MovieRail
         title="90-Minute Quick Watches"
         subtitle="Fast-paced, satisfying features perfect for bedtime constraints"
-        icon={<Clock className="w-5 h-5 text-purple-400" />}
+        icon={<Clock className="w-5 h-5 text-fire-amber" />}
         movies={quickWatches}
         groupName="rail-quick"
         onSelectMovie={onSelectMovie}

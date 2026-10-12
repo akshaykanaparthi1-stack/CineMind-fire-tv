@@ -24,24 +24,19 @@ const MoodCardItem: React.FC<{
     <button
       ref={ref as any}
       onClick={onSelect}
-      className={`relative flex-1 min-w-[190px] p-4 rounded-2xl border text-left transition-all duration-300 tv-focusable ${
+      className={`relative flex-1 min-w-[190px] p-4 rounded-none border text-left transition-all duration-200 tv-focusable ${
         isSelected
-          ? 'bg-gradient-to-br from-slate-800 to-slate-900 border-fire-amber ring-2 ring-fire-amber shadow-lg shadow-fire-amber/30 scale-105'
-          : 'bg-cinematic-900/80 border-slate-800/80 hover:border-slate-700 hover:bg-cinematic-850'
+          ? 'bg-neutral-800 border-amber-500 ring-1 ring-amber-500 scale-102'
+          : 'bg-cinematic-900 border-neutral-800 hover:border-neutral-700 hover:bg-neutral-850'
       } ${
-        isFocused ? 'tv-focused ring-4 ring-fire-amber scale-105 shadow-2xl' : ''
+        isFocused ? 'tv-focused ring-2 ring-white scale-105' : ''
       }`}
     >
-      {/* Glow gradient background */}
-      <div
-        className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${config.gradient} opacity-20 pointer-events-none`}
-      />
-
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div className="flex items-center justify-between mb-2">
           <span className="text-2xl">{config.emoji}</span>
           {isSelected && (
-            <span className="px-1.5 py-0.5 text-[9px] uppercase font-bold tracking-wider rounded bg-fire-amber text-black">
+            <span className="px-1.5 py-0.5 text-[9px] uppercase font-bold tracking-wider rounded-none bg-amber-500 text-black">
               ACTIVE
             </span>
           )}
@@ -68,7 +63,7 @@ export const MoodSelector: React.FC<MoodSelectorProps> = ({
     <div className="my-6 px-8">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-fire-amber" />
+          <Sparkles className="w-4 h-4 text-amber-400" />
           <h2 className="text-lg font-bold font-display text-white">
             What is the Living Room Vibe Tonight?
           </h2>

@@ -174,19 +174,19 @@ export const SearchHub: React.FC<SearchHubProps> = ({
       <div className="max-w-3xl mx-auto mb-8 text-center space-y-4">
         
         {/* Mode Switcher Tabs */}
-        <div className="inline-flex p-1.5 rounded-2xl bg-cinematic-900 border border-slate-800 shadow-xl">
+        <div className="inline-flex p-1 rounded-none bg-cinematic-900 border border-neutral-800">
           <button
             onClick={() => {
               playFeedbackSound('select');
               setSearchMode('ai_assistant');
             }}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-none text-xs font-bold transition-all ${
               searchMode === 'ai_assistant'
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-600/30'
+                ? 'bg-amber-500 text-black font-bold shadow-sm'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-purple-300" />
+            <Sparkles className={`w-4 h-4 ${searchMode === 'ai_assistant' ? 'text-black' : 'text-amber-400'}`} />
             <span>AI Recommendation Assistant</span>
           </button>
 
@@ -195,13 +195,13 @@ export const SearchHub: React.FC<SearchHubProps> = ({
               playFeedbackSound('select');
               setSearchMode('tmdb_search');
             }}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-none text-xs font-bold transition-all ${
               searchMode === 'tmdb_search'
-                ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30'
+                ? 'bg-amber-500 text-black font-bold shadow-sm'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Film className="w-4 h-4 text-cyan-200" />
+            <Film className={`w-4 h-4 ${searchMode === 'tmdb_search' ? 'text-black' : 'text-slate-400'}`} />
             <span>TMDB Metadata Catalog</span>
           </button>
         </div>
@@ -225,9 +225,9 @@ export const SearchHub: React.FC<SearchHubProps> = ({
         <div className="relative flex items-center">
           <div className="absolute left-5 text-slate-400">
             {searchMode === 'ai_assistant' ? (
-              <Sparkles className="w-6 h-6 text-purple-400" />
+              <Sparkles className="w-6 h-6 text-amber-400" />
             ) : (
-              <Search className="w-6 h-6 text-cyan-400" />
+              <Search className="w-6 h-6 text-slate-400" />
             )}
           </div>
 
@@ -240,25 +240,21 @@ export const SearchHub: React.FC<SearchHubProps> = ({
                 ? "Try: 'Find a funny family movie under 100 minutes'..."
                 : "Search movie titles ('Interstellar', 'Spider-Man', 'Coco')..."
             }
-            className={`w-full pl-14 pr-32 py-4 rounded-2xl bg-cinematic-900 border-2 font-medium text-base text-white placeholder-slate-500 focus:outline-none transition-all shadow-xl ${
-              searchMode === 'ai_assistant'
-                ? 'border-purple-800/80 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/30'
-                : 'border-slate-700/80 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/30'
-            }`}
+            className="w-full pl-14 pr-32 py-4 rounded-none bg-cinematic-900 border font-medium text-base text-white placeholder-slate-500 focus:outline-none transition-all border-neutral-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
           />
 
           <div className="absolute right-4 flex items-center gap-2">
             {query && (
               <button
                 onClick={handleClear}
-                className="p-1 rounded-full text-slate-400 hover:text-white"
+                className="p-1 rounded-none text-slate-400 hover:text-white"
                 title="Clear input"
               >
                 <X className="w-5 h-5" />
               </button>
             )}
-            <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 text-slate-300 border border-slate-700 text-[10px] font-mono font-bold">
-              <Mic className="w-3 h-3 text-fire-amber" />
+            <div className="flex items-center gap-1 px-2.5 py-1 rounded-none bg-black/60 text-slate-300 border border-slate-700 text-[10px] font-mono font-bold">
+              <Mic className="w-3 h-3 text-amber-400" />
               <span>Voice / Remote</span>
             </div>
           </div>
@@ -271,7 +267,7 @@ export const SearchHub: React.FC<SearchHubProps> = ({
               <button
                 key={item.label}
                 onClick={() => handleSelectPill(item.prompt)}
-                className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-950/40 text-purple-200 border border-purple-800/60 hover:border-purple-400 hover:bg-purple-900/60 transition-all shadow-sm"
+                className="px-3.5 py-1.5 rounded-none text-xs font-semibold bg-neutral-900 text-neutral-300 border border-neutral-800 hover:border-neutral-600 hover:bg-neutral-850 hover:text-white transition-all shadow-sm"
               >
                 {item.label}
               </button>
@@ -287,24 +283,24 @@ export const SearchHub: React.FC<SearchHubProps> = ({
           
           {/* AI Interpreted Filters & Safety Lock Banner */}
           {aiResponse && (
-            <div className="p-6 rounded-3xl bg-gradient-to-r from-purple-950/40 via-cinematic-900 to-indigo-950/40 border border-purple-500/40 space-y-4 shadow-2xl">
+            <div className="p-6 rounded-none bg-cinematic-900 border border-neutral-800 space-y-4">
               
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-purple-900/60 pb-3">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-neutral-800 pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center">
-                    <Cpu className="w-4 h-4 text-purple-400" />
+                  <div className="w-8 h-8 rounded-none bg-neutral-800 border border-neutral-700 flex items-center justify-center">
+                    <Cpu className="w-4 h-4 text-amber-400" />
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-white flex items-center gap-2">
                       <span>Interpreted Assistant Intent</span>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                      <span className={`px-2 py-0.5 rounded-none text-[10px] font-bold border ${
                         aiResponse.providerUsed === 'bedrock'
-                          ? 'bg-emerald-950 text-emerald-300 border-emerald-600'
-                          : 'bg-purple-950 text-purple-300 border-purple-600'
+                          ? 'bg-emerald-950 text-emerald-300 border-emerald-700'
+                          : 'bg-neutral-800 text-neutral-300 border-neutral-700'
                       }`}>
                         {aiResponse.providerUsed === 'bedrock'
                           ? '● Amazon Bedrock Active'
-                          : '● CineMind Rule Engine'}
+                          : '● CineMind Engine'}
                       </span>
                     </h3>
                   </div>
@@ -312,12 +308,12 @@ export const SearchHub: React.FC<SearchHubProps> = ({
 
                 {/* Verified Dataset & Safety Badge */}
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="px-3 py-1 rounded-xl bg-black/60 border border-slate-700 text-slate-300 text-[11px] flex items-center gap-1.5">
+                  <span className="px-3 py-1 rounded-none bg-black/60 border border-neutral-700 text-slate-300 text-[11px] flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Verified Dataset (0 Invented Titles)</span>
                   </span>
                   {aiResponse.restrictedCount > 0 && (
-                    <span className="px-3 py-1 rounded-xl bg-amber-950/60 border border-amber-700 text-amber-300 text-[11px] flex items-center gap-1.5">
+                    <span className="px-3 py-1 rounded-none bg-amber-950/60 border border-amber-800 text-amber-300 text-[11px] flex items-center gap-1.5">
                       <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
                       <span>{aiResponse.restrictedCount} Titles Filtered by Safety Lock</span>
                     </span>
@@ -328,37 +324,37 @@ export const SearchHub: React.FC<SearchHubProps> = ({
               {/* Structured Extracted Criteria Pills */}
               <div className="flex items-center gap-2 flex-wrap text-xs">
                 {aiResponse.parsedFilters.moods?.length > 0 && (
-                  <span className="px-2.5 py-1 rounded-lg bg-purple-900/50 border border-purple-700 text-purple-200">
+                  <span className="px-2.5 py-1 rounded-none bg-neutral-800 border border-neutral-700 text-neutral-200">
                     Mood: {aiResponse.parsedFilters.moods.join(', ')}
                   </span>
                 )}
                 {aiResponse.parsedFilters.genres?.length > 0 && (
-                  <span className="px-2.5 py-1 rounded-lg bg-indigo-900/50 border border-indigo-700 text-indigo-200">
+                  <span className="px-2.5 py-1 rounded-none bg-neutral-800 border border-neutral-700 text-neutral-200">
                     Genres: {aiResponse.parsedFilters.genres.join(', ')}
                   </span>
                 )}
                 {aiResponse.parsedFilters.max_runtime_minutes && (
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 flex items-center gap-1">
+                  <span className="px-2.5 py-1 rounded-none bg-neutral-800 border border-neutral-700 text-slate-200 flex items-center gap-1">
                     <Clock className="w-3 h-3 text-slate-400" />
                     Max: {aiResponse.parsedFilters.max_runtime_minutes} mins
                   </span>
                 )}
                 {aiResponse.parsedFilters.max_age_rating && (
-                  <span className="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-fire-amber font-bold">
+                  <span className="px-2.5 py-1 rounded-none bg-neutral-800 border border-neutral-700 text-amber-400 font-bold">
                     Age Cap: {aiResponse.parsedFilters.max_age_rating}
                   </span>
                 )}
                 {aiResponse.parsedFilters.avoid_violence && (
-                  <span className="px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700 text-emerald-300">
+                  <span className="px-2.5 py-1 rounded-none bg-emerald-950/80 border border-emerald-700 text-emerald-300">
                     ✓ Violence Excluded
                   </span>
                 )}
               </div>
 
               {/* Natural-Language Spoiler-Free Recommendation Synthesis */}
-              <div className="p-4 rounded-2xl bg-black/40 border border-purple-500/20 text-xs sm:text-sm text-slate-200 leading-relaxed">
-                <span className="font-bold text-fire-amber block mb-1 uppercase tracking-wider text-[11px]">
-                  🍿 AI Recommendation Rationale:
+              <div className="p-4 rounded-none bg-black/40 border border-neutral-800 text-xs sm:text-sm text-slate-200 leading-relaxed">
+                <span className="font-bold text-amber-400 block mb-1 uppercase tracking-wider text-[11px]">
+                  🍿 Recommendation Rationale:
                 </span>
                 {aiResponse.recommendationExplanation}
               </div>
@@ -368,8 +364,8 @@ export const SearchHub: React.FC<SearchHubProps> = ({
 
           {/* Ambiguity / Insufficient Context Callout */}
           {aiResponse && !aiResponse.hasSufficientContext && (
-            <div className="p-8 rounded-3xl bg-amber-950/30 border border-amber-600/40 text-center space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mx-auto text-amber-400">
+            <div className="p-8 rounded-none bg-amber-950/20 border border-amber-700/40 text-center space-y-3">
+              <div className="w-12 h-12 rounded-none bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mx-auto text-amber-400">
                 <HelpCircle className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-white">
@@ -384,8 +380,8 @@ export const SearchHub: React.FC<SearchHubProps> = ({
           {/* Loading Indicator */}
           {isLoading && (
             <div className="py-16 text-center space-y-3 animate-pulse">
-              <div className="w-12 h-12 rounded-full border-4 border-purple-500 border-t-transparent animate-spin mx-auto" />
-              <p className="text-xs text-purple-300 font-semibold tracking-wider uppercase">
+              <div className="w-12 h-12 rounded-full border-4 border-neutral-700 border-t-amber-500 animate-spin mx-auto" />
+              <p className="text-xs text-slate-400 font-semibold tracking-wider uppercase">
                 Interpreting Natural Language & Ranking Verified Catalog...
               </p>
             </div>
@@ -432,8 +428,8 @@ export const SearchHub: React.FC<SearchHubProps> = ({
                 onClick={() => setSelectedGenre('All')}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                   selectedGenre === 'All'
-                    ? 'bg-cyan-500 text-black font-bold'
-                    : 'bg-slate-800 text-slate-300 hover:text-white'
+                    ? 'bg-amber-500 text-black font-bold'
+                    : 'bg-neutral-800 text-slate-300 hover:text-white border border-neutral-700'
                 }`}
               >
                 All Genres
@@ -442,10 +438,10 @@ export const SearchHub: React.FC<SearchHubProps> = ({
                 <button
                   key={g}
                   onClick={() => setSelectedGenre(g)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                  className={`px-3.5 py-1.5 rounded-none text-xs font-semibold whitespace-nowrap transition-all ${
                     selectedGenre === g
-                      ? 'bg-cyan-500 text-black font-bold'
-                      : 'bg-slate-800 text-slate-300 hover:text-white'
+                      ? 'bg-amber-500 text-black font-bold'
+                      : 'bg-neutral-800 text-slate-300 hover:text-white border border-neutral-700'
                   }`}
                 >
                   {g}
@@ -457,7 +453,7 @@ export const SearchHub: React.FC<SearchHubProps> = ({
               <select
                 value={selectedLanguage}
                 onChange={(e) => setSelectedLanguage(e.target.value)}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 text-xs border border-slate-700 focus:outline-none focus:border-cyan-500"
+                className="px-3 py-1.5 rounded-none bg-neutral-800 text-slate-300 text-xs border border-neutral-700 focus:outline-none focus:border-neutral-500"
               >
                 {SUPPORTED_LANGUAGES.map((l) => (
                   <option key={l.code} value={l.code}>
@@ -469,13 +465,13 @@ export const SearchHub: React.FC<SearchHubProps> = ({
           </div>
 
           {errorMessage && (
-            <div className="p-4 rounded-2xl bg-amber-950/40 border border-amber-600/40 text-amber-300 text-xs">
+            <div className="p-4 rounded-none bg-amber-950/40 border border-amber-600/40 text-amber-300 text-xs">
               {errorMessage}
             </div>
           )}
 
           {isRateLimited && (
-            <div className="p-4 rounded-2xl bg-rose-950/40 border border-rose-600/40 text-rose-300 text-xs">
+            <div className="p-4 rounded-none bg-neutral-900 border border-neutral-700 text-slate-300 text-xs">
               TMDB rate limit reached. Displaying verified local catalog fallback.
             </div>
           )}
@@ -483,7 +479,7 @@ export const SearchHub: React.FC<SearchHubProps> = ({
           {/* Loading */}
           {isLoading && (
             <div className="py-16 text-center space-y-3">
-              <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin mx-auto" />
+              <RefreshCw className="w-8 h-8 text-amber-400 animate-spin mx-auto" />
               <p className="text-xs text-slate-400">Searching TMDB metadata...</p>
             </div>
           )}

@@ -316,9 +316,9 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
       {/* Feature Header with Step Indicator */}
       <div className="flex items-center justify-between mb-8 pb-6 border-b border-slate-800 flex-wrap gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-none bg-gradient-to-tr from-purple-600 via-indigo-600 to-fire-amber p-0.5 shadow-xl shadow-purple-900/30 flex-shrink-0">
+          <div className="w-12 h-12 rounded-none bg-amber-500 p-0.5 flex-shrink-0 flex items-center justify-center">
             <div className="w-full h-full bg-cinematic-900 rounded-none flex items-center justify-center">
-              <Vote className="w-6 h-6 text-fire-amber" />
+              <Vote className="w-6 h-6 text-amber-400" />
             </div>
           </div>
           <div>
@@ -326,7 +326,7 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
               <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white">
                 Family Vote
               </h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-fire-amber/20 text-fire-amber border border-fire-amber/40 text-[10px] font-bold uppercase tracking-wider">
+              <span className="px-2.5 py-0.5 rounded-none bg-neutral-800 text-amber-400 border border-neutral-700 text-[10px] font-bold uppercase tracking-wider">
                 Consensus Engine
               </span>
             </div>
@@ -384,10 +384,10 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                   playFeedbackSound('move');
                   setParticipantCount(count);
                 }}
-                className={`py-6 rounded-3xl border text-center transition-all duration-200 tv-focusable ${
+                className={`py-6 rounded-none border text-center transition-all duration-200 tv-focusable ${
                   participantCount === count
-                    ? 'bg-gradient-to-b from-fire-amber to-fire-orange text-black font-black scale-105 shadow-xl shadow-fire-amber/30 border-fire-amber'
-                    : 'bg-cinematic-900 border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
+                    ? 'bg-amber-500 text-black font-black scale-102 border-amber-500'
+                    : 'bg-cinematic-900 border-neutral-800 text-slate-300 hover:text-white hover:border-neutral-700'
                 }`}
               >
                 <span className="text-3xl font-display font-black block">{count}</span>
@@ -565,7 +565,7 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                   {/* 2. Preferred Genres */}
                   <div>
                     <label className="text-xs uppercase font-bold tracking-wider text-slate-300 block mb-2 flex items-center gap-1.5">
-                      <Award className="w-3.5 h-3.5 text-neon-cyan" />
+                      <Award className="w-3.5 h-3.5 text-fire-amber" />
                       Preferred Genres
                     </label>
                     <div className="flex flex-wrap gap-1.5">
@@ -581,9 +581,9 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                                 : [...currentP.preferredGenres, genre];
                               updateCurrent({ preferredGenres: next });
                             }}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                            className={`px-3 py-1.5 rounded-none text-xs font-semibold transition-all ${
                               isFav
-                                ? 'bg-cyan-500 text-black font-bold'
+                                ? 'bg-fire-amber text-black font-bold'
                                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                             }`}
                           >
@@ -608,7 +608,7 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                             playFeedbackSound('move');
                             updateCurrent({ maxAgeRating: rating });
                           }}
-                          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
+                          className={`flex-1 py-2 rounded-none text-xs font-bold transition-all ${
                             currentP.maxAgeRating === rating
                               ? 'bg-emerald-500 text-black shadow-md'
                               : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -626,7 +626,7 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                   {/* 4. Maximum Runtime */}
                   <div>
                     <label className="text-xs uppercase font-bold tracking-wider text-slate-300 block mb-2 flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-purple-400" />
+                      <Clock className="w-3.5 h-3.5 text-slate-400" />
                       Target Runtime Ceiling
                     </label>
                     <div className="flex gap-1.5">
@@ -642,9 +642,9 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                             playFeedbackSound('move');
                             updateCurrent({ maxRuntimeMinutes: t.val });
                           }}
-                          className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
+                          className={`flex-1 py-2 rounded-none text-xs font-bold transition-all ${
                             currentP.maxRuntimeMinutes === t.val
-                              ? 'bg-purple-600 text-white shadow-md'
+                              ? 'bg-white text-black font-bold shadow-md'
                               : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                           }`}
                         >
@@ -753,7 +753,7 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                         playFeedbackSound('select');
                         setSessionStep('restrictions_audit');
                       }}
-                      className="px-8 py-3 rounded-2xl bg-gradient-to-r from-fire-amber to-fire-orange text-black font-extrabold text-sm shadow-xl shadow-fire-amber/30 hover:brightness-110"
+                      className="px-8 py-3 rounded-none bg-amber-500 text-black font-bold text-sm hover:bg-amber-400 transition-all"
                     >
                       Review Mandatory Safety Audit & Candidates →
                     </button>
@@ -1011,9 +1011,9 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
 
                             <button
                               onClick={() => handleCastVote(p.id, 'like')}
-                              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                              className={`px-2.5 py-1.5 rounded-none text-xs font-semibold transition-all ${
                                 userVote === 'like'
-                                  ? 'bg-cyan-500 text-black shadow-md ring-2 ring-cyan-400 scale-105'
+                                  ? 'bg-sky-600 text-white shadow-md ring-2 ring-sky-500 scale-105'
                                   : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                               }`}
                               title="Like (+0.5)"
@@ -1101,10 +1101,10 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
         <div className="space-y-8 animate-fade-in">
           
           {/* Header Banner & Normalized Score Disclaimer */}
-          <div className="p-6 rounded-3xl bg-gradient-to-r from-purple-950/40 via-cinematic-900 to-amber-950/40 border border-fire-amber/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="p-6 rounded-none bg-cinematic-900 border border-neutral-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 text-fire-amber font-display font-extrabold text-sm uppercase tracking-widest mb-1">
-                <Trophy className="w-5 h-5 text-fire-amber animate-bounce" />
+              <div className="flex items-center gap-2 text-amber-400 font-display font-extrabold text-sm uppercase tracking-widest mb-1">
+                <Trophy className="w-5 h-5 text-amber-400" />
                 <span>Family Vote Consensus Results</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-black font-display text-white">
@@ -1114,37 +1114,37 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                 Ranked using our transparent multi-tier algorithm.
               </p>
               <div className="flex items-center gap-2 mt-2">
-                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-none text-[10px] font-bold uppercase tracking-wider ${
                   dataSource === 'supabase'
-                    ? 'bg-emerald-950 text-emerald-400 border border-emerald-700/60'
-                    : 'bg-purple-950 text-purple-300 border border-purple-700/60'
+                    ? 'bg-emerald-950 text-emerald-400 border border-emerald-700'
+                    : 'bg-neutral-800 text-neutral-300 border border-neutral-700'
                 }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${dataSource === 'supabase' ? 'bg-emerald-400 animate-pulse' : 'bg-purple-400'}`} />
+                  <span className={`w-1.5 h-1.5 rounded-none ${dataSource === 'supabase' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
                   {dataSource === 'supabase' ? 'Supabase Cloud Sync Active' : 'Local Algorithmic Consensus Engine (Demo)'}
                 </span>
               </div>
             </div>
 
             {/* Disclaimer Pill */}
-            <div className="p-3 rounded-2xl bg-black/60 border border-slate-700 max-w-sm text-[11px] text-slate-300 leading-tight">
-              <span className="text-fire-amber font-bold block mb-0.5">ℹ️ Score Metric:</span>
+            <div className="p-3 rounded-none bg-black/60 border border-neutral-800 max-w-sm text-[11px] text-slate-300 leading-tight">
+              <span className="text-amber-400 font-bold block mb-0.5">ℹ️ Score Metric:</span>
               Normalized compatibility score (0–100) measures preference compatibility across genres, moods, runtimes, and votes — not a guarantee that every participant will enjoy the movie.
             </div>
           </div>
 
           {/* AI Consensus Insights Card */}
           {aiWinnerExplanation && (
-            <div className="p-5 rounded-3xl bg-gradient-to-r from-purple-900/30 to-indigo-900/30 border border-purple-500/40 space-y-3">
-              <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="w-4 h-4 text-purple-400" />
+            <div className="p-5 rounded-none bg-cinematic-900 border border-neutral-800 space-y-3">
+              <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-4 h-4 text-amber-400" />
                 <span>AI Consensus Insights: {aiWinnerExplanation.headline}</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div className="p-3 rounded-2xl bg-black/40 border border-purple-500/20">
+                <div className="p-3 rounded-none bg-black/40 border border-neutral-800">
                   <span className="font-bold text-slate-300 block mb-1">🍿 Spoiler-Free Vibe Check:</span>
                   <p className="text-slate-300 leading-relaxed">{aiWinnerExplanation.vibeCheck}</p>
                 </div>
-                <div className="p-3 rounded-2xl bg-black/40 border border-purple-500/20">
+                <div className="p-3 rounded-none bg-black/40 border border-neutral-800">
                   <span className="font-bold text-slate-300 block mb-1">🛡️ Parental & Group Guidance:</span>
                   <p className="text-slate-300 leading-relaxed">{aiWinnerExplanation.parentalGuidance}</p>
                 </div>
@@ -1277,7 +1277,7 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
                   <div className="space-y-2 pt-2">
                     <button
                       onClick={() => handleChooseFinalMovie(rec.movie)}
-                      className="w-full py-3 rounded-xl bg-gradient-to-r from-fire-amber to-fire-orange text-black font-extrabold text-xs tracking-wide shadow-lg hover:brightness-110 transition-all"
+                      className="w-full py-3 rounded-none bg-amber-500 text-black font-bold text-xs tracking-wide hover:bg-amber-400 transition-all"
                     >
                       {watchlistIds.includes(rec.movie.id) ? "✓ In Watchlist • Pick Feature" : "Choose as Tonight's Movie"}
                     </button>

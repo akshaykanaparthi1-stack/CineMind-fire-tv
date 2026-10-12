@@ -29,7 +29,7 @@ export const SAMPLE_PROFILES: UserProfile[] = [
     id: 'maya',
     name: 'Maya (15y)',
     avatar: '🎧',
-    color: '#a855f7', // purple
+    color: '#0284c7', // slate-blue
     role: 'Teen',
     favoriteMoods: ['Excited', 'Adventurous', 'Happy'],
     favoriteGenres: ['Animation', 'Action', 'Comedy'],

@@ -69,10 +69,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         <div className="max-w-3xl">
           
           {/* AI Recommendation Pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cinematic-900/90 border border-fire-amber/60 text-fire-amber text-xs font-semibold backdrop-blur-md mb-3 shadow-lg">
-            <Sparkles className="w-3.5 h-3.5 text-fire-amber animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-none bg-cinematic-900 border border-neutral-700 text-amber-400 text-xs font-semibold mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>AI Featured Match: {movie.aiInsights.matchScore}% Family Compatibility</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-fire-amber" />
+            <span className="w-1.5 h-1.5 rounded-none bg-amber-400" />
             <span className="text-white font-normal">{movie.streamingProvider}</span>
           </div>
 
@@ -88,11 +88,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
           {/* Metadata Specs Bar */}
           <div className="flex items-center gap-3.5 my-3 text-xs font-medium text-slate-300">
-            <span className="flex items-center gap-1 text-amber-400 font-bold bg-amber-400/10 px-2.5 py-1 rounded-md border border-amber-400/30">
+            <span className="flex items-center gap-1 text-amber-400 font-bold bg-amber-400/10 px-2.5 py-1 rounded-none border border-amber-400/30">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
               {movie.rating.toFixed(1)} IMDb
             </span>
-            <span className="px-2 py-0.5 rounded font-bold uppercase tracking-wider bg-slate-800 text-slate-200 border border-slate-700">
+            <span className="px-2 py-0.5 rounded-none font-bold uppercase tracking-wider bg-neutral-800 text-slate-200 border border-neutral-700">
               {movie.ageRating}
             </span>
             <span className="flex items-center gap-1 text-slate-300">
@@ -100,7 +100,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               {movie.runtimeMinutes} min
             </span>
             <span className="text-slate-400 font-mono">{movie.year}</span>
-            <span className="hidden sm:inline-block text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/60 font-semibold">
+            <span className="hidden sm:inline-block text-neutral-300 bg-neutral-800 px-2 py-0.5 rounded-none border border-neutral-700 font-semibold">
               ⚡ {movie.moods[0]}
             </span>
           </div>
@@ -111,9 +111,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
           </p>
 
           {/* AI "Why This Fits Your Evening" Micro-Box */}
-          <div className="mb-6 p-3 rounded-xl bg-slate-900/80 border border-fire-amber/30 backdrop-blur-md max-w-2xl flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-fire-amber/20 flex items-center justify-center flex-shrink-0">
-              <ShieldCheck className="w-4 h-4 text-fire-amber" />
+          <div className="mb-6 p-3 rounded-none bg-cinematic-900 border border-neutral-800 max-w-2xl flex items-center gap-3">
+            <div className="w-8 h-8 rounded-none bg-neutral-800 flex items-center justify-center flex-shrink-0 text-amber-400">
+              <ShieldCheck className="w-4 h-4 text-amber-400" />
             </div>
             <div className="text-xs">
               <span className="font-bold text-white block">
@@ -132,10 +132,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             <button
               ref={playBtn.ref as any}
               onClick={() => onSelectMovie(movie)}
-              className={`flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all tv-focusable ${
+              className={`flex items-center gap-2 px-6 py-3.5 rounded-none font-bold text-sm tracking-wide transition-all tv-focusable ${
                 playBtn.isFocused
-                  ? 'bg-fire-amber text-black ring-4 ring-fire-amber/60 scale-105 shadow-xl shadow-fire-amber/40'
-                  : 'bg-white text-black hover:bg-slate-200'
+                  ? 'bg-amber-500 text-black ring-2 ring-white scale-105'
+                  : 'bg-white text-black hover:bg-neutral-200'
               }`}
             >
               <Play className="w-4 h-4 fill-current" />
@@ -146,10 +146,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             <button
               ref={voteBtn.ref as any}
               onClick={() => onStartFamilyVote(movie)}
-              className={`flex items-center gap-2 px-5 py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all tv-focusable ${
+              className={`flex items-center gap-2 px-5 py-3.5 rounded-none font-bold text-sm tracking-wide transition-all tv-focusable ${
                 voteBtn.isFocused
-                  ? 'bg-neon-purple text-white ring-4 ring-neon-purple/60 scale-105 shadow-xl shadow-neon-purple/40'
-                  : 'bg-gradient-to-r from-purple-700 to-indigo-700 text-white hover:brightness-110 border border-purple-500/40'
+                  ? 'bg-neutral-700 text-white ring-2 ring-white scale-105'
+                  : 'bg-neutral-800 text-white hover:bg-neutral-750 border border-neutral-700'
               }`}
             >
               <Vote className="w-4 h-4" />
@@ -160,12 +160,12 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             <button
               ref={watchlistBtn.ref as any}
               onClick={() => onToggleWatchlist(movie)}
-              className={`flex items-center gap-2 px-4 py-3.5 rounded-xl font-semibold text-sm transition-all tv-focusable ${
+              className={`flex items-center gap-2 px-4 py-3.5 rounded-none font-semibold text-sm transition-all tv-focusable ${
                 watchlistBtn.isFocused
-                  ? 'bg-slate-700 text-white ring-4 ring-fire-amber scale-105'
+                  ? 'bg-neutral-700 text-white ring-2 ring-white scale-105'
                   : inWatchlist
-                  ? 'bg-fire-amber/20 text-fire-amber border border-fire-amber/50'
-                  : 'bg-slate-900/80 text-slate-200 hover:bg-slate-800 border border-slate-700'
+                  ? 'bg-neutral-800 text-amber-400 border border-neutral-700'
+                  : 'bg-cinematic-900 text-slate-200 hover:bg-neutral-800 border border-neutral-700'
               }`}
             >
               {inWatchlist ? <Check className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
@@ -176,8 +176,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             <button
               ref={detailsBtn.ref as any}
               onClick={() => onSelectMovie(movie)}
-              className={`flex items-center gap-2 px-4 py-3.5 rounded-xl font-semibold text-sm bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700 transition-all tv-focusable ${
-                detailsBtn.isFocused ? 'tv-focused ring-2 ring-fire-amber' : ''
+              className={`flex items-center gap-2 px-4 py-3.5 rounded-none font-semibold text-sm bg-cinematic-900 text-slate-300 hover:text-white hover:bg-neutral-800 border border-neutral-700 transition-all tv-focusable ${
+                detailsBtn.isFocused ? 'tv-focused ring-2 ring-white' : ''
               }`}
             >
               <Info className="w-4 h-4" />

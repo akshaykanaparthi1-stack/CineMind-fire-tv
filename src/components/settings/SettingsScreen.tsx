@@ -173,13 +173,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </div>
 
         {/* Section 2: Audio Feedback & Fire TV Remote Controls */}
-        <div className="p-6 rounded-3xl bg-cinematic-900 border border-slate-800 space-y-6">
-          <div className="flex items-center gap-2.5 text-cyan-400 font-display font-bold text-base border-b border-slate-800 pb-3">
-            <Volume2 className="w-5 h-5 text-cyan-400" />
+        <div className="p-6 rounded-none bg-cinematic-900 border border-neutral-800 space-y-6">
+          <div className="flex items-center gap-2.5 text-slate-200 font-display font-bold text-base border-b border-neutral-800 pb-3">
+            <Volume2 className="w-5 h-5 text-slate-400" />
             <span>Audio & Remote Navigation</span>
           </div>
 
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60">
+          <div className="flex items-center justify-between p-3.5 rounded-none bg-neutral-800/60 border border-neutral-700/60">
             <div>
               <span className="text-sm font-bold text-white block">TV Remote Acoustic Feedback (SFX)</span>
               <span className="text-xs text-slate-400">Play directional navigation clicks and celebration fanfare</span>
@@ -190,12 +190,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 setSoundEnabled(next);
                 if (next) playFeedbackSound('select');
               }}
-              className={`w-12 h-6 rounded-full transition-colors relative p-0.5 ${
-                soundEnabled ? 'bg-cyan-500' : 'bg-slate-700'
+              className={`w-12 h-6 rounded-none transition-colors relative p-0.5 ${
+                soundEnabled ? 'bg-amber-500' : 'bg-neutral-700'
               }`}
             >
               <div
-                className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                className={`w-5 h-5 rounded-none bg-white transition-transform ${
                   soundEnabled ? 'translate-x-6' : 'translate-x-0'
                 }`}
               />
@@ -208,10 +208,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </label>
             <button
               onClick={() => setIsVirtualRemoteOpen(true)}
-              className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-850 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white text-xs font-bold flex items-center justify-between transition-all"
+              className="w-full py-3 px-4 rounded-none bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white text-xs font-bold flex items-center justify-between transition-all"
             >
               <span>Launch On-Screen Fire TV Remote Controller</span>
-              <kbd className="px-2 py-0.5 rounded bg-slate-900 text-fire-amber border border-slate-700 font-mono text-[10px]">
+              <kbd className="px-2 py-0.5 rounded-none bg-slate-900 text-fire-amber border border-slate-700 font-mono text-[10px]">
                 Press [R]
               </kbd>
             </button>
@@ -271,9 +271,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </div>
 
         {/* Section 4: CineMind Recommendation Tuning */}
-        <div className="p-6 rounded-3xl bg-cinematic-900 border border-slate-800 space-y-6">
-          <div className="flex items-center gap-2.5 text-neon-purple font-display font-bold text-base border-b border-slate-800 pb-3">
-            <Sparkles className="w-5 h-5 text-neon-purple" />
+        <div className="p-6 rounded-none bg-cinematic-900 border border-neutral-800 space-y-6">
+          <div className="flex items-center gap-2.5 text-slate-200 font-display font-bold text-base border-b border-neutral-800 pb-3">
+            <Sparkles className="w-5 h-5 text-amber-400" />
             <span>AI Recommendation & Consensus Tuning</span>
           </div>
 
@@ -294,14 +294,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                     setConsensusAlgorithm(algo.id as any);
                     showNotification('Consensus algorithm updated');
                   }}
-                  className={`p-3 rounded-2xl border text-left transition-all ${
+                  className={`p-3 rounded-none border text-left transition-all ${
                     consensusAlgorithm === algo.id
-                      ? 'bg-purple-600 text-white font-bold border-purple-400 shadow-md'
-                      : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-750'
+                      ? 'bg-amber-500 text-black font-bold border-amber-500 shadow-sm'
+                      : 'bg-neutral-800 text-slate-300 border-neutral-700 hover:bg-neutral-750'
                   }`}
                 >
                   <span className="text-xs font-bold block">{algo.label}</span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                  <span className={`text-[10px] block mt-0.5 ${consensusAlgorithm === algo.id ? 'text-neutral-900' : 'text-slate-400'}`}>
                     {algo.desc}
                   </span>
                 </button>
@@ -323,21 +323,21 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       </div>
 
       {/* Metadata Provider & TMDB Configuration */}
-      <div className="mt-8 p-6 rounded-3xl bg-cinematic-900 border border-slate-800 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="mt-8 p-6 rounded-none bg-cinematic-900 border border-neutral-800 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-700/60 flex items-center justify-center">
-              <Database className="w-5 h-5 text-cyan-400" />
+            <div className="w-10 h-10 rounded-none bg-neutral-800 border border-neutral-700 flex items-center justify-center">
+              <Database className="w-5 h-5 text-neutral-300" />
             </div>
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <span>Movie Metadata Provider (TMDB)</span>
                 {apiStatus?.mode === 'tmdb' ? (
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-600 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-none bg-emerald-950 text-emerald-400 border border-emerald-700 text-[10px] font-bold">
                     Live Connected
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-none bg-neutral-800 text-slate-300 border border-neutral-700 text-[10px] font-bold">
                     Bundled Catalog Mode
                   </span>
                 )}
@@ -351,7 +351,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <button
             onClick={handleRefreshStatus}
             disabled={isCheckingApi}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-semibold self-start sm:self-auto"
+            className="flex items-center gap-2 px-4 py-2 rounded-none bg-neutral-800 hover:bg-neutral-750 text-slate-200 border border-neutral-700 text-xs font-semibold self-start sm:self-auto"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isCheckingApi ? 'animate-spin' : ''}`} />
             <span>Check Connectivity</span>
@@ -360,16 +360,16 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
 
         {/* Security Architecture & Instructions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 space-y-2">
-            <span className="font-bold text-fire-amber block text-[11px] uppercase tracking-wider">
+          <div className="p-4 rounded-none bg-neutral-800/40 border border-neutral-700/50 space-y-2">
+            <span className="font-bold text-amber-400 block text-[11px] uppercase tracking-wider">
               🔒 Zero-Leak Security Architecture:
             </span>
             <p className="text-slate-300 leading-relaxed">
-              API keys are never bundled in client code. Requests to TMDB are securely routed through the Vite/Node server backend proxy at <code className="text-cyan-300 font-mono text-[11px]">/api/tmdb/*</code>.
+              API keys are never bundled in client code. Requests to TMDB are securely routed through the Vite/Node server backend proxy at <code className="text-neutral-300 font-mono text-[11px]">/api/tmdb/*</code>.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 space-y-2">
+          <div className="p-4 rounded-none bg-neutral-800/40 border border-neutral-700/50 space-y-2">
             <span className="font-bold text-emerald-400 block text-[11px] uppercase tracking-wider">
               🔑 Environment Configuration:
             </span>
@@ -384,25 +384,25 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       </div>
 
       {/* Cloud Backend & Supabase Database Configuration */}
-      <div className="mt-8 p-6 rounded-3xl bg-cinematic-900 border border-slate-800 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="mt-8 p-6 rounded-none bg-cinematic-900 border border-neutral-800 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-700/60 flex items-center justify-center">
-              <Server className="w-5 h-5 text-purple-400" />
+            <div className="w-10 h-10 rounded-none bg-neutral-800 border border-neutral-700 flex items-center justify-center">
+              <Server className="w-5 h-5 text-neutral-300" />
             </div>
             <div>
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <span>FastAPI & Supabase Cloud Backend</span>
                 {backendHealth?.online ? (
-                  <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${
+                  <span className={`px-2 py-0.5 rounded-none border text-[10px] font-bold ${
                     backendHealth.source === 'supabase'
-                      ? 'bg-emerald-950/80 text-emerald-400 border-emerald-600'
-                      : 'bg-purple-950/80 text-purple-300 border-purple-600'
+                      ? 'bg-emerald-950 text-emerald-400 border-emerald-700'
+                      : 'bg-neutral-800 text-neutral-300 border-neutral-700'
                   }`}>
                     {backendHealth.source === 'supabase' ? 'Supabase Connected' : 'FastAPI Demo Store'}
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 rounded-full bg-amber-950/80 text-amber-300 border border-amber-700 text-[10px] font-bold">
+                  <span className="px-2 py-0.5 rounded-none bg-amber-950 text-amber-300 border border-amber-800 text-[10px] font-bold">
                     Local Offline Mode
                   </span>
                 )}
@@ -416,7 +416,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <button
             onClick={handleRefreshBackend}
             disabled={isCheckingBackend}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-semibold self-start sm:self-auto"
+            className="flex items-center gap-2 px-4 py-2 rounded-none bg-neutral-800 hover:bg-neutral-750 text-slate-200 border border-neutral-700 text-xs font-semibold self-start sm:self-auto"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isCheckingBackend ? 'animate-spin' : ''}`} />
             <span>Check Backend</span>
@@ -424,26 +424,26 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 space-y-1.5">
-            <span className="font-bold text-purple-400 block text-[11px] uppercase tracking-wider">
+          <div className="p-4 rounded-none bg-neutral-800/40 border border-neutral-700/50 space-y-1.5">
+            <span className="font-bold text-amber-400 block text-[11px] uppercase tracking-wider">
               🚀 Backend API:
             </span>
             <div className="text-slate-300 space-y-1">
-              <div>Endpoint: <code className="text-purple-300 font-mono text-[10px]">http://localhost:8000</code></div>
+              <div>Endpoint: <code className="text-neutral-300 font-mono text-[10px]">http://localhost:8000</code></div>
               <div>Status: <span className={backendHealth?.online ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
                 {backendHealth?.online ? 'Healthy (v1.0.0)' : 'Offline / Standalone'}
               </span></div>
-              <div>Interactive Docs: <a href="http://localhost:8000/docs" target="_blank" rel="noreferrer" className="text-fire-amber underline hover:text-white">/docs</a></div>
+              <div>Interactive Docs: <a href="http://localhost:8000/docs" target="_blank" rel="noreferrer" className="text-amber-400 underline hover:text-white">/docs</a></div>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 space-y-1.5">
+          <div className="p-4 rounded-none bg-neutral-800/40 border border-neutral-700/50 space-y-1.5">
             <span className="font-bold text-emerald-400 block text-[11px] uppercase tracking-wider">
               🗄️ PostgreSQL Database:
             </span>
             <div className="text-slate-300 space-y-1">
               <div>Provider: <span className="text-white font-bold">Supabase Cloud</span></div>
-              <div>Storage Mode: <span className={backendHealth?.source === 'supabase' ? 'text-emerald-400 font-bold' : 'text-purple-400 font-bold'}>
+              <div>Storage Mode: <span className={backendHealth?.source === 'supabase' ? 'text-emerald-400 font-bold' : 'text-neutral-300 font-bold'}>
                 {backendHealth?.source === 'supabase' ? 'Cloud Tables Active' : 'Automatic In-Memory Demo Store'}
               </span></div>
               <div>Migration: <code className="text-slate-400 font-mono text-[10px]">001_initial_schema.sql</code></div>

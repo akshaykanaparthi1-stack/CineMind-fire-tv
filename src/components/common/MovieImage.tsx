@@ -18,7 +18,7 @@ export const MovieImage: React.FC<MovieImageProps> = ({
   title,
   year,
   genre,
-  mood,
+  mood: _mood,
   aspectRatio = 'poster',
   className = '',
 }) => {
@@ -27,24 +27,9 @@ export const MovieImage: React.FC<MovieImageProps> = ({
 
   const aspectClass = aspectRatio === 'backdrop' ? 'aspect-video' : '';
 
-  // Gradient themes based on mood or title hash
+  // Calm dark cinema theme for poster fallback
   const getGradient = () => {
-    switch (mood) {
-      case 'Happy':
-        return 'from-amber-600 via-yellow-700 to-slate-900';
-      case 'Excited':
-        return 'from-red-600 via-orange-700 to-slate-900';
-      case 'Curious':
-        return 'from-cyan-600 via-blue-800 to-slate-900';
-      case 'Romantic':
-        return 'from-pink-600 via-rose-800 to-slate-900';
-      case 'Adventurous':
-        return 'from-purple-600 via-indigo-800 to-slate-900';
-      case 'Relaxed':
-        return 'from-emerald-600 via-teal-800 to-slate-900';
-      default:
-        return 'from-slate-800 via-indigo-950 to-cinematic-950';
-    }
+    return 'from-slate-900 via-cinematic-900 to-black';
   };
 
   if (hasError) {

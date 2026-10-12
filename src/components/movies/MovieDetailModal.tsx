@@ -170,7 +170,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   {current.year}
                 </span>
                 {current.isFromTMDB && (
-                  <span className="text-[10px] text-cyan-300 font-bold bg-cyan-950/80 border border-cyan-800 px-2 py-0.5 rounded">
+                  <span className="text-[10px] text-slate-300 font-bold bg-slate-800 border border-slate-700 px-2 py-0.5 rounded-none">
                     TMDB Live
                   </span>
                 )}
@@ -212,12 +212,12 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             <button
               ref={watchlistBtn.ref as any}
               onClick={() => onToggleWatchlist(current)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all tv-focusable ${
+              className={`flex items-center gap-2 px-5 py-3 rounded-none font-bold text-sm transition-all tv-focusable ${
                 watchlistBtn.isFocused
-                  ? 'bg-slate-700 text-white ring-4 ring-fire-amber scale-105'
+                  ? 'bg-neutral-700 text-white ring-2 ring-white scale-105'
                   : inWatchlist
-                  ? 'bg-fire-amber text-black font-extrabold shadow-md'
-                  : 'bg-slate-800/90 text-slate-200 hover:bg-slate-700 border border-slate-700'
+                  ? 'bg-amber-500 text-black font-extrabold shadow-sm'
+                  : 'bg-neutral-800 text-slate-200 hover:bg-neutral-750 border border-neutral-700'
               }`}
             >
               {inWatchlist ? <Check className="w-4 h-4 stroke-[3]" /> : <Bookmark className="w-4 h-4" />}
@@ -228,10 +228,10 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             <button
               ref={voteBtn.ref as any}
               onClick={() => onStartFamilyVote(current)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm tracking-wide transition-all tv-focusable ${
+              className={`flex items-center gap-2 px-5 py-3 rounded-none font-bold text-sm tracking-wide transition-all tv-focusable ${
                 voteBtn.isFocused
-                  ? 'bg-neon-purple text-white ring-4 ring-neon-purple/60 scale-105 shadow-lg'
-                  : 'bg-gradient-to-r from-purple-700 to-indigo-700 text-white hover:brightness-110 border border-purple-500/40'
+                  ? 'bg-neutral-700 text-white ring-2 ring-white scale-105'
+                  : 'bg-neutral-800 text-white hover:bg-neutral-750 border border-neutral-700'
               }`}
             >
               <Vote className="w-4 h-4" />
@@ -242,12 +242,12 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             <button
               ref={watchBtn.ref as any}
               onClick={() => setShowWhereToWatchModal((prev) => !prev)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm tracking-wide transition-all tv-focusable ${
+              className={`flex items-center gap-2 px-5 py-3 rounded-none font-bold text-sm tracking-wide transition-all tv-focusable ${
                 watchBtn.isFocused
-                  ? 'bg-fire-amber text-black ring-4 ring-fire-amber/60 scale-105 shadow-lg shadow-fire-amber/40'
+                  ? 'bg-amber-500 text-black ring-2 ring-white scale-105'
                   : current.isVerifiedStreaming
-                  ? 'bg-white text-black hover:bg-slate-200'
-                  : 'bg-slate-800 text-slate-300 hover:text-white border border-slate-700'
+                  ? 'bg-white text-black hover:bg-neutral-200'
+                  : 'bg-neutral-800 text-slate-300 hover:text-white border border-neutral-700'
               }`}
             >
               {current.isVerifiedStreaming ? (
@@ -382,7 +382,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               onClick={() => setActiveTab('cast')}
               className={`pb-2.5 px-3 text-xs font-bold tracking-wider uppercase transition-colors border-b-2 ${
                 activeTab === 'cast'
-                  ? 'border-cyan-400 text-cyan-300'
+                  ? 'border-white text-white'
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -510,13 +510,13 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   </span>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60">
+                <div className="p-3 rounded-none bg-slate-800/60 border border-slate-700/60">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
                     Pacing Energy
                   </span>
-                  <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-1">
+                  <div className="w-full bg-slate-700 h-2 rounded-none overflow-hidden mb-1">
                     <div
-                      className="bg-cyan-400 h-full rounded-full"
+                      className="bg-fire-amber h-full rounded-none"
                       style={{ width: `${current.aiInsights.toneScores.pacing}%` }}
                     />
                   </div>
@@ -527,8 +527,8 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               </div>
 
               {/* Spoiler-Free Vibe Check */}
-              <div className="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/50 flex items-center gap-3">
-                <Info className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+              <div className="p-3.5 rounded-none bg-slate-800/40 border border-slate-700/50 flex items-center gap-3">
+                <Info className="w-4 h-4 text-fire-amber flex-shrink-0" />
                 <p className="text-xs text-slate-300">
                   <strong className="text-white">Spoiler-Free Vibe Check: </strong>
                   {current.aiInsights.spoilerFreeVibeCheck}
@@ -540,13 +540,13 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
           {/* Tab: Safety Guide */}
           {activeTab === 'safety' && (
             <div className="space-y-3.5 animate-fade-in">
-              <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/40">
+              <div className="p-4 rounded-none bg-emerald-950/30 border border-emerald-500/40">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase">
                     <ShieldCheck className="w-4 h-4" />
                     <span>Age Verdict: {current.ageRating} Rated</span>
                   </div>
-                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded ${
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-none ${
                     current.certificationStatus === 'verified'
                       ? 'bg-emerald-900 text-emerald-300 border border-emerald-700'
                       : 'bg-slate-800 text-slate-400 border border-slate-700'
@@ -562,8 +562,8 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
-                  <span className="text-[10px] uppercase font-bold text-amber-400 block mb-1">
+                <div className="p-3.5 rounded-none bg-slate-800/60 border border-slate-700/60">
+                  <span className="text-[10px] uppercase font-bold text-fire-amber block mb-1">
                     Violence & Peril
                   </span>
                   <p className="text-xs text-slate-300">
@@ -571,8 +571,8 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
-                  <span className="text-[10px] uppercase font-bold text-cyan-400 block mb-1">
+                <div className="p-3.5 rounded-none bg-slate-800/60 border border-slate-700/60">
+                  <span className="text-[10px] uppercase font-bold text-slate-300 block mb-1">
                     Language & Slang
                   </span>
                   <p className="text-xs text-slate-300">
@@ -580,8 +580,8 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
-                  <span className="text-[10px] uppercase font-bold text-pink-400 block mb-1">
+                <div className="p-3.5 rounded-none bg-slate-800/60 border border-slate-700/60">
+                  <span className="text-[10px] uppercase font-bold text-slate-300 block mb-1">
                     Sensitive Themes
                   </span>
                   <p className="text-xs text-slate-300">

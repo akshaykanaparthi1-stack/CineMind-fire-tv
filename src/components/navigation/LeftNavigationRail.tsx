@@ -57,11 +57,11 @@ const NavRailItem: React.FC<NavRailItemProps> = ({
     <button
       ref={ref as any}
       onClick={onSelect}
-      className={`relative w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl font-medium text-sm transition-all duration-200 select-none tv-focusable group ${
+      className={`relative w-full flex items-center gap-3.5 px-4 py-3.5 rounded-none font-medium text-sm transition-all duration-200 select-none tv-focusable group ${
         active
-          ? 'bg-gradient-to-r from-fire-amber to-fire-orange text-black font-bold shadow-lg shadow-fire-amber/30 scale-102'
-          : 'text-slate-300 hover:text-white hover:bg-slate-800/70'
-      } ${isFocused ? 'tv-focused ring-4 ring-fire-amber scale-105 z-30' : ''}`}
+          ? 'bg-amber-500 text-black font-bold shadow-sm scale-102'
+          : 'text-slate-300 hover:text-white hover:bg-neutral-800'
+      } ${isFocused ? 'tv-focused ring-2 ring-white scale-105 z-30' : ''}`}
       title={label}
     >
       {/* Icon */}
@@ -85,12 +85,12 @@ const NavRailItem: React.FC<NavRailItemProps> = ({
       {/* Badge */}
       {badge !== undefined && (
         <span
-          className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider transition-opacity ${
+          className={`text-[10px] font-bold px-2 py-0.5 rounded-none uppercase tracking-wider transition-opacity ${
             isExpanded ? 'opacity-100' : 'opacity-0 lg:opacity-100'
           } ${
             active
-              ? 'bg-black text-fire-amber'
-              : 'bg-fire-amber/20 text-fire-amber border border-fire-amber/40'
+              ? 'bg-black text-amber-400'
+              : 'bg-neutral-800 text-neutral-300 border border-neutral-700'
           }`}
         >
           {badge}
@@ -152,7 +152,7 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
           onClick={() => handleSelect('home')}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="w-11 h-11 rounded-none bg-blue-600/30 p-0.5 border border-blue-500/50 shadow-lg shadow-blue-900/30 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-11 h-11 rounded-none bg-neutral-800 p-0.5 border border-neutral-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
             <img 
               src="/cinemind-mark.png" 
               alt="CineMind Logo" 
@@ -251,16 +251,16 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
 
         {/* Backend & Metadata Status Badges */}
         <div className={`pt-1 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0 lg:opacity-100'} space-y-1`}>
-          <div className="flex items-center justify-between px-2.5 py-1 rounded-xl bg-black/40 text-[9px] text-slate-500 font-mono border border-slate-800/60">
+          <div className="flex items-center justify-between px-2.5 py-1 rounded-none bg-black/40 text-[9px] text-slate-500 font-mono border border-slate-800/60">
             <span>Backend:</span>
             <span className={`font-bold flex items-center gap-1 ${
               backendStatus?.online 
-                ? backendStatus.source === 'supabase' ? 'text-emerald-400' : 'text-purple-400'
+                ? backendStatus.source === 'supabase' ? 'text-emerald-400' : 'text-slate-200'
                 : 'text-amber-400'
             }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${
+              <span className={`w-1.5 h-1.5 rounded-none ${
                 backendStatus?.online 
-                  ? backendStatus.source === 'supabase' ? 'bg-emerald-400 animate-pulse' : 'bg-purple-400'
+                  ? backendStatus.source === 'supabase' ? 'bg-emerald-400 animate-pulse' : 'bg-slate-200'
                   : 'bg-amber-400'
               }`} />
               {backendStatus?.online 
@@ -268,9 +268,9 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
                 : 'Local Demo'}
             </span>
           </div>
-          <div className="flex items-center justify-between px-2.5 py-1 rounded-xl bg-black/40 text-[9px] text-slate-500 font-mono border border-slate-800/60">
+          <div className="flex items-center justify-between px-2.5 py-1 rounded-none bg-black/40 text-[9px] text-slate-500 font-mono border border-slate-800/60">
             <span>Metadata:</span>
-            <span className="text-cyan-400 font-bold">TMDB API</span>
+            <span className="text-slate-300 font-bold">TMDB API</span>
           </div>
         </div>
 

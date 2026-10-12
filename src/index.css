@@ -39,47 +39,43 @@
 
 /* TV Focusable Item Animations */
 .tv-focusable {
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
 
 .tv-focusable:focus-visible,
 .tv-focusable.tv-focused {
-  transform: scale(1.06);
+  transform: scale(1.04);
   z-index: 30;
-  box-shadow: 0 0 0 3px #ff9900, 0 12px 30px rgba(255, 153, 0, 0.45);
+  box-shadow: 0 0 0 2px #ffffff, 0 8px 24px rgba(0, 0, 0, 0.7);
 }
 
 .tv-focusable-subtle:focus-visible,
 .tv-focusable-subtle.tv-focused {
-  transform: scale(1.03);
+  transform: scale(1.02);
   z-index: 20;
-  box-shadow: 0 0 0 2px #06b6d4, 0 8px 24px rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 0 2px #f59e0b;
 }
 
-/* Glassmorphism TV Cards */
+/* Clean Dark TV Surfaces */
 .glass-panel {
-  background: rgba(18, 24, 38, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #131519;
+  border: 1px solid #262932;
 }
 
 .glass-panel-elevated {
-  background: rgba(23, 31, 51, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #1a1d23;
+  border: 1px solid #303440;
 }
 
-/* Subtle Shimmer for Highlighting AI match */
+/* Subtle Shimmer for Highlighting match */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 
 .ai-shimmer {
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
   background-size: 200% 100%;
   animation: shimmer 3s infinite;
 }

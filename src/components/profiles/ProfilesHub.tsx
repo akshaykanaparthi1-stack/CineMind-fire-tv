@@ -22,7 +22,7 @@ export const ProfilesHub: React.FC<ProfilesHubProps> = ({
       
       {/* Title */}
       <div className="text-center max-w-xl mx-auto mb-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fire-amber/20 text-fire-amber border border-fire-amber/40 text-xs font-bold uppercase tracking-wider mb-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-fire-amber/20 text-fire-amber border border-fire-amber/40 text-xs font-bold uppercase tracking-wider mb-3">
           <Users className="w-4 h-4" />
           <span>Fire TV Household Profiles</span>
         </div>
@@ -46,22 +46,22 @@ export const ProfilesHub: React.FC<ProfilesHubProps> = ({
                 playFeedbackSound('select');
                 onSelectProfile(profile);
               }}
-              className={`p-6 rounded-3xl border text-left transition-all duration-300 flex flex-col justify-between h-[360px] tv-focusable ${
+              className={`p-6 rounded-none border text-left transition-all duration-300 flex flex-col justify-between h-[360px] tv-focusable ${
                 isActive
-                  ? 'bg-gradient-to-b from-slate-800 to-slate-900 border-fire-amber ring-4 ring-fire-amber/80 shadow-2xl shadow-fire-amber/30 scale-105'
+                  ? 'bg-slate-800 border-fire-amber ring-2 ring-fire-amber shadow-xl scale-105'
                   : 'bg-cinematic-900/80 border-slate-800 hover:border-slate-700 hover:bg-slate-850'
               }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-lg"
+                    className="w-16 h-16 rounded-none flex items-center justify-center text-3xl shadow-lg"
                     style={{ backgroundColor: `${profile.color}25`, border: `2px solid ${profile.color}` }}
                   >
                     {profile.avatar}
                   </div>
                   {isActive && (
-                    <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-2 py-1 bg-fire-amber text-black rounded-lg">
+                    <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider px-2 py-1 bg-fire-amber text-black rounded-none">
                       <Check className="w-3 h-3 stroke-[3]" />
                       ACTIVE
                     </span>
@@ -76,7 +76,7 @@ export const ProfilesHub: React.FC<ProfilesHubProps> = ({
                 </span>
 
                 {/* Age rating safeguard badge */}
-                <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-800 text-[11px] font-semibold text-slate-300 mb-3 border border-slate-700">
+                <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-none bg-slate-800 text-[11px] font-semibold text-slate-300 mb-3 border border-slate-700">
                   <Shield className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Max Rating: {profile.maxAgeRating}</span>
                 </div>
@@ -102,7 +102,7 @@ export const ProfilesHub: React.FC<ProfilesHubProps> = ({
       <div className="flex justify-center">
         <button
           onClick={onBackToHome}
-          className="px-8 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 shadow-lg"
+          className="px-8 py-3.5 rounded-none bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 shadow-lg"
         >
           Return to Entertainment Hub
         </button>
