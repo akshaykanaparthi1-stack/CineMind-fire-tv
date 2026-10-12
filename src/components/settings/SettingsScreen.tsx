@@ -3,6 +3,7 @@ import { useTVNavigation } from '../../context/TVNavigationContext';
 import { tmdbMovieService } from '../../services/tmdbService';
 import type { TMDBApiStatus } from '../../types/tmdb';
 import { TMDBAttribution } from '../common/TMDBAttribution';
+import { apiClient, type BackendHealthStatus } from '../../services/apiClient';
 import { 
   Settings, 
   Tv, 
@@ -13,7 +14,8 @@ import {
   Check, 
   Cpu,
   Database,
-  RefreshCw
+  RefreshCw,
+  Server
 } from 'lucide-react';
 
 interface SettingsScreenProps {
@@ -37,10 +39,25 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   const [resetSavedNotice, setResetSavedNotice] = useState<string | null>(null);
   const [apiStatus, setApiStatus] = useState<TMDBApiStatus | undefined>(undefined);
   const [isCheckingApi, setIsCheckingApi] = useState(false);
+  const [backendHealth, setBackendHealth] = useState<BackendHealthStatus | null>(null);
+  const [isCheckingBackend, setIsCheckingBackend] = useState(false);
 
   useEffect(() => {
     tmdbMovieService.getStatus().then(setApiStatus);
+    apiClient.checkHealth().then(setBackendHealth);
   }, []);
+
+  const handleRefreshBackend = async () => {
+    setIsCheckingBackend(true);
+    playFeedbackSound('select');
+    try {
+      const health = await apiClient.checkHealth(true);
+      setBackendHealth(health);
+      showNotification('Backend health refreshed');
+    } finally {
+      setIsCheckingBackend(false);
+    }
+  };
 
   const handleRefreshStatus = async () => {
     setIsCheckingApi(true);
@@ -364,6 +381,84 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
 
         {/* Attribution Component */}
         <TMDBAttribution status={apiStatus} />
+      </div>
+
+      {/* Cloud Backend & Supabase Database Configuration */}
+      <div className="mt-8 p-6 rounded-3xl bg-cinematic-900 border border-slate-800 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-950/60 border border-purple-700/60 flex items-center justify-center">
+              <Server className="w-5 h-5 text-purple-400" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <span>FastAPI & Supabase Cloud Backend</span>
+                {backendHealth?.online ? (
+                  <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold ${
+                    backendHealth.source === 'supabase'
+                      ? 'bg-emerald-950/80 text-emerald-400 border-emerald-600'
+                      : 'bg-purple-950/80 text-purple-300 border-purple-600'
+                  }`}>
+                    {backendHealth.source === 'supabase' ? 'Supabase Connected' : 'FastAPI Demo Store'}
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-full bg-amber-950/80 text-amber-300 border border-amber-700 text-[10px] font-bold">
+                    Local Offline Mode
+                  </span>
+                )}
+              </h3>
+              <p className="text-xs text-slate-400">
+                Persistent multi-user watchlists, voting sessions, and AI-powered recommendation consensus.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleRefreshBackend}
+            disabled={isCheckingBackend}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-semibold self-start sm:self-auto"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isCheckingBackend ? 'animate-spin' : ''}`} />
+            <span>Check Backend</span>
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 space-y-1.5">
+            <span className="font-bold text-purple-400 block text-[11px] uppercase tracking-wider">
+              🚀 Backend API:
+            </span>
+            <div className="text-slate-300 space-y-1">
+              <div>Endpoint: <code className="text-purple-300 font-mono text-[10px]">http://localhost:8000</code></div>
+              <div>Status: <span className={backendHealth?.online ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                {backendHealth?.online ? 'Healthy (v1.0.0)' : 'Offline / Standalone'}
+              </span></div>
+              <div>Interactive Docs: <a href="http://localhost:8000/docs" target="_blank" rel="noreferrer" className="text-fire-amber underline hover:text-white">/docs</a></div>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 space-y-1.5">
+            <span className="font-bold text-emerald-400 block text-[11px] uppercase tracking-wider">
+              🗄️ PostgreSQL Database:
+            </span>
+            <div className="text-slate-300 space-y-1">
+              <div>Provider: <span className="text-white font-bold">Supabase Cloud</span></div>
+              <div>Storage Mode: <span className={backendHealth?.source === 'supabase' ? 'text-emerald-400 font-bold' : 'text-purple-400 font-bold'}>
+                {backendHealth?.source === 'supabase' ? 'Cloud Tables Active' : 'Automatic In-Memory Demo Store'}
+              </span></div>
+              <div>Migration: <code className="text-slate-400 font-mono text-[10px]">001_initial_schema.sql</code></div>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 space-y-1.5">
+            <span className="font-bold text-fire-amber block text-[11px] uppercase tracking-wider">
+              🛡️ Zero Secret Leak:
+            </span>
+            <p className="text-slate-300 leading-relaxed text-[11px]">
+              Supabase secret keys are confined strictly to <code className="text-fire-amber font-mono text-[10px]">backend/.env</code>. The browser communicates exclusively via validated REST endpoints.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Household Data & Reset Bar */}

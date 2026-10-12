@@ -1,11 +1,12 @@
 import type { FamilyVoteSession } from '../types/familyVote';
+import { apiClient } from './apiClient';
 
 const STORAGE_KEY = 'cinemind_family_vote_active_session';
 const HISTORY_KEY = 'cinemind_family_vote_session_history';
 
 /**
  * Modular Family Vote Session Service
- * Provides decoupled state persistence ready to be connected to Supabase or FastAPI.
+ * Provides instant local cache + background FastAPI & Supabase synchronization.
  */
 export class FamilyVoteSessionService {
   /**
@@ -16,6 +17,23 @@ export class FamilyVoteSessionService {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
     } catch {
       // LocalStorage quota or private mode fallback
+    }
+
+    // Background sync to backend if online
+    try {
+      if (session.backendSessionId && session.votes) {
+        const flatVotes: Array<{ movieId: string; participantId: string; voteType: any }> = [];
+        Object.entries(session.votes).forEach(([movieId, pVotes]) => {
+          Object.entries(pVotes).forEach(([pId, vType]) => {
+            flatVotes.push({ movieId, participantId: pId, voteType: vType });
+          });
+        });
+        if (flatVotes.length > 0) {
+          apiClient.submitBatchVotes(session.backendSessionId, flatVotes).catch(() => {});
+        }
+      }
+    } catch {
+      // Graceful offline fallback
     }
   }
 
@@ -44,7 +62,7 @@ export class FamilyVoteSessionService {
   }
 
   /**
-   * Finalize and archive a session to history (and prepare for Supabase insert)
+   * Finalize and archive a session to history (and sync winner to backend)
    */
   static async finalizeSession(session: FamilyVoteSession, finalSelectedMovieId: string): Promise<void> {
     try {
@@ -62,6 +80,11 @@ export class FamilyVoteSessionService {
       const history: FamilyVoteSession[] = existingHistoryJson ? JSON.parse(existingHistoryJson) : [];
       const updatedHistory = [finalized, ...history.filter(s => s.id !== finalized.id)].slice(0, 10);
       localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
+
+      // Sync winner to backend
+      if (session.backendSessionId) {
+        apiClient.selectWinner(session.backendSessionId, finalSelectedMovieId, true).catch(() => {});
+      }
     } catch {
       // Ignore
     }

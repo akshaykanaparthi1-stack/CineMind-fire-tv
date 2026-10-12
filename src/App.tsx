@@ -15,6 +15,7 @@ import { SettingsScreen } from './components/settings/SettingsScreen';
 import { MovieDetailModal } from './components/movies/MovieDetailModal';
 import { VirtualRemoteOverlay } from './components/remote/VirtualRemoteOverlay';
 import { TVRemoteGuide } from './components/common/TVRemoteGuide';
+import { apiClient, type BackendHealthStatus } from './services/apiClient';
 
 const AppContent: React.FC = () => {
   // Parse initial hash or default to 'home'
@@ -41,6 +42,26 @@ const AppContent: React.FC = () => {
     { movieId: 'paddington-2', addedByProfileId: 'leo', addedAt: '2026-10-11', watched: false },
     { movieId: 'knives-out', addedByProfileId: 'mom', addedAt: '2026-10-12', watched: false },
   ]);
+
+  const [backendHealth, setBackendHealth] = useState<BackendHealthStatus | null>(null);
+
+  // Probe backend connectivity & load cloud watchlist if available
+  useEffect(() => {
+    apiClient.checkHealth().then((health) => {
+      setBackendHealth(health);
+      if (health.online) {
+        apiClient.getWatchlist().then((remoteItems) => {
+          if (remoteItems && remoteItems.length > 0) {
+            setWatchlist((prev) => {
+              const remoteIds = new Set(remoteItems.map((r) => r.movieId));
+              const localOnly = prev.filter((p) => !remoteIds.has(p.movieId));
+              return [...remoteItems, ...localOnly];
+            });
+          }
+        }).catch(() => {});
+      }
+    }).catch(() => {});
+  }, []);
 
   const watchlistIds = watchlist.map((w) => w.movieId);
 
@@ -85,31 +106,39 @@ const AppContent: React.FC = () => {
 
   // Watchlist toggle handler
   const handleToggleWatchlist = (movie: Movie) => {
-    setWatchlist((prev) => {
-      const exists = prev.some((w) => w.movieId === movie.id);
-      if (exists) {
-        return prev.filter((w) => w.movieId !== movie.id);
-      } else {
-        return [
-          {
-            movieId: movie.id,
-            addedByProfileId: activeProfile.id,
-            addedAt: new Date().toISOString().split('T')[0],
-            watched: false,
-          },
-          ...prev,
-        ];
-      }
-    });
+    const exists = watchlist.some((w) => w.movieId === movie.id);
+    if (exists) {
+      setWatchlist((prev) => prev.filter((w) => w.movieId !== movie.id));
+      apiClient.removeFromWatchlist(movie.id).catch(() => {});
+    } else {
+      setWatchlist((prev) => [
+        {
+          movieId: movie.id,
+          addedByProfileId: activeProfile.id,
+          addedAt: new Date().toISOString().split('T')[0],
+          watched: false,
+        },
+        ...prev,
+      ]);
+      apiClient.addToWatchlist(movie.id, activeProfile.id, movie).catch(() => {});
+    }
   };
 
   const handleRemoveFromWatchlist = (movieId: string) => {
     setWatchlist((prev) => prev.filter((w) => w.movieId !== movieId));
+    apiClient.removeFromWatchlist(movieId).catch(() => {});
   };
 
   const handleToggleWatched = (movieId: string) => {
     setWatchlist((prev) =>
-      prev.map((w) => (w.movieId === movieId ? { ...w, watched: !w.watched } : w))
+      prev.map((w) => {
+        if (w.movieId === movieId) {
+          const nextWatched = !w.watched;
+          apiClient.toggleWatched(movieId, nextWatched).catch(() => {});
+          return { ...w, watched: nextWatched };
+        }
+        return w;
+      })
     );
   };
 
@@ -168,6 +197,7 @@ const AppContent: React.FC = () => {
         watchlistCount={watchlist.length}
         familySafeMode={familySafeMode}
         onToggleFamilySafeMode={() => setFamilySafeMode((prev) => !prev)}
+        backendStatus={backendHealth}
       />
 
       {/* 2. Main Screen Viewport (Offset for left-rail on TV display) */}
@@ -241,13 +271,14 @@ const AppContent: React.FC = () => {
             </div>
           )}
 
-          {/* Screen 6: Search */}
+          {/* Screen 6: Search & AI Assistant */}
           {activeScreen === 'search' && (
             <SearchHub
               onSelectMovie={setSelectedMovie}
               watchlistIds={watchlistIds}
               onToggleWatchlist={handleToggleWatchlist}
               initialQuery={searchQuery}
+              activeProfile={activeProfile}
             />
           )}
 

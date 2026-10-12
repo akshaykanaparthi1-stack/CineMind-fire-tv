@@ -72,4 +72,6 @@ export interface FamilyVoteSession {
   currentVotingMovieIndex: number;
   status: 'setup_count' | 'setup_profiles' | 'voting' | 'results' | 'final_selected';
   finalSelectedMovieId?: string;
+  backendSessionId?: string;
+  source?: 'supabase' | 'demo';
 }

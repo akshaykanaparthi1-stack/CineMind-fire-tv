@@ -13,6 +13,7 @@ import {
   rankMoviesForFamilyGroup 
 } from '../../services/familyVoteAlgorithm';
 import { FamilyVoteSessionService } from '../../services/familyVoteSessionService';
+import { apiClient } from '../../services/apiClient';
 import { useTVFocus, useTVNavigation } from '../../context/TVNavigationContext';
 import { MovieImage } from '../common/MovieImage';
 import confetti from 'canvas-confetti';
@@ -106,6 +107,14 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
   const [rankedResults, setRankedResults] = useState<GroupRecommendationResult[]>([]);
   const [finalSelectedMovie, setFinalSelectedMovie] = useState<Movie | null>(null);
   const [isSavedToWatchlist, setIsSavedToWatchlist] = useState<boolean>(false);
+  const [backendSessionId, setBackendSessionId] = useState<string | null>(null);
+  const [dataSource, setDataSource] = useState<'supabase' | 'demo'>('demo');
+  const [aiWinnerExplanation, setAiWinnerExplanation] = useState<{
+    headline: string;
+    vibeCheck: string;
+    parentalGuidance: string;
+    tailoredReasons: string[];
+  } | null>(null);
 
   // Initialize participants when count or step changes
   useEffect(() => {
@@ -153,6 +162,17 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
     });
     setVotes(initVotes);
     setSessionStep('voting_arena');
+
+    // Register session in FastAPI & Supabase backend asynchronously
+    apiClient.createSession(participants[0]?.id || 'host', participants.length)
+      .then((created) => {
+        if (created) {
+          setBackendSessionId(created.sessionId);
+          setDataSource(created.source === 'supabase' ? 'supabase' : 'demo');
+          apiClient.registerParticipants(created.sessionId, participants).catch(() => {});
+        }
+      })
+      .catch(() => {});
   };
 
   // Cast vote for participant
@@ -216,8 +236,39 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
         votes,
         currentVotingMovieIndex: currentVotingIndex,
         status: 'results',
+        backendSessionId: backendSessionId || undefined,
+        source: dataSource,
       };
       FamilyVoteSessionService.saveSession(sessionRecord);
+
+      // Async backend verification & ranking calculation
+      if (backendSessionId) {
+        apiClient.calculateSessionResults(backendSessionId, candidateMovies)
+          .then((backendRes) => {
+            if (backendRes && backendRes.results.length > 0) {
+              setRankedResults(backendRes.results);
+              setDataSource(backendRes.source === 'supabase' ? 'supabase' : 'demo');
+            }
+          })
+          .catch(() => {});
+      }
+
+      // Fetch AI spoiler-free explanation for top pick
+      const topPick = ranked[0]?.movie;
+      if (topPick) {
+        apiClient.getAiExplanation(topPick, participants)
+          .then((aiRes) => {
+            if (aiRes) {
+              setAiWinnerExplanation({
+                headline: aiRes.headline,
+                vibeCheck: aiRes.spoilerFreeVibeCheck,
+                parentalGuidance: aiRes.parentalGuidance,
+                tailoredReasons: aiRes.tailoredReasons,
+              });
+            }
+          })
+          .catch(() => {});
+      }
     }
   };
 
@@ -228,6 +279,10 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
     if (onAddToWatchlist) {
       onAddToWatchlist(movie);
       setIsSavedToWatchlist(true);
+    }
+
+    if (backendSessionId) {
+      apiClient.selectWinner(backendSessionId, movie.id, true).catch(() => {});
     }
   };
 
@@ -1058,6 +1113,16 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
               <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
                 Ranked using our transparent multi-tier algorithm.
               </p>
+              <div className="flex items-center gap-2 mt-2">
+                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                  dataSource === 'supabase'
+                    ? 'bg-emerald-950 text-emerald-400 border border-emerald-700/60'
+                    : 'bg-purple-950 text-purple-300 border border-purple-700/60'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${dataSource === 'supabase' ? 'bg-emerald-400 animate-pulse' : 'bg-purple-400'}`} />
+                  {dataSource === 'supabase' ? 'Supabase Cloud Sync Active' : 'Local Algorithmic Consensus Engine (Demo)'}
+                </span>
+              </div>
             </div>
 
             {/* Disclaimer Pill */}
@@ -1066,6 +1131,26 @@ export const FamilyVoteHub: React.FC<FamilyVoteHubProps> = ({
               Normalized compatibility score (0–100) measures preference compatibility across genres, moods, runtimes, and votes — not a guarantee that every participant will enjoy the movie.
             </div>
           </div>
+
+          {/* AI Consensus Insights Card */}
+          {aiWinnerExplanation && (
+            <div className="p-5 rounded-3xl bg-gradient-to-r from-purple-900/30 to-indigo-900/30 border border-purple-500/40 space-y-3">
+              <div className="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-4 h-4 text-purple-400" />
+                <span>AI Consensus Insights: {aiWinnerExplanation.headline}</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div className="p-3 rounded-2xl bg-black/40 border border-purple-500/20">
+                  <span className="font-bold text-slate-300 block mb-1">🍿 Spoiler-Free Vibe Check:</span>
+                  <p className="text-slate-300 leading-relaxed">{aiWinnerExplanation.vibeCheck}</p>
+                </div>
+                <div className="p-3 rounded-2xl bg-black/40 border border-purple-500/20">
+                  <span className="font-bold text-slate-300 block mb-1">🛡️ Parental & Group Guidance:</span>
+                  <p className="text-slate-300 leading-relaxed">{aiWinnerExplanation.parentalGuidance}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Final Choice Confirmation Box if selected */}
           {finalSelectedMovie && (

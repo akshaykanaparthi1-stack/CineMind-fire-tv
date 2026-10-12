@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   ChevronRight
 } from 'lucide-react';
+import type { BackendHealthStatus } from '../../services/apiClient';
 
 interface LeftNavigationRailProps {
   activeScreen: ActiveScreen;
@@ -23,6 +24,7 @@ interface LeftNavigationRailProps {
   watchlistCount: number;
   familySafeMode: boolean;
   onToggleFamilySafeMode: () => void;
+  backendStatus?: BackendHealthStatus | null;
 }
 
 interface NavRailItemProps {
@@ -111,6 +113,7 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
   watchlistCount,
   familySafeMode,
   onToggleFamilySafeMode,
+  backendStatus,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const { playFeedbackSound } = useTVNavigation();
@@ -239,8 +242,25 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
           />
         </div>
 
-        {/* TMDB Badge */}
-        <div className={`pt-1 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0 lg:opacity-100'}`}>
+        {/* Backend & Metadata Status Badges */}
+        <div className={`pt-1 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0 lg:opacity-100'} space-y-1`}>
+          <div className="flex items-center justify-between px-2.5 py-1 rounded-xl bg-black/40 text-[9px] text-slate-500 font-mono border border-slate-800/60">
+            <span>Backend:</span>
+            <span className={`font-bold flex items-center gap-1 ${
+              backendStatus?.online 
+                ? backendStatus.source === 'supabase' ? 'text-emerald-400' : 'text-purple-400'
+                : 'text-amber-400'
+            }`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${
+                backendStatus?.online 
+                  ? backendStatus.source === 'supabase' ? 'bg-emerald-400 animate-pulse' : 'bg-purple-400'
+                  : 'bg-amber-400'
+              }`} />
+              {backendStatus?.online 
+                ? backendStatus.source === 'supabase' ? 'Supabase' : 'FastAPI'
+                : 'Local Demo'}
+            </span>
+          </div>
           <div className="flex items-center justify-between px-2.5 py-1 rounded-xl bg-black/40 text-[9px] text-slate-500 font-mono border border-slate-800/60">
             <span>Metadata:</span>
             <span className="text-cyan-400 font-bold">TMDB API</span>
