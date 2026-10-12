@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import type { Movie, UserProfile } from '../../types';
 import { MOVIES_DATABASE } from '../../data/moviesData';
 import { tmdbMovieService } from '../../services/tmdbService';
+import { speechToTextService } from '../../services/speechToTextService';
 import { useTVFocus, useTVNavigation } from '../../context/TVNavigationContext';
 import { 
   Search, 
@@ -51,6 +52,13 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const stopVoiceRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (stopVoiceRef.current) stopVoiceRef.current();
+    };
+  }, []);
 
   // Live TV Digital Clock
   useEffect(() => {
@@ -161,25 +169,65 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
     return list.slice(0, 6);
   }, [localMatches, tmdbSearchResults]);
 
-  // Simulated Voice / Alexa Search
+  // Audio-to-Text Speech Recognition Search
   const handleVoiceSearch = () => {
     playFeedbackSound('select');
-    setIsVoiceListening(true);
-    const samplePrompts = [
-      'Find a funny family movie under 100 minutes',
-      'Show me exciting sci-fi adventures',
-      'Relaxed feel-good animated movies for kids',
-      'Clever suspense thriller with high ratings',
-    ];
-    const picked = samplePrompts[Math.floor(Math.random() * samplePrompts.length)];
-    setQuery(picked);
-    setIsDropdownOpen(true);
 
-    setTimeout(() => {
+    if (isVoiceListening) {
+      if (stopVoiceRef.current) stopVoiceRef.current();
+      speechToTextService.stopListening();
       setIsVoiceListening(false);
-      onNavigateToSearch(picked);
-      setIsDropdownOpen(false);
-    }, 1400);
+      return;
+    }
+
+    setIsVoiceListening(true);
+    setIsDropdownOpen(true);
+    setQuery('');
+
+    if (speechToTextService.isSupported()) {
+      const stopFn = speechToTextService.startListening({
+        onStart: () => {
+          setIsVoiceListening(true);
+        },
+        onInterimResult: (interim) => {
+          setQuery(interim);
+        },
+        onFinalResult: (finalText) => {
+          setQuery(finalText);
+          setTimeout(() => {
+            setIsVoiceListening(false);
+            handleSubmitSearch(finalText);
+          }, 800);
+        },
+        onError: () => {
+          // Graceful fallback to sample prompt
+          const sample = 'Find a funny family movie under 100 minutes';
+          setQuery(sample);
+          setTimeout(() => {
+            setIsVoiceListening(false);
+            handleSubmitSearch(sample);
+          }, 1200);
+        },
+        onEnd: () => {
+          setIsVoiceListening(false);
+        },
+      });
+      stopVoiceRef.current = stopFn;
+    } else {
+      // Fallback simulation when Web Speech API is absent
+      const samplePrompts = [
+        'Find a funny family movie under 100 minutes',
+        'Show me exciting sci-fi adventures',
+        'Relaxed feel-good animated movies for kids',
+        'Clever suspense thriller with high ratings',
+      ];
+      const picked = samplePrompts[Math.floor(Math.random() * samplePrompts.length)];
+      setQuery(picked);
+      setTimeout(() => {
+        setIsVoiceListening(false);
+        handleSubmitSearch(picked);
+      }, 1400);
+    }
   };
 
   // Submit search query to full SearchHub

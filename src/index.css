@@ -7,10 +7,10 @@
     color-scheme: dark;
   }
 
-  /* Perfect Rectangle Design: All boxes, cards, modals, buttons, badges, inputs, posters, and containers are perfect rectangles */
-  *,
-  *::before,
-  *::after {
+  /* Perfect Rectangle Design for all application boxes and containers */
+  *:not(.remote-curved):not(.remote-curved *):not(.remote-pill):not(.remote-pill *):not(.remote-hud):not(.remote-hud *),
+  *:not(.remote-curved):not(.remote-curved *):not(.remote-pill):not(.remote-pill *):not(.remote-hud *)::before,
+  *:not(.remote-curved):not(.remote-curved *):not(.remote-pill):not(.remote-pill *):not(.remote-hud *)::after {
     border-radius: 0px !important;
   }
 
@@ -83,3 +83,57 @@
   background-size: 200% 100%;
   animation: shimmer 3s infinite;
 }
+
+/* Authentic Fire TV Remote Controller Rounded Curves */
+.remote-curved {
+  border-radius: 38px !important;
+}
+
+.remote-pill {
+  border-radius: 9999px !important;
+}
+
+.remote-circle {
+  border-radius: 9999px !important;
+}
+
+.remote-dpad {
+  border-radius: 9999px !important;
+}
+
+.remote-btn {
+  border-radius: 12px !important;
+}
+
+.remote-hud {
+  border-radius: 20px !important;
+}
+
+.remote-dpad-up {
+  border-top-left-radius: 9999px !important;
+  border-top-right-radius: 9999px !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.remote-dpad-down {
+  border-bottom-left-radius: 9999px !important;
+  border-bottom-right-radius: 9999px !important;
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+}
+
+.remote-dpad-left {
+  border-top-left-radius: 9999px !important;
+  border-bottom-left-radius: 9999px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.remote-dpad-right {
+  border-top-right-radius: 9999px !important;
+  border-bottom-right-radius: 9999px !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}
+
