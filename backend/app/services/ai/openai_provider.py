@@ -17,7 +17,7 @@ logger = logging.getLogger("cinemind.ai.openai")
 
 class OpenAICompatibleProvider(BaseAIProvider):
     """
-    OpenAI-Compatible AI Provider for CineMind AI.
+    OpenAI-Compatible AI Provider for CineMind.
     Provides standard REST chat completion adapter via httpx.
     """
 
@@ -41,7 +41,7 @@ class OpenAICompatibleProvider(BaseAIProvider):
 
         try:
             prompt = (
-                f"You are the CineMind AI Assistant on Amazon Fire TV.\n"
+                f"You are the CineMind Assistant on Amazon Fire TV.\n"
                 f"User Query: '{query}'\n"
                 f"Active Profile: {json.dumps(active_profile or {})}\n"
                 f"Convert into JSON with keys: moods, genres, max_runtime_minutes, max_age_rating, "
@@ -157,7 +157,7 @@ class OpenAICompatibleProvider(BaseAIProvider):
         payload = {
             "model": settings.openai_model_id or "gpt-4o-mini",
             "messages": [
-                {"role": "system", "content": "You are CineMind AI on Amazon Fire TV. You always respond accurately without inventing movies or spoiling plot twists."},
+                {"role": "system", "content": "You are CineMind on Amazon Fire TV. You always respond accurately without inventing movies or spoiling plot twists."},
                 {"role": "user", "content": prompt}
             ],
             "temperature": 0.2

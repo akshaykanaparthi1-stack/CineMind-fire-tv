@@ -17,7 +17,7 @@ logger = logging.getLogger("cinemind.ai.bedrock")
 
 class BedrockProvider(BaseAIProvider):
     """
-    Amazon Bedrock AI Provider for CineMind AI.
+    Amazon Bedrock AI Provider for CineMind.
     Preferred provider for Amazon Fire TV integration.
     Invokes Anthropic Claude or Amazon Titan via AWS Bedrock Runtime.
     """
@@ -70,7 +70,7 @@ class BedrockProvider(BaseAIProvider):
 
         try:
             prompt = (
-                f"You are the CineMind AI Assistant for Amazon Fire TV.\n"
+                f"You are the CineMind Assistant for Amazon Fire TV.\n"
                 f"Analyze this entertainment request: '{query}'\n"
                 f"Active Profile: {json.dumps(active_profile or {})}\n"
                 f"Convert the user's intent into JSON with these exact fields:\n"
@@ -128,7 +128,7 @@ class BedrockProvider(BaseAIProvider):
 
         try:
             prompt = (
-                f"You are the CineMind AI Assistant on Amazon Fire TV.\n"
+                f"You are the CineMind Assistant on Amazon Fire TV.\n"
                 f"Movie: {movie.title} ({movie.year}, {movie.runtimeMinutes}m, Rated {movie.ageRating.value}, Genres: {[g.value for g in movie.genres]})\n"
                 f"Synopsis: {movie.synopsis}\n"
                 f"User Profile: {profile.get('name', 'Viewer')}, Preferred Mood: {mood or 'Any'}\n"
@@ -166,7 +166,7 @@ class BedrockProvider(BaseAIProvider):
 
         try:
             prompt = (
-                f"You are the CineMind AI Assistant on Amazon Fire TV.\n"
+                f"You are the CineMind Assistant on Amazon Fire TV.\n"
                 f"Explain why this movie suits a family voting group:\n"
                 f"Movie: {movie.title} (Rated {movie.ageRating.value}, Genres: {[g.value for g in movie.genres]})\n"
                 f"Participants: {[{'name': p.get('name'), 'role': p.get('role')} for p in participants]}\n"

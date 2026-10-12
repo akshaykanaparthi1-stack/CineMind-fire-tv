@@ -282,7 +282,7 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
           <div className="hidden sm:flex flex-col">
             <div className="flex items-center gap-2">
               <span className="text-base lg:text-lg font-black tracking-tight font-display text-white">
-                CineMind <span className="text-fire-amber">AI</span>
+                Cine<span className="text-fire-amber">Mind</span>
               </span>
               <span className="flex items-center gap-1 text-[9px] font-bold tracking-wider uppercase px-1.5 py-0.5 bg-blue-600/25 text-cyan-300 border border-blue-500/40 rounded-none">
                 <Tv className="w-2.5 h-2.5 text-fire-amber" />
@@ -324,7 +324,7 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
               }}
               onFocus={() => setIsDropdownOpen(true)}
               onKeyDown={handleKeyDown}
-              placeholder="Search movies, genres, moods, actors, or ask CineMind AI..."
+              placeholder="Search movies, genres, moods, actors, or ask CineMind..."
               className="w-full py-2.5 pr-2 bg-transparent text-sm text-white placeholder-slate-400 focus:outline-none rounded-none"
             />
 
@@ -468,11 +468,11 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
                 </div>
               ) : query.trim() ? (
                 <div className="p-4 text-center text-slate-400 text-xs">
-                  No direct title matches for "{query}". Try asking CineMind AI below!
+                  No direct title matches for "{query}". Try asking CineMind below!
                 </div>
               ) : null}
 
-              {/* Action Card: Search with CineMind AI Assistant */}
+              {/* Action Card: Search with CineMind Assistant */}
               <div
                 onClick={() => handleSubmitSearch(query || 'Find a funny family movie under 100 minutes')}
                 className="p-3 bg-gradient-to-r from-purple-950/60 via-cinematic-900 to-indigo-950/60 border-t border-purple-500/30 hover:border-fire-amber cursor-pointer flex items-center justify-between group transition-all"
@@ -483,7 +483,7 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
                   </div>
                   <div>
                     <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <span>Ask CineMind AI Assistant</span>
+                      <span>Ask CineMind Assistant</span>
                       {query.trim() && (
                         <span className="text-cyan-300 font-normal truncate max-w-xs">
                           "{query.trim()}"

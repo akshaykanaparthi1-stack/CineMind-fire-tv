@@ -270,7 +270,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           </div>
         </div>
 
-        {/* Section 4: CineMind AI Recommendation Tuning */}
+        {/* Section 4: CineMind Recommendation Tuning */}
         <div className="p-6 rounded-3xl bg-cinematic-900 border border-slate-800 space-y-6">
           <div className="flex items-center gap-2.5 text-neon-purple font-display font-bold text-base border-b border-slate-800 pb-3">
             <Sparkles className="w-5 h-5 text-neon-purple" />
@@ -374,7 +374,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               🔑 Environment Configuration:
             </span>
             <p className="text-slate-300 leading-relaxed">
-              Set <code className="text-emerald-300 font-mono text-[11px]">TMDB_API_KEY=your_key</code> in your <code className="text-emerald-300 font-mono text-[11px]">.env</code> file. If omitted, CineMind AI seamlessly operates using its built-in sample database.
+              Set <code className="text-emerald-300 font-mono text-[11px]">TMDB_API_KEY=your_key</code> in your <code className="text-emerald-300 font-mono text-[11px]">.env</code> file. If omitted, CineMind seamlessly operates using its built-in sample database.
             </p>
           </div>
         </div>
@@ -468,7 +468,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             Household Data & App Cache
           </h3>
           <p className="text-xs text-slate-400">
-            CineMind AI Hackathon Build 1.2.0 • Amazon Fire TV Track (Web Runtime)
+            CineMind Hackathon Build 1.2.0 • Amazon Fire TV Track (Web Runtime)
           </p>
         </div>
 

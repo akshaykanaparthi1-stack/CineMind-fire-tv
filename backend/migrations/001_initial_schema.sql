@@ -1,5 +1,5 @@
 -- ====================================================================
--- CineMind AI: Supabase PostgreSQL Database Schema
+-- CineMind: Supabase PostgreSQL Database Schema
 -- Amazon Developer Hackathon (Fire TV Track)
 -- ====================================================================
 

@@ -76,7 +76,7 @@ export const MovieImage: React.FC<MovieImageProps> = ({
         </div>
 
         <div className="text-[9px] text-slate-400 text-center uppercase tracking-wider font-mono">
-          CineMind AI Master
+          CineMind Master
         </div>
       </div>
     );

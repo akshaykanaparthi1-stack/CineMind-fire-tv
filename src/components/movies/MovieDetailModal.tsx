@@ -185,14 +185,14 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               )}
             </div>
 
-            {/* CineMind AI Score Stamp */}
+            {/* CineMind Score Stamp */}
             <div className="p-3 rounded-2xl bg-cinematic-950/90 border border-fire-amber/50 backdrop-blur-md flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-fire-amber/20 flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-fire-amber animate-pulse" />
               </div>
               <div>
                 <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-semibold">
-                  CineMind AI Match
+                  CineMind Match
                 </span>
                 <span className="text-lg font-black text-fire-amber font-display">
                   {current.aiInsights.matchScore}%
@@ -448,7 +448,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               <div className="p-4 rounded-2xl bg-cinematic-950/70 border border-fire-amber/30">
                 <div className="flex items-center gap-2 text-fire-amber text-xs font-bold uppercase mb-1">
                   <Sparkles className="w-4 h-4" />
-                  <span>Why CineMind AI Recommends This</span>
+                  <span>Why CineMind Recommends This</span>
                 </div>
                 <p className="text-sm font-semibold text-white mb-2">
                   "{current.aiInsights.headline}"

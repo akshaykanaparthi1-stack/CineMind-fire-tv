@@ -114,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-extrabold tracking-tight font-display text-white">
-                  CineMind <span className="text-fire-amber">AI</span>
+                  Cine<span className="text-fire-amber">Mind</span>
                 </span>
                 <span className="flex items-center gap-1 text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 bg-slate-800 text-slate-300 rounded-md border border-slate-700">
                   <Tv className="w-3 h-3 text-fire-amber" />

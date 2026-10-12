@@ -9,7 +9,7 @@ from ...schemas.movies import MovieSchema
 
 class BaseAIProvider(ABC):
     """
-    Abstract AI Provider Interface for CineMind AI.
+    Abstract AI Provider Interface for CineMind.
     Decouples natural-language reasoning and explanations from external LLM providers
     (Amazon Bedrock, OpenAI, or Deterministic NLP Fallback).
     """

@@ -1,11 +1,11 @@
-# 🎬 CineMind AI — Fire TV Smart Entertainment Discovery & Family Vote
+# 🎬 CineMind — Fire TV Smart Entertainment Discovery & Family Vote
 
 > **Amazon Developer Hackathon — Fire TV Track**  
 > An AI-powered 10-foot living room entertainment discovery application designed specifically for televisions, remote controls, and multi-generational households.
 
 ---
 
-## 🌟 The Problem CineMind AI Solves
+## 🌟 The Problem CineMind Solves
 
 Every evening, millions of families and friend groups sit in front of the TV spending 20 to 45 minutes endlessly scrolling through streaming catalogues, unable to decide what to watch. Different people want different things:
 - **Dad** wants a high-octane sci-fi thriller.
@@ -13,7 +13,7 @@ Every evening, millions of families and friend groups sit in front of the TV spe
 - **Teenagers** want cutting-edge animation or fast-paced humor.
 - **Kids** have strict bedtime schedules (< 90 minutes) and strict content ratings (G/PG).
 
-**CineMind AI solves living room decision fatigue** with its signature **Family Vote** consensus engine, multi-dimensional emotional mood matching, and spoiler-free AI recommendations.
+**CineMind solves living room decision fatigue** with its signature **Family Vote** consensus engine, multi-dimensional emotional mood matching, and spoiler-free AI recommendations.
 
 ---
 
@@ -53,7 +53,7 @@ Designed from the ground up for the TV screen (1080p / 4K) and directional D-pad
 - **Genre Filter Bar:** Instant filtering across *Action, Comedy, Drama, Thriller, Animation, Science Fiction, and Family*.
 - **Curated TV Rails:**
   - 🔥 *Trending Tonight on Fire TV*
-  - 🧠 *CineMind AI Top Picks For Your Family*
+  - 🧠 *CineMind Top Picks For Your Family*
   - 🛡️ *Family Night Favorites (G & PG Rated)*
   - ⚡ *High Energy & Thrills (Action & Spectacle)*
   - 🍿 *90-Minute Quick Watches (For tight bedtime schedules)*
@@ -93,7 +93,7 @@ Designed from the ground up for the TV screen (1080p / 4K) and directional D-pad
 
 ## 🧠 AI Recommendation Assistant
 
-CineMind AI features an intelligent, multi-modal **AI Recommendation Assistant** designed specifically for 10-foot living room interaction and Fire TV Alexa voice integration.
+CineMind features an intelligent, multi-modal **AI Recommendation Assistant** designed specifically for 10-foot living room interaction and Fire TV Alexa voice integration.
 
 ### 1. Multi-Provider Architecture with Clean Adapters
 The AI system is built with a decoupled provider architecture (`backend/app/services/ai/`):
@@ -126,7 +126,7 @@ Converts everyday speech and voice commands into structured, validated filters:
 - If no movie matches all constraints, the system explicitly explains the conflict and suggests relaxing one parameter.
 
 ### 5. Multi-User Family Consensus Explanations
-- CineMind AI synthesizes the distinct preferences of multiple family members:
+- CineMind synthesizes the distinct preferences of multiple family members:
   - Explains the **shared compromise** (e.g., *"Paddington 2 satisfies Dad's request for witty British humor, Mom's desire for warmth, and Leo's strict PG bedtime limit"*).
   - Provides concise, spoiler-free vibe summaries and dynamic tone meters (Humor, Thrill, Emotional Heart, Pacing Energy).
 
@@ -168,7 +168,7 @@ When running, interactive OpenAPI documentation is available at:
 
 ## 🗄️ Database & Supabase Setup
 
-CineMind AI uses **Supabase / PostgreSQL** for scalable persistence with Row-Level Security (RLS).
+CineMind uses **Supabase / PostgreSQL** for scalable persistence with Row-Level Security (RLS).
 
 ### Schema Tables (`backend/migrations/001_initial_schema.sql`):
 1. `profiles`: Household members with avatar, kid flags, and age rating ceilings.
@@ -236,12 +236,12 @@ npm run build
 
 ## 🌐 TMDB Movie Metadata Integration & API Setup
 
-CineMind AI integrates with **The Movie Database (TMDB)** for real-time movie search, trending and popular discovery, official age ratings, backdrops, cast records, and verified JustWatch streaming availability.
+CineMind integrates with **The Movie Database (TMDB)** for real-time movie search, trending and popular discovery, official age ratings, backdrops, cast records, and verified JustWatch streaming availability.
 
 ### 1. Zero-Leak Security Architecture
 - **Private API Key Isolation:** TMDB API keys and Read Access Tokens are **never exposed to client-side bundles or browser network requests**.
 - **Server Backend Proxy:** All metadata requests are routed through the local backend proxy (`/api/tmdb/*`) built into `vite.config.ts`.
-- **Automatic Fallback:** If `TMDB_API_KEY` is not configured, or if an HTTP 429 rate limit is reached, CineMind AI seamlessly operates using its verified sample database without interrupting user experience.
+- **Automatic Fallback:** If `TMDB_API_KEY` is not configured, or if an HTTP 429 rate limit is reached, CineMind seamlessly operates using its verified sample database without interrupting user experience.
 
 ### 2. Obtaining a Free TMDB API Key
 1. Create a free account at [The Movie Database (TMDB)](https://www.themoviedb.org/).
@@ -283,7 +283,7 @@ This application complies with TMDB API terms of use:
 
 ## 📦 Adapting for Amazon Fire TV Production
 
-To deploy CineMind AI directly to Fire TV devices:
+To deploy CineMind directly to Fire TV devices:
 1. **Amazon Web App Tester:** Host the built application (`dist/` folder) on HTTPS or test locally by entering the URL into Amazon Web App Tester on your Fire TV Stick / Fire TV Cube.
 2. **Amazon Appstore Submission:** Package the web app with a Fire TV manifest (`manifest.json`) or bundle using Cordova / Capacitor for native APK submission.
 

@@ -9,7 +9,7 @@ async def health_check():
     status = supabase_service.get_status()
     return {
         "status": "healthy",
-        "service": "CineMind AI FastAPI Backend",
+        "service": "CineMind FastAPI Backend",
         "version": "1.0.0",
         "database": status
     }
@@ -40,7 +40,7 @@ async def system_status():
             "database_mode": status["mode"],
             "supabase_url": status["url"],
             "version": "1.0.0",
-            "attribution": "Powered by CineMind AI and TMDB API (Not endorsed or certified by TMDB)"
+            "attribution": "Powered by CineMind and TMDB API (Not endorsed or certified by TMDB)"
         },
         source=status["mode"],
         message="System operational"

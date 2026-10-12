@@ -17,14 +17,14 @@ logger = logging.getLogger("cinemind.app")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info(f"CineMind AI backend starting on port {settings.port} [{settings.environment} mode]")
+    logger.info(f"CineMind backend starting on port {settings.port} [{settings.environment} mode]")
     if settings.supabase_url:
         logger.info(f"Configured Supabase URL: {settings.supabase_url}")
     yield
-    logger.info("CineMind AI backend shutting down...")
+    logger.info("CineMind backend shutting down...")
 
 app = FastAPI(
-    title="CineMind AI API",
+    title="CineMind API",
     description=(
         "AI-powered 10-foot television entertainment discovery, personalized recommendations, "
         "and multi-generational Family Vote consensus engine for Amazon Fire TV."

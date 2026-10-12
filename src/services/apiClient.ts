@@ -1,5 +1,5 @@
 /**
- * CineMind AI - Backend Typed API Client
+ * CineMind - Backend Typed API Client
  * Seamlessly connects React Fire TV frontend to FastAPI & Supabase
  * with transparent fallback to local demo mode when offline.
  */

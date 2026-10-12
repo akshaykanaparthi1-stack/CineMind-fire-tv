@@ -209,7 +209,7 @@ export const SearchHub: React.FC<SearchHubProps> = ({
         <div className="flex items-center justify-center gap-3">
           <h1 className="text-3xl font-extrabold font-display text-white">
             {searchMode === 'ai_assistant'
-              ? 'CineMind AI Conversational Discovery'
+              ? 'CineMind Conversational Discovery'
               : 'Discover Titles with TMDB API'}
           </h1>
           {searchMode === 'tmdb_search' && <TMDBAttribution status={apiStatus} compact />}
@@ -304,7 +304,7 @@ export const SearchHub: React.FC<SearchHubProps> = ({
                       }`}>
                         {aiResponse.providerUsed === 'bedrock'
                           ? '● Amazon Bedrock Active'
-                          : '● CineMind AI Rule Engine'}
+                          : '● CineMind Rule Engine'}
                       </span>
                     </h3>
                   </div>

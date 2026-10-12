@@ -7,7 +7,7 @@ import type {
 } from '../types/tmdb';
 import { MOVIES_DATABASE } from '../data/moviesData';
 
-// TMDB Genre ID to canonical CineMind AI GenreType mapping
+// TMDB Genre ID to canonical CineMind GenreType mapping
 export const TMDB_TO_GENRE_MAP: Record<number, GenreType> = {
   28: 'Action',
   12: 'Action',          // Adventure

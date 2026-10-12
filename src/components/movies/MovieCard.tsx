@@ -87,7 +87,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
       {/* Top Floating Badges */}
       <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
-        {/* CineMind AI Match Score */}
+        {/* CineMind Match Score */}
         <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-cinematic-950/85 backdrop-blur-md border border-fire-amber/50 text-fire-amber font-display font-bold text-xs shadow-lg">
           <Sparkles className="w-3 h-3 text-fire-amber animate-pulse" />
           <span>{movie.aiInsights.matchScore}% Match</span>

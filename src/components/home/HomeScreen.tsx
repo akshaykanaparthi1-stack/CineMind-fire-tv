@@ -238,7 +238,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* 4. Recommended for You */}
       <MovieRail
         title={`Recommended for You (${activeProfile.name.split(' ')[0]})`}
-        subtitle="Curated by CineMind AI based on your favorite tones, pacing, and rating safety"
+        subtitle="Curated by CineMind based on your favorite tones, pacing, and rating safety"
         icon={<Sparkles className="w-5 h-5 text-neon-cyan" />}
         movies={recommendedForYou}
         groupName="rail-recommended"

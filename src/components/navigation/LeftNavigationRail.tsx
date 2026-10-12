@@ -169,7 +169,7 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
           >
             <div className="flex items-center gap-1.5">
               <span className="text-lg font-black tracking-tight font-display text-white">
-                CineMind <span className="text-fire-amber">AI</span>
+                Cine<span className="text-fire-amber">Mind</span>
               </span>
             </div>
             <span className="flex items-center gap-1 text-[9px] font-bold tracking-wider uppercase text-slate-400">
