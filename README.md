@@ -104,6 +104,41 @@ Open **[http://localhost:5173](http://localhost:5173)** in your browser.
 
 ---
 
+## 🌐 TMDB Movie Metadata Integration & API Setup
+
+CineMind AI integrates with **The Movie Database (TMDB)** for real-time movie search, trending and popular discovery, official age ratings, backdrops, cast records, and verified JustWatch streaming availability.
+
+### 1. Zero-Leak Security Architecture
+- **Private API Key Isolation:** TMDB API keys and Read Access Tokens are **never exposed to client-side bundles or browser network requests**.
+- **Server Backend Proxy:** All metadata requests are routed through the local backend proxy (`/api/tmdb/*`) built into `vite.config.ts`.
+- **Automatic Fallback:** If `TMDB_API_KEY` is not configured, or if an HTTP 429 rate limit is reached, CineMind AI seamlessly operates using its built-in sample database without interrupting user experience.
+
+### 2. Obtaining a Free TMDB API Key
+1. Create a free account at [The Movie Database (TMDB)](https://www.themoviedb.org/).
+2. Navigate to **Settings → API** (`https://www.themoviedb.org/settings/api`).
+3. Request a Developer API Key (v3).
+
+### 3. Environment Variable Configuration
+Copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+```
+Open `.env` and add your API key:
+```ini
+# TMDB API Key (v3) - Used exclusively by the server proxy
+TMDB_API_KEY=your_actual_tmdb_api_key_here
+```
+> [!NOTE]
+> `.env` is included in `.gitignore` to prevent committing secrets to version control.
+
+### 4. TMDB Terms & Attribution Notice
+This application complies with TMDB API terms of use:
+> **Attribution:** *This product uses the TMDB API but is not endorsed or certified by TMDB.*
+> 
+> Movie posters, high-resolution backdrops, cast directories, and titles are sourced via TMDB API. Verified streaming availability data is provided through TMDB's JustWatch integration.
+
+---
+
 ## 📦 Adapting for Amazon Fire TV Production
 
 To deploy CineMind AI directly to Fire TV devices:

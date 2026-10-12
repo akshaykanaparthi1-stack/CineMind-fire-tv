@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import type { Movie } from '../../types';
 import { useTVFocus } from '../../context/TVNavigationContext';
 import { MovieImage } from '../common/MovieImage';
+import { TMDBLogoSvg } from '../common/TMDBAttribution';
+import { tmdbMovieService } from '../../services/tmdbService';
 import { 
   X, 
   Play, 
@@ -12,9 +14,10 @@ import {
   Clock, 
   ShieldCheck, 
   Sparkles, 
-  Info,
-  AlertTriangle,
-  Tv
+  Info, 
+  AlertTriangle, 
+  Tv, 
+  ExternalLink 
 } from 'lucide-react';
 
 interface MovieDetailModalProps {
@@ -35,6 +38,17 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
   const [activeTab, setActiveTab] = useState<'overview' | 'ai' | 'safety' | 'cast'>('overview');
   const [isPlayingTrailer, setIsPlayingTrailer] = useState(false);
   const [showWhereToWatchModal, setShowWhereToWatchModal] = useState(false);
+  const [detailedMovie, setDetailedMovie] = useState<Movie | null>(movie);
+
+  // Fetch full details if TMDB movie or in catalog
+  useEffect(() => {
+    setDetailedMovie(movie);
+    if (movie) {
+      tmdbMovieService.getMovieDetails(movie.id).then((full) => {
+        if (full) setDetailedMovie(full);
+      });
+    }
+  }, [movie]);
 
   useEffect(() => {
     const handleTVBack = () => {
@@ -61,7 +75,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
 
   const watchBtn = useTVFocus('modal-btn-where-to-watch', 'modal-actions', {
     order: 3,
-    onSelect: () => setShowWhereToWatchModal(true),
+    onSelect: () => setShowWhereToWatchModal((prev) => !prev),
   });
 
   const trailerBtn = useTVFocus('modal-btn-trailer', 'modal-actions', {
@@ -70,6 +84,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
   });
 
   if (!movie) return null;
+  const current = detailedMovie || movie;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:p-8 bg-black/85 backdrop-blur-xl animate-fade-in select-none">
@@ -88,7 +103,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                 Now Streaming Fire TV Preview
               </h4>
               <p className="text-xs text-slate-400 max-w-md">
-                Simulating 4K HDR playback for "{movie.title}" on {movie.streamingProvider}.
+                Simulating 4K HDR playback for "{current.title}" on {current.streamingProvider || 'Prime Video'}.
               </p>
               <button
                 onClick={() => setIsPlayingTrailer(false)}
@@ -100,11 +115,11 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
           ) : (
             <>
               <MovieImage
-                src={movie.backdropUrl}
-                alt={movie.title}
-                title={movie.title}
-                year={movie.year}
-                genre={movie.genres[0]}
+                src={current.backdropUrl}
+                alt={current.title}
+                title={current.title}
+                year={current.year}
+                genre={current.genres[0]}
                 aspectRatio="backdrop"
                 className="w-full h-full object-cover object-center"
               />
@@ -129,30 +144,45 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
           <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between flex-wrap gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span className="px-2.5 py-1 rounded bg-fire-amber text-black font-extrabold text-xs tracking-wider uppercase shadow-md">
-                  {movie.streamingProvider}
-                </span>
-                <span className="px-2 py-0.5 rounded text-xs font-bold tracking-wider bg-slate-800 border border-slate-600 text-white">
-                  {movie.ageRating}
+                {current.streamingProvider && (
+                  <span className="px-2.5 py-1 rounded bg-fire-amber text-black font-extrabold text-xs tracking-wider uppercase shadow-md">
+                    {current.streamingProvider}
+                  </span>
+                )}
+                <span className={`px-2 py-0.5 rounded text-xs font-bold tracking-wider border ${
+                  current.certificationStatus === 'verified'
+                    ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300'
+                    : 'bg-slate-800 border-slate-600 text-white'
+                }`}>
+                  {current.ageRating}
+                  {current.certificationStatus === 'verified' && ' • Verified US'}
                 </span>
                 <span className="flex items-center gap-1 text-xs text-amber-400 font-bold bg-black/60 px-2.5 py-0.5 rounded backdrop-blur-md">
                   <Star className="w-3.5 h-3.5 fill-amber-400" />
-                  {movie.rating.toFixed(1)} IMDb
+                  {current.rating.toFixed(1)}
+                  {current.voteCount ? ` (${current.voteCount.toLocaleString()} votes)` : ' Rating'}
                 </span>
                 <span className="flex items-center gap-1 text-xs text-slate-300 bg-black/60 px-2 py-0.5 rounded backdrop-blur-md">
                   <Clock className="w-3.5 h-3.5 text-slate-400" />
-                  {movie.runtimeMinutes} min
+                  {current.runtimeMinutes} min
                 </span>
                 <span className="text-xs text-slate-400 font-mono bg-black/60 px-2 py-0.5 rounded">
-                  {movie.year}
+                  {current.year}
                 </span>
+                {current.isFromTMDB && (
+                  <span className="text-[10px] text-cyan-300 font-bold bg-cyan-950/80 border border-cyan-800 px-2 py-0.5 rounded">
+                    TMDB Live
+                  </span>
+                )}
               </div>
               <h2 className="text-2xl sm:text-4xl font-extrabold font-display text-white tracking-tight drop-shadow-md">
-                {movie.title}
+                {current.title}
               </h2>
-              <p className="text-xs sm:text-sm text-slate-300 italic mt-0.5">
-                "{movie.tagline}"
-              </p>
+              {current.tagline && (
+                <p className="text-xs sm:text-sm text-slate-300 italic mt-0.5">
+                  "{current.tagline}"
+                </p>
+              )}
             </div>
 
             {/* CineMind AI Score Stamp */}
@@ -165,7 +195,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   CineMind AI Match
                 </span>
                 <span className="text-lg font-black text-fire-amber font-display">
-                  {movie.aiInsights.matchScore}%
+                  {current.aiInsights.matchScore}%
                 </span>
               </div>
             </div>
@@ -175,13 +205,13 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
         {/* Modal Body */}
         <div className="p-6 sm:p-8 flex-1 flex flex-col">
           
-          {/* Action Buttons Row: Add to Watchlist, Vote for This Movie, Find Where to Watch */}
+          {/* Action Buttons Row */}
           <div className="flex items-center gap-3 pb-6 border-b border-slate-800/80 flex-wrap">
             
             {/* 1. Add to Watchlist Button */}
             <button
               ref={watchlistBtn.ref as any}
-              onClick={() => onToggleWatchlist(movie)}
+              onClick={() => onToggleWatchlist(current)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all tv-focusable ${
                 watchlistBtn.isFocused
                   ? 'bg-slate-700 text-white ring-4 ring-fire-amber scale-105'
@@ -197,7 +227,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             {/* 2. Vote for This Movie Button */}
             <button
               ref={voteBtn.ref as any}
-              onClick={() => onStartFamilyVote(movie)}
+              onClick={() => onStartFamilyVote(current)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm tracking-wide transition-all tv-focusable ${
                 voteBtn.isFocused
                   ? 'bg-neon-purple text-white ring-4 ring-neon-purple/60 scale-105 shadow-lg'
@@ -208,19 +238,19 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               <span>Vote for This Movie</span>
             </button>
 
-            {/* 3. Find Where to Watch (With Verified Indicator) */}
+            {/* 3. Find Where to Watch (Verified vs Unverified) */}
             <button
               ref={watchBtn.ref as any}
-              onClick={() => setShowWhereToWatchModal(true)}
+              onClick={() => setShowWhereToWatchModal((prev) => !prev)}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm tracking-wide transition-all tv-focusable ${
                 watchBtn.isFocused
                   ? 'bg-fire-amber text-black ring-4 ring-fire-amber/60 scale-105 shadow-lg shadow-fire-amber/40'
-                  : movie.isVerifiedStreaming
+                  : current.isVerifiedStreaming
                   ? 'bg-white text-black hover:bg-slate-200'
                   : 'bg-slate-800 text-slate-300 hover:text-white border border-slate-700'
               }`}
             >
-              {movie.isVerifiedStreaming ? (
+              {current.isVerifiedStreaming ? (
                 <>
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   <span>Find Where to Watch (Verified)</span>
@@ -233,7 +263,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               )}
             </button>
 
-            {/* Watch Trailer Preview Button */}
+            {/* 4. Preview Trailer Button */}
             <button
               ref={trailerBtn.ref as any}
               onClick={() => setIsPlayingTrailer(true)}
@@ -246,18 +276,18 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             </button>
           </div>
 
-          {/* Where to Watch Status Notification if clicked or unverified */}
+          {/* Where to Watch Status Notification */}
           {showWhereToWatchModal && (
             <div className="my-4 p-4 rounded-2xl bg-slate-800/90 border border-slate-700 animate-fade-in flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  {movie.isVerifiedStreaming ? (
+                  {current.isVerifiedStreaming ? (
                     <ShieldCheck className="w-5 h-5 text-emerald-400" />
                   ) : (
                     <AlertTriangle className="w-5 h-5 text-amber-400" />
                   )}
                   <h4 className="text-sm font-bold text-white">
-                    Streaming Availability on Fire TV
+                    Streaming Availability & Rights on Fire TV
                   </h4>
                 </div>
                 <button
@@ -268,24 +298,48 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                 </button>
               </div>
 
-              {movie.isVerifiedStreaming ? (
-                <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-xs">
-                  <p className="font-semibold text-emerald-300 flex items-center gap-1.5 mb-1">
+              {current.isVerifiedStreaming ? (
+                <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-xs space-y-2">
+                  <p className="font-semibold text-emerald-300 flex items-center gap-1.5">
                     <Check className="w-4 h-4 text-emerald-400" />
-                    Verified Destination: {movie.streamingProvider}
+                    Verified Provider Destination: {current.streamingProvider || 'Prime Video'}
                   </p>
-                  <p className="text-slate-300">
-                    This title is verified and ready for instant playback in your Amazon Prime Video library or Fire TV subscription.
-                  </p>
+                  {current.verifiedWatchProviders && current.verifiedWatchProviders.length > 0 ? (
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1.5">
+                        Verified Streaming Platforms (JustWatch / TMDB):
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {current.verifiedWatchProviders.map((vp, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-emerald-700/50 text-[11px] text-white font-medium"
+                          >
+                            {vp.logoUrl && (
+                              <img src={vp.logoUrl} alt="" className="w-3.5 h-3.5 rounded object-contain" />
+                            )}
+                            <span>{vp.providerName}</span>
+                            <span className="text-[9px] uppercase px-1 rounded bg-emerald-900/80 text-emerald-300">
+                              {vp.type}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-slate-300">
+                      {current.verifiedStreamingDestination || 'Verified and ready for playback in Prime Video.'}
+                    </p>
+                  )}
                 </div>
               ) : (
-                <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/40 text-xs">
+                <div className="p-3.5 rounded-xl bg-amber-950/40 border border-amber-500/40 text-xs">
                   <p className="font-semibold text-amber-300 flex items-center gap-1.5 mb-1">
                     <AlertTriangle className="w-4 h-4 text-amber-400" />
-                    Availability Not Verified
+                    Availability Not Verified for Region
                   </p>
                   <p className="text-slate-300">
-                    Live streaming rights for "{movie.title}" on {movie.streamingProvider} have not been verified for your local region. Please search your local Fire TV app store or regional channels.
+                    Live digital rights for "{current.title}" have not been verified through TMDB watch providers for your region. Please search local Fire TV app channels or Prime Video store.
                   </p>
                 </div>
               )}
@@ -340,14 +394,13 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
           {activeTab === 'overview' && (
             <div className="space-y-4 animate-fade-in">
               <div className="flex flex-col md:flex-row gap-6 items-start">
-                {/* Poster Card */}
                 <div className="w-40 min-w-[160px] aspect-[2/3] rounded-2xl overflow-hidden shadow-xl border border-slate-700/60 hidden sm:block">
                   <MovieImage
-                    src={movie.posterUrl}
-                    alt={movie.title}
-                    title={movie.title}
-                    year={movie.year}
-                    genre={movie.genres[0]}
+                    src={current.posterUrl}
+                    alt={current.title}
+                    title={current.title}
+                    year={current.year}
+                    genre={current.genres[0]}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -358,7 +411,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                       Overview & Story
                     </h4>
                     <p className="text-sm leading-relaxed text-slate-200">
-                      {movie.synopsis}
+                      {current.synopsis}
                     </p>
                   </div>
 
@@ -367,7 +420,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                       Genres
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {movie.genres.map((g) => (
+                      {current.genres.map((g) => (
                         <span
                           key={g}
                           className="px-3 py-1 rounded-xl text-xs bg-slate-800 text-slate-200 border border-slate-700 font-medium"
@@ -381,7 +434,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   <div className="pt-2">
                     <span className="text-xs text-slate-400 font-semibold">Mood Alignment: </span>
                     <span className="text-xs text-fire-amber font-bold">
-                      {movie.moods.join(' • ')}
+                      {current.moods.join(' • ')}
                     </span>
                   </div>
                 </div>
@@ -398,10 +451,10 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   <span>Why CineMind AI Recommends This</span>
                 </div>
                 <p className="text-sm font-semibold text-white mb-2">
-                  "{movie.aiInsights.headline}"
+                  "{current.aiInsights.headline}"
                 </p>
                 <ul className="space-y-1.5 text-xs text-slate-300">
-                  {movie.aiInsights.fitReasons.map((reason, idx) => (
+                  {current.aiInsights.fitReasons.map((reason, idx) => (
                     <li key={idx} className="flex items-start gap-2">
                       <span className="text-fire-amber font-bold">✓</span>
                       <span>{reason}</span>
@@ -419,11 +472,11 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-1">
                     <div
                       className="bg-amber-400 h-full rounded-full"
-                      style={{ width: `${movie.aiInsights.toneScores.humor}%` }}
+                      style={{ width: `${current.aiInsights.toneScores.humor}%` }}
                     />
                   </div>
                   <span className="text-xs font-bold text-slate-200">
-                    {movie.aiInsights.toneScores.humor}%
+                    {current.aiInsights.toneScores.humor}%
                   </span>
                 </div>
 
@@ -434,11 +487,11 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-1">
                     <div
                       className="bg-orange-500 h-full rounded-full"
-                      style={{ width: `${movie.aiInsights.toneScores.thrill}%` }}
+                      style={{ width: `${current.aiInsights.toneScores.thrill}%` }}
                     />
                   </div>
                   <span className="text-xs font-bold text-slate-200">
-                    {movie.aiInsights.toneScores.thrill}%
+                    {current.aiInsights.toneScores.thrill}%
                   </span>
                 </div>
 
@@ -449,11 +502,11 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-1">
                     <div
                       className="bg-pink-500 h-full rounded-full"
-                      style={{ width: `${movie.aiInsights.toneScores.emotional}%` }}
+                      style={{ width: `${current.aiInsights.toneScores.emotional}%` }}
                     />
                   </div>
                   <span className="text-xs font-bold text-slate-200">
-                    {movie.aiInsights.toneScores.emotional}%
+                    {current.aiInsights.toneScores.emotional}%
                   </span>
                 </div>
 
@@ -464,11 +517,11 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden mb-1">
                     <div
                       className="bg-cyan-400 h-full rounded-full"
-                      style={{ width: `${movie.aiInsights.toneScores.pacing}%` }}
+                      style={{ width: `${current.aiInsights.toneScores.pacing}%` }}
                     />
                   </div>
                   <span className="text-xs font-bold text-slate-200">
-                    {movie.aiInsights.toneScores.pacing}%
+                    {current.aiInsights.toneScores.pacing}%
                   </span>
                 </div>
               </div>
@@ -478,7 +531,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                 <Info className="w-4 h-4 text-cyan-400 flex-shrink-0" />
                 <p className="text-xs text-slate-300">
                   <strong className="text-white">Spoiler-Free Vibe Check: </strong>
-                  {movie.aiInsights.spoilerFreeVibeCheck}
+                  {current.aiInsights.spoilerFreeVibeCheck}
                 </p>
               </div>
             </div>
@@ -488,12 +541,23 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
           {activeTab === 'safety' && (
             <div className="space-y-3.5 animate-fade-in">
               <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/40">
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase mb-1">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Age Verdict: {movie.ageRating} Rated</span>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase">
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>Age Verdict: {current.ageRating} Rated</span>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded ${
+                    current.certificationStatus === 'verified'
+                      ? 'bg-emerald-900 text-emerald-300 border border-emerald-700'
+                      : 'bg-slate-800 text-slate-400 border border-slate-700'
+                  }`}>
+                    {current.certificationStatus === 'verified'
+                      ? '✓ Official MPAA / US Certified'
+                      : 'Uncertified / Estimated'}
+                  </span>
                 </div>
                 <p className="text-sm font-semibold text-emerald-200">
-                  {movie.familySafety.ageAppropriateVerdict}
+                  {current.familySafety?.ageAppropriateVerdict || `Certified ${current.ageRating} for general viewing.`}
                 </p>
               </div>
 
@@ -503,7 +567,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                     Violence & Peril
                   </span>
                   <p className="text-xs text-slate-300">
-                    {movie.familySafety.violence}
+                    {current.familySafety?.violence || 'Official ratings certification guidance only.'}
                   </p>
                 </div>
 
@@ -512,7 +576,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                     Language & Slang
                   </span>
                   <p className="text-xs text-slate-300">
-                    {movie.familySafety.language}
+                    {current.familySafety?.language || 'Official ratings certification guidance only.'}
                   </p>
                 </div>
 
@@ -521,7 +585,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                     Sensitive Themes
                   </span>
                   <p className="text-xs text-slate-300">
-                    {movie.familySafety.themes}
+                    {current.familySafety?.themes || 'Themes consistent with ' + current.genres.join(', ') + '.'}
                   </p>
                 </div>
               </div>
@@ -537,7 +601,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                     Director
                   </span>
                   <span className="text-sm font-bold text-white">
-                    {movie.director}
+                    {current.director}
                   </span>
                 </div>
 
@@ -546,8 +610,13 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                     Release Information
                   </span>
                   <span className="text-sm text-slate-200">
-                    Year: {movie.year} • Runtime: {movie.runtimeMinutes} min
+                    Year: {current.year} • Runtime: {current.runtimeMinutes} min
                   </span>
+                  {current.originalLanguage && (
+                    <span className="text-xs text-slate-400 block mt-1">
+                      Original Language: {current.originalLanguage.toUpperCase()}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -556,7 +625,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   Starring Cast
                 </span>
                 <div className="flex flex-wrap gap-2">
-                  {movie.cast.map((actor) => (
+                  {current.cast.map((actor) => (
                     <span
                       key={actor}
                       className="px-3 py-1 rounded-lg text-xs bg-slate-900 border border-slate-700 text-slate-200 font-medium"
@@ -568,6 +637,25 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               </div>
             </div>
           )}
+
+          {/* TMDB Metadata Attribution Footer */}
+          <div className="mt-6 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
+            <div className="flex items-center gap-2">
+              <TMDBLogoSvg className="h-3" />
+              <span>This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
+            </div>
+            {current.isFromTMDB && (
+              <a
+                href={`https://www.themoviedb.org/movie/${current.id.replace('tmdb-', '')}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1 text-fire-amber hover:underline text-[10px] font-bold"
+              >
+                <span>View on TMDB</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+          </div>
 
         </div>
       </div>

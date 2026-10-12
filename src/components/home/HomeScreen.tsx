@@ -1,10 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import type { Movie, MoodType, GenreType, UserProfile } from '../../types';
+import type { TMDBApiStatus } from '../../types/tmdb';
 import { MOVIES_DATABASE } from '../../data/moviesData';
+import { tmdbMovieService } from '../../services/tmdbService';
 import { HeroBanner } from './HeroBanner';
 import { MoodSelector } from './MoodSelector';
 import { GenreFilterBar } from './GenreFilterBar';
 import { MovieRail } from '../movies/MovieRail';
+import { TMDBAttribution } from '../common/TMDBAttribution';
 import { Flame, Sparkles, ShieldCheck, Zap, Clock, PlayCircle } from 'lucide-react';
 
 interface HomeScreenProps {
@@ -30,18 +33,60 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   const [selectedGenre, setSelectedGenre] = useState<GenreType | 'All'>('All');
   const [activeMoodFilter, setActiveMoodFilter] = useState<MoodType | null>(null);
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
+  const [popularMoviesList, setPopularMoviesList] = useState<Movie[]>([]);
+  const [familyPicksList, setFamilyPicksList] = useState<Movie[]>([]);
+  const [apiStatus, setApiStatus] = useState<TMDBApiStatus | undefined>(undefined);
+  const [, setIsLoadingMetadata] = useState<boolean>(true);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadData() {
+      setIsLoadingMetadata(true);
+      try {
+        const [status, trending, popular, family] = await Promise.all([
+          tmdbMovieService.getStatus(),
+          tmdbMovieService.getTrendingMovies(),
+          tmdbMovieService.getPopularMovies(),
+          tmdbMovieService.getFamilyPicks(),
+        ]);
+        if (mounted) {
+          setApiStatus(status);
+          setTrendingMovies(trending);
+          setPopularMoviesList(popular);
+          setFamilyPicksList(family);
+        }
+      } catch {
+        // Fallback already handled inside tmdbMovieService
+      } finally {
+        if (mounted) setIsLoadingMetadata(false);
+      }
+    }
+    loadData();
+    return () => { mounted = false; };
+  }, []);
+
+  // Combined pool including live TMDB discoveries
+  const combinedCatalog = useMemo(() => {
+    const map = new Map<string, Movie>();
+    MOVIES_DATABASE.forEach((m) => map.set(m.id, m));
+    trendingMovies.forEach((m) => map.set(m.id, m));
+    popularMoviesList.forEach((m) => map.set(m.id, m));
+    familyPicksList.forEach((m) => map.set(m.id, m));
+    return Array.from(map.values());
+  }, [trendingMovies, popularMoviesList, familyPicksList]);
 
   // Featured Hero movie
   const featuredMovie = useMemo(() => {
     if (familySafeMode) {
-      return MOVIES_DATABASE.find((m) => m.id === 'paddington-2') || MOVIES_DATABASE[0];
+      return combinedCatalog.find((m) => m.id === 'paddington-2') || combinedCatalog[0] || MOVIES_DATABASE[0];
     }
-    return MOVIES_DATABASE.find((m) => m.featured) || MOVIES_DATABASE[0];
-  }, [familySafeMode]);
+    return combinedCatalog.find((m) => m.featured) || trendingMovies[0] || combinedCatalog[0] || MOVIES_DATABASE[0];
+  }, [familySafeMode, combinedCatalog, trendingMovies]);
 
   // Master filtered list according to global safe mode and genre
   const baseMovies = useMemo(() => {
-    return MOVIES_DATABASE.filter((m) => {
+    return combinedCatalog.filter((m) => {
       if (familySafeMode && !['G', 'PG'].includes(m.ageRating)) {
         return false;
       }
@@ -53,7 +98,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       }
       return true;
     });
-  }, [familySafeMode, selectedGenre, activeMoodFilter]);
+  }, [combinedCatalog, familySafeMode, selectedGenre, activeMoodFilter]);
 
   // Section 1: Continue Exploring (Titles with in-progress viewing)
   const continueExploringMovies = useMemo(() => {
@@ -67,13 +112,24 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
   // Section 3: Popular Movies
   const popularMovies = useMemo(() => {
+    if (popularMoviesList.length > 0) {
+      return popularMoviesList.filter((m) => {
+        if (familySafeMode && !['G', 'PG'].includes(m.ageRating)) return false;
+        if (selectedGenre !== 'All' && !m.genres.includes(selectedGenre)) return false;
+        if (activeMoodFilter && !m.moods.includes(activeMoodFilter)) return false;
+        return true;
+      });
+    }
     return baseMovies.filter((m) => m.trending || m.rating >= 8.0);
-  }, [baseMovies]);
+  }, [popularMoviesList, baseMovies, familySafeMode, selectedGenre, activeMoodFilter]);
 
   // Section 4: Family Picks
   const familyPicks = useMemo(() => {
+    if (familyPicksList.length > 0) {
+      return familyPicksList.filter((m) => ['G', 'PG'].includes(m.ageRating));
+    }
     return baseMovies.filter((m) => m.familyFavorite || ['G', 'PG'].includes(m.ageRating));
-  }, [baseMovies]);
+  }, [familyPicksList, baseMovies]);
 
   // Extra Curated Rails
   const quickWatches = useMemo(() => {
@@ -243,6 +299,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         onToggleWatchlist={onToggleWatchlist}
         cardSize="standard"
       />
+
+      {/* TMDB API Attribution & Provider Status Banner */}
+      <div className="px-8 mt-12">
+        <TMDBAttribution status={apiStatus} />
+      </div>
 
     </div>
   );

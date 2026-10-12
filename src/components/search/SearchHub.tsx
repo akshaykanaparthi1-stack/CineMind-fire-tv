@@ -1,8 +1,11 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { Movie, GenreType } from '../../types';
-import { MOVIES_DATABASE, GENRES_LIST } from '../../data/moviesData';
+import type { TMDBApiStatus } from '../../types/tmdb';
+import { GENRES_LIST } from '../../data/moviesData';
+import { tmdbMovieService } from '../../services/tmdbService';
 import { MovieCard } from '../movies/MovieCard';
-import { Search, Mic, X } from 'lucide-react';
+import { TMDBAttribution } from '../common/TMDBAttribution';
+import { Search, Mic, X, Globe, AlertTriangle, RefreshCw } from 'lucide-react';
 import { useTVNavigation } from '../../context/TVNavigationContext';
 
 interface SearchHubProps {
@@ -11,6 +14,17 @@ interface SearchHubProps {
   onToggleWatchlist: (movie: Movie) => void;
   initialQuery?: string;
 }
+
+const SUPPORTED_LANGUAGES = [
+  { code: 'all', label: 'All Languages' },
+  { code: 'en', label: 'English (EN)' },
+  { code: 'es', label: 'Spanish (ES)' },
+  { code: 'ja', label: 'Japanese (JA)' },
+  { code: 'ko', label: 'Korean (KO)' },
+  { code: 'fr', label: 'French (FR)' },
+  { code: 'de', label: 'German (DE)' },
+  { code: 'hi', label: 'Hindi (HI)' },
+];
 
 export const SearchHub: React.FC<SearchHubProps> = ({
   onSelectMovie,
@@ -21,7 +35,15 @@ export const SearchHub: React.FC<SearchHubProps> = ({
   const { playFeedbackSound } = useTVNavigation();
   const [query, setQuery] = useState(initialQuery);
   const [selectedGenre, setSelectedGenre] = useState<GenreType | 'All'>('All');
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
   const [selectedQuickChip, setSelectedQuickChip] = useState<string | null>(null);
+
+  // Async search states
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRateLimited, setIsRateLimited] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [apiStatus, setApiStatus] = useState<TMDBApiStatus | undefined>(undefined);
 
   useEffect(() => {
     if (initialQuery) {
@@ -29,12 +51,16 @@ export const SearchHub: React.FC<SearchHubProps> = ({
     }
   }, [initialQuery]);
 
+  useEffect(() => {
+    tmdbMovieService.getStatus().then(setApiStatus);
+  }, []);
+
   const quickChips = [
     { label: '🍕 Under 95m Quick Watches', filter: 'short' },
-    { label: '🌟 95%+ High AI Compatibility', filter: 'high-match' },
-    { label: '👨‍👩‍👧‍👦 100% Family Friendly (G/PG)', filter: 'family' },
-    { label: '🚀 Mind-Expanding Sci-Fi', filter: 'scifi' },
-    { label: '😂 Belly-Laugh Comedies', filter: 'comedy' },
+    { label: '🌟 90%+ High Match Score', filter: 'high-match' },
+    { label: '👨‍👩‍👧‍👦 Family Friendly (G/PG)', filter: 'family' },
+    { label: '🚀 Sci-Fi Adventures', filter: 'scifi' },
+    { label: '😂 Laugh-Out-Loud Comedies', filter: 'comedy' },
   ];
 
   const handleChipClick = (chipFilter: string) => {
@@ -46,49 +72,70 @@ export const SearchHub: React.FC<SearchHubProps> = ({
     }
   };
 
-  const results = useMemo(() => {
-    return MOVIES_DATABASE.filter((movie) => {
-      // Text query match
-      if (query.trim()) {
-        const q = query.toLowerCase();
-        const matchesTitle = movie.title.toLowerCase().includes(q);
-        const matchesSynopsis = movie.synopsis.toLowerCase().includes(q);
-        const matchesCast = movie.cast.some((c) => c.toLowerCase().includes(q));
-        const matchesDirector = movie.director.toLowerCase().includes(q);
-        const matchesMood = movie.moods.some((m) => m.toLowerCase().includes(q));
-        const matchesGenre = movie.genres.some((g) => g.toLowerCase().includes(q));
+  // Perform debounced search via tmdbMovieService
+  const performSearch = useCallback(async (searchQuery: string, genre: GenreType | 'All', lang: string) => {
+    setIsLoading(true);
+    setErrorMessage(null);
 
-        if (!matchesTitle && !matchesSynopsis && !matchesCast && !matchesDirector && !matchesMood && !matchesGenre) {
-          return false;
-        }
+    try {
+      const res = await tmdbMovieService.searchMovies(searchQuery, {
+        genre: genre !== 'All' ? genre : undefined,
+        language: lang !== 'all' ? lang : undefined,
+      });
+
+      setIsRateLimited(Boolean(res.isRateLimited));
+      if (res.error && res.error !== 'FALLBACK') {
+        setErrorMessage(res.error);
       }
 
-      // Genre filter
-      if (selectedGenre !== 'All' && !movie.genres.includes(selectedGenre)) {
-        return false;
-      }
+      let filtered = res.movies;
 
-      // Quick chip filter
-      if (selectedQuickChip === 'short' && movie.runtimeMinutes > 95) return false;
-      if (selectedQuickChip === 'high-match' && movie.aiInsights.matchScore < 95) return false;
-      if (selectedQuickChip === 'family' && !['G', 'PG'].includes(movie.ageRating)) return false;
-      if (selectedQuickChip === 'scifi' && !movie.genres.includes('Science Fiction')) return false;
-      if (selectedQuickChip === 'comedy' && !movie.genres.includes('Comedy')) return false;
+      // Apply quick chips in memory
+      if (selectedQuickChip === 'short') filtered = filtered.filter((m) => m.runtimeMinutes <= 95);
+      if (selectedQuickChip === 'high-match') filtered = filtered.filter((m) => m.aiInsights.matchScore >= 90);
+      if (selectedQuickChip === 'family') filtered = filtered.filter((m) => ['G', 'PG'].includes(m.ageRating));
+      if (selectedQuickChip === 'scifi') filtered = filtered.filter((m) => m.genres.includes('Science Fiction'));
+      if (selectedQuickChip === 'comedy') filtered = filtered.filter((m) => m.genres.includes('Comedy'));
 
-      return true;
-    });
-  }, [query, selectedGenre, selectedQuickChip]);
+      setMovies(filtered);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Error executing search';
+      setErrorMessage(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [selectedQuickChip]);
+
+  // Debounced search trigger
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      performSearch(query, selectedGenre, selectedLanguage);
+    }, 280);
+
+    return () => clearTimeout(timer);
+  }, [query, selectedGenre, selectedLanguage, performSearch]);
+
+  const handleResetFilters = () => {
+    playFeedbackSound('select');
+    setQuery('');
+    setSelectedGenre('All');
+    setSelectedLanguage('all');
+    setSelectedQuickChip(null);
+  };
 
   return (
     <div className="w-full max-w-[1800px] mx-auto px-8 py-8 animate-fade-in select-none">
       
       {/* Header & Big TV Search Input */}
       <div className="max-w-3xl mx-auto mb-8 text-center">
-        <h1 className="text-3xl font-extrabold font-display text-white mb-2">
-          Discover Anything with CineMind AI
-        </h1>
+        <div className="flex items-center justify-center gap-3 mb-2">
+          <h1 className="text-3xl font-extrabold font-display text-white">
+            Discover Anything with CineMind AI
+          </h1>
+          <TMDBAttribution status={apiStatus} compact />
+        </div>
         <p className="text-xs text-slate-400 mb-6">
-          Search by actors, titles, themes, or ask for specific vibes.
+          Real-time metadata powered by TMDB API. Search titles, actors, genres, or language.
         </p>
 
         {/* 10-Foot Search Bar */}
@@ -101,7 +148,7 @@ export const SearchHub: React.FC<SearchHubProps> = ({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search movies, actors ('Tom Cruise'), genres, or moods ('Excited')..."
+            placeholder="Search movie titles ('Interstellar', 'Moana', 'Spider-Man')..."
             className="w-full pl-14 pr-28 py-4 rounded-2xl bg-cinematic-900 border-2 border-slate-700/80 text-white placeholder-slate-500 font-medium text-base focus:outline-none focus:border-fire-amber focus:ring-4 focus:ring-fire-amber/30 transition-all shadow-xl"
           />
 
@@ -110,6 +157,7 @@ export const SearchHub: React.FC<SearchHubProps> = ({
               <button
                 onClick={() => setQuery('')}
                 className="p-1 rounded-full text-slate-400 hover:text-white"
+                title="Clear search"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -142,12 +190,14 @@ export const SearchHub: React.FC<SearchHubProps> = ({
         </div>
       </div>
 
-      {/* Genre Filter Sub-Bar */}
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+      {/* Language & Genre Filter Sub-Bar */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
+        
+        {/* Genre Selector */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full md:w-auto">
           <button
-            onClick={() => setSelectedGenre('All')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold ${
+            onClick={() => { playFeedbackSound('move'); setSelectedGenre('All'); }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors ${
               selectedGenre === 'All'
                 ? 'bg-white text-black'
                 : 'bg-cinematic-900 text-slate-400 hover:text-white'
@@ -158,8 +208,8 @@ export const SearchHub: React.FC<SearchHubProps> = ({
           {GENRES_LIST.map((genre) => (
             <button
               key={genre}
-              onClick={() => setSelectedGenre(genre)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold ${
+              onClick={() => { playFeedbackSound('move'); setSelectedGenre(genre); }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
                 selectedGenre === genre
                   ? 'bg-fire-amber text-black'
                   : 'bg-cinematic-900 text-slate-400 hover:text-white'
@@ -170,35 +220,98 @@ export const SearchHub: React.FC<SearchHubProps> = ({
           ))}
         </div>
 
-        <span className="text-xs font-mono text-slate-400">
-          Showing {results.length} matches
-        </span>
+        {/* Language Filter & Results Count */}
+        <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cinematic-900 border border-slate-700 text-xs text-slate-300">
+            <Globe className="w-3.5 h-3.5 text-fire-amber" />
+            <select
+              value={selectedLanguage}
+              onChange={(e) => {
+                playFeedbackSound('select');
+                setSelectedLanguage(e.target.value);
+              }}
+              className="bg-transparent text-slate-200 text-xs font-semibold focus:outline-none cursor-pointer"
+            >
+              {SUPPORTED_LANGUAGES.map((lang) => (
+                <option key={lang.code} value={lang.code} className="bg-slate-900 text-white">
+                  {lang.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <span className="text-xs font-mono text-slate-400 whitespace-nowrap">
+            {isLoading ? 'Searching...' : `Showing ${movies.length} matches`}
+          </span>
+        </div>
       </div>
 
-      {/* Results View */}
-      {results.length === 0 ? (
+      {/* Rate-Limit Warning State */}
+      {isRateLimited && (
+        <div className="mb-6 p-4 rounded-2xl bg-amber-950/40 border border-amber-600/60 flex items-center justify-between text-amber-200 text-xs">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+            <span>
+              <strong>TMDB Rate Limit Notice:</strong> API request frequency limit reached (HTTP 429). Temporarily serving local catalog until rate window resets.
+            </span>
+          </div>
+          <button
+            onClick={() => performSearch(query, selectedGenre, selectedLanguage)}
+            className="flex items-center gap-1 px-3 py-1 rounded-lg bg-amber-600/30 hover:bg-amber-600/50 text-white font-bold text-[11px]"
+          >
+            <RefreshCw className="w-3 h-3" />
+            <span>Retry</span>
+          </button>
+        </div>
+      )}
+
+      {/* Error Banner */}
+      {errorMessage && (
+        <div className="mb-6 p-4 rounded-2xl bg-rose-950/40 border border-rose-600/60 flex items-center justify-between text-rose-200 text-xs">
+          <span>{errorMessage}</span>
+          <button
+            onClick={() => performSearch(query, selectedGenre, selectedLanguage)}
+            className="px-3 py-1 rounded-lg bg-rose-600/30 hover:bg-rose-600/50 text-white font-bold text-[11px]"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {/* Loading Skeleton State */}
+      {isLoading ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div
+              key={i}
+              className="w-full aspect-[2/3] rounded-2xl bg-slate-800/60 border border-slate-700/50 animate-pulse flex flex-col justify-end p-4"
+            >
+              <div className="h-4 bg-slate-700/80 rounded mb-2 w-3/4" />
+              <div className="h-3 bg-slate-700/50 rounded w-1/2" />
+            </div>
+          ))}
+        </div>
+      ) : movies.length === 0 ? (
+        /* Empty State */
         <div className="p-16 text-center rounded-3xl bg-cinematic-900/50 border border-slate-800">
           <div className="text-4xl mb-3">🎬</div>
           <h3 className="text-lg font-bold text-white mb-1">
-            No Movies Found for "{query}"
+            No Movies Found for "{query || selectedGenre}"
           </h3>
-          <p className="text-xs text-slate-400 max-w-md mx-auto mb-4">
-            Try a broader keyword, clear the filter chips, or browse by mood from the top menu.
+          <p className="text-xs text-slate-400 max-w-md mx-auto mb-5 leading-relaxed">
+            We couldn't find matches matching your current combination of keywords, genre, and language filters. Try another title or reset your filters.
           </p>
           <button
-            onClick={() => {
-              setQuery('');
-              setSelectedGenre('All');
-              setSelectedQuickChip(null);
-            }}
-            className="px-5 py-2.5 rounded-xl bg-slate-800 text-xs font-bold text-slate-200 hover:bg-slate-700"
+            onClick={handleResetFilters}
+            className="px-6 py-2.5 rounded-xl bg-fire-amber text-black text-xs font-bold hover:brightness-110 shadow-lg"
           >
             Reset Search & Filters
           </button>
         </div>
       ) : (
+        /* Results Grid */
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-          {results.map((movie, index) => (
+          {movies.map((movie, index) => (
             <div key={movie.id} className="flex justify-center">
               <MovieCard
                 movie={movie}
@@ -213,6 +326,11 @@ export const SearchHub: React.FC<SearchHubProps> = ({
           ))}
         </div>
       )}
+
+      {/* Attribution footer */}
+      <div className="mt-12">
+        <TMDBAttribution status={apiStatus} />
+      </div>
 
     </div>
   );

@@ -15,6 +15,8 @@ export const AGE_RATING_SEVERITY: Record<AgeRating, number> = {
   'TV-14': 3,
   'R': 4,
   'TV-MA': 4,
+  'Unrated': 3,
+  'NR': 3,
 };
 
 /**
@@ -46,39 +48,39 @@ export function filterMoviesByMandatoryRestrictions(
 
       // 2. Mandatory Content Restrictions Check
       if (p.contentRestrictions.avoidViolence) {
-        const vText = movie.familySafety.violence.toLowerCase();
+        const vText = movie.familySafety?.violence?.toLowerCase() || '';
         if (movie.ageRating === 'R' || movie.ageRating === 'TV-MA' || vText.includes('gore') || vText.includes('combat') || vText.includes('war')) {
           rejections.push({
             movieId: movie.id,
             movieTitle: movie.title,
             violatingParticipantNames: [p.name],
-            reason: `Violates ${p.name}'s restriction: Avoid Violence (${movie.familySafety.violence})`,
+            reason: `Violates ${p.name}'s restriction: Avoid Violence (${movie.familySafety?.violence || 'High age-rating content'})`,
           });
           return false;
         }
       }
 
       if (p.contentRestrictions.avoidStrongLanguage) {
-        const langText = movie.familySafety.language.toLowerCase();
+        const langText = movie.familySafety?.language?.toLowerCase() || '';
         if (movie.ageRating === 'R' || movie.ageRating === 'TV-MA' || langText.includes('coarse') || langText.includes('strong') || langText.includes('profanity')) {
           rejections.push({
             movieId: movie.id,
             movieTitle: movie.title,
             violatingParticipantNames: [p.name],
-            reason: `Violates ${p.name}'s restriction: Avoid Strong Language (${movie.familySafety.language})`,
+            reason: `Violates ${p.name}'s restriction: Avoid Strong Language (${movie.familySafety?.language || 'High age-rating language'})`,
           });
           return false;
         }
       }
 
       if (p.contentRestrictions.avoidSensitiveThemes) {
-        const themeText = movie.familySafety.themes.toLowerCase();
+        const themeText = movie.familySafety?.themes?.toLowerCase() || '';
         if (themeText.includes('extinction') || themeText.includes('death') || themeText.includes('fanaticism')) {
           rejections.push({
             movieId: movie.id,
             movieTitle: movie.title,
             violatingParticipantNames: [p.name],
-            reason: `Violates ${p.name}'s restriction: Avoid Sensitive Themes (${movie.familySafety.themes})`,
+            reason: `Violates ${p.name}'s restriction: Avoid Sensitive Themes (${movie.familySafety?.themes || 'Mature themes'})`,
           });
           return false;
         }

@@ -9,7 +9,7 @@ export type GenreType =
   | 'Science Fiction' 
   | 'Family';
 
-export type AgeRating = 'G' | 'PG' | 'PG-13' | 'TV-14' | 'R' | 'TV-MA';
+export type AgeRating = 'G' | 'PG' | 'PG-13' | 'TV-14' | 'R' | 'TV-MA' | 'Unrated' | 'NR';
 
 export interface FamilySafetyNotes {
   violence: string;
@@ -48,18 +48,30 @@ export interface Movie {
   trailerVideoId?: string; // YouTube embed ID or video placeholder
   cast: string[];
   director: string;
-  streamingProvider: 'Prime Video' | 'Freevee' | 'Paramount+' | 'Max' | 'MGM+';
+  streamingProvider?: 'Prime Video' | 'Freevee' | 'Paramount+' | 'Max' | 'MGM+' | string;
   isVerifiedStreaming?: boolean;
   verifiedStreamingDestination?: string;
+  verifiedWatchProviders?: {
+    providerName: string;
+    logoUrl?: string;
+    type: 'flatrate' | 'rent' | 'buy';
+  }[];
   continueWatchingProgress?: {
     percent: number;
     resumeTimeText: string;
   };
-  familySafety: FamilySafetyNotes;
+  familySafety?: FamilySafetyNotes;
+  isVerifiedEditorial?: boolean;
   aiInsights: AIMatchInsights;
   featured?: boolean;
   trending?: boolean;
   familyFavorite?: boolean;
+  // TMDB Metadata fields
+  isFromTMDB?: boolean;
+  tmdbId?: number;
+  originalLanguage?: string;
+  voteCount?: number;
+  certificationStatus?: 'verified' | 'unverified';
 }
 
 export interface UserProfile {

@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import type { Movie, WatchlistItem, UserProfile } from '../../types';
 import { SAMPLE_PROFILES } from '../../data/sampleProfiles';
 import { MOVIES_DATABASE } from '../../data/moviesData';
+import { tmdbMovieService } from '../../services/tmdbService';
 import { MovieCard } from '../movies/MovieCard';
 import { Bookmark, Trash2, CheckCircle2 } from 'lucide-react';
 import { useTVNavigation } from '../../context/TVNavigationContext';
@@ -30,7 +31,7 @@ export const WatchlistHub: React.FC<WatchlistHubProps> = ({
   const watchlistMovies = useMemo(() => {
     return watchlist
       .map((item) => {
-        const movie = MOVIES_DATABASE.find((m) => m.id === item.movieId);
+        const movie = tmdbMovieService.getRegisteredMovie(item.movieId) || MOVIES_DATABASE.find((m) => m.id === item.movieId);
         const profile = SAMPLE_PROFILES.find((p) => p.id === item.addedByProfileId);
         return {
           item,

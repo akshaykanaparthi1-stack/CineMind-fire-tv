@@ -239,6 +239,14 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
           />
         </div>
 
+        {/* TMDB Badge */}
+        <div className={`pt-1 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0 lg:opacity-100'}`}>
+          <div className="flex items-center justify-between px-2.5 py-1 rounded-xl bg-black/40 text-[9px] text-slate-500 font-mono border border-slate-800/60">
+            <span>Metadata:</span>
+            <span className="text-cyan-400 font-bold">TMDB API</span>
+          </div>
+        </div>
+
       </div>
     </aside>
   );
