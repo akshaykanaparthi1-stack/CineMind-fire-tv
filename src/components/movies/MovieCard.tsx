@@ -1,7 +1,8 @@
 import React from 'react';
 import type { Movie } from '../../types';
 import { useTVFocus } from '../../context/TVNavigationContext';
-import { Star, Clock, Bookmark, Sparkles, Check } from 'lucide-react';
+import { MovieImage } from '../common/MovieImage';
+import { Star, Clock, Bookmark, Sparkles, Check, Play } from 'lucide-react';
 
 interface MovieCardProps {
   movie: Movie;
@@ -11,6 +12,7 @@ interface MovieCardProps {
   inWatchlist?: boolean;
   onToggleWatchlist?: (movie: Movie) => void;
   size?: 'standard' | 'large' | 'compact';
+  showProgress?: boolean;
 }
 
 export const MovieCard: React.FC<MovieCardProps> = ({
@@ -21,6 +23,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
   inWatchlist = false,
   onToggleWatchlist,
   size = 'standard',
+  showProgress = false,
 }) => {
   const cardId = `card-${groupName}-${movie.id}`;
 
@@ -68,11 +71,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           : 'hover:scale-102 hover:shadow-2xl border border-white/5'
       }`}
     >
-      {/* Movie Poster Image with Gradient Overlay */}
-      <img
+      {/* Movie Image with Error Fallback */}
+      <MovieImage
         src={movie.posterUrl}
         alt={movie.title}
-        loading="lazy"
+        title={movie.title}
+        year={movie.year}
+        genre={movie.genres[0]}
+        mood={movie.moods[0]}
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
 
@@ -81,7 +87,6 @@ export const MovieCard: React.FC<MovieCardProps> = ({
 
       {/* Top Floating Badges */}
       <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
-        
         {/* CineMind AI Match Score */}
         <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-cinematic-950/85 backdrop-blur-md border border-fire-amber/50 text-fire-amber font-display font-bold text-xs shadow-lg">
           <Sparkles className="w-3 h-3 text-fire-amber animate-pulse" />
@@ -116,9 +121,28 @@ export const MovieCard: React.FC<MovieCardProps> = ({
         </button>
       )}
 
+      {/* Continue Exploring Progress Bar (if applicable) */}
+      {showProgress && movie.continueWatchingProgress && (
+        <div className="absolute top-12 left-3 right-3 z-20">
+          <div className="p-2 rounded-xl bg-black/80 backdrop-blur-md border border-slate-700/60 text-[10px]">
+            <div className="flex items-center justify-between text-slate-300 font-medium mb-1">
+              <span className="flex items-center gap-1 text-fire-amber">
+                <Play className="w-3 h-3 fill-current" /> Resume
+              </span>
+              <span>{movie.continueWatchingProgress.resumeTimeText}</span>
+            </div>
+            <div className="w-full bg-slate-700/80 h-1.5 rounded-full overflow-hidden">
+              <div
+                className="bg-fire-amber h-full rounded-full transition-all"
+                style={{ width: `${movie.continueWatchingProgress.percent}%` }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Bottom Content Metadata */}
       <div className="absolute bottom-0 inset-x-0 p-4 z-10 flex flex-col justify-end">
-        
         {/* Streaming Provider & Mood Badge */}
         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
           <span className="text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded bg-slate-800/90 text-slate-300 border border-slate-700">
@@ -147,7 +171,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
           <span className="text-slate-400">{movie.year}</span>
         </div>
 
-        {/* AI Insight Snippet (visible on focus/hover for 10-foot television clarity) */}
+        {/* AI Insight Snippet */}
         <p className="text-[11px] text-slate-300/90 line-clamp-2 mt-2 leading-snug border-t border-slate-700/50 pt-2 transition-all">
           <span className="text-fire-amber font-semibold">AI Vibe: </span>
           {movie.aiInsights.bestFor}

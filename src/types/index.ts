@@ -49,6 +49,12 @@ export interface Movie {
   cast: string[];
   director: string;
   streamingProvider: 'Prime Video' | 'Freevee' | 'Paramount+' | 'Max' | 'MGM+';
+  isVerifiedStreaming?: boolean;
+  verifiedStreamingDestination?: string;
+  continueWatchingProgress?: {
+    percent: number;
+    resumeTimeText: string;
+  };
   familySafety: FamilySafetyNotes;
   aiInsights: AIMatchInsights;
   featured?: boolean;
@@ -89,4 +95,14 @@ export interface WatchlistItem {
   watched: boolean;
 }
 
-export type ActiveScreen = 'home' | 'moods' | 'family-vote' | 'watchlist' | 'search' | 'profiles';
+export type ActiveScreen = 
+  | 'home' 
+  | 'moods' 
+  | 'genres' 
+  | 'family-vote' 
+  | 'details' 
+  | 'search' 
+  | 'watchlist' 
+  | 'profiles' 
+  | 'settings';
+

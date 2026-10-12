@@ -5,7 +5,7 @@ import { HeroBanner } from './HeroBanner';
 import { MoodSelector } from './MoodSelector';
 import { GenreFilterBar } from './GenreFilterBar';
 import { MovieRail } from '../movies/MovieRail';
-import { Flame, Sparkles, ShieldCheck, Zap, Clock, Heart } from 'lucide-react';
+import { Flame, Sparkles, ShieldCheck, Zap, Clock, PlayCircle } from 'lucide-react';
 
 interface HomeScreenProps {
   onSelectMovie: (movie: Movie) => void;
@@ -15,6 +15,7 @@ interface HomeScreenProps {
   activeProfile: UserProfile;
   familySafeMode: boolean;
   onNavigateToMoodStudio: (mood: MoodType) => void;
+  onNavigateToGenre?: (genre: GenreType) => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -25,11 +26,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   activeProfile,
   familySafeMode,
   onNavigateToMoodStudio,
+  onNavigateToGenre,
 }) => {
   const [selectedGenre, setSelectedGenre] = useState<GenreType | 'All'>('All');
   const [activeMoodFilter, setActiveMoodFilter] = useState<MoodType | null>(null);
 
-  // Featured Hero movie (Spider-Verse or Dune 2, or first available)
+  // Featured Hero movie
   const featuredMovie = useMemo(() => {
     if (familySafeMode) {
       return MOVIES_DATABASE.find((m) => m.id === 'paddington-2') || MOVIES_DATABASE[0];
@@ -53,31 +55,33 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
     });
   }, [familySafeMode, selectedGenre, activeMoodFilter]);
 
-  // Specialized Shelf Rails
-  const trendingMovies = useMemo(() => {
-    return baseMovies.filter((m) => m.trending || m.rating >= 8.0);
+  // Section 1: Continue Exploring (Titles with in-progress viewing)
+  const continueExploringMovies = useMemo(() => {
+    return baseMovies.filter((m) => m.continueWatchingProgress !== undefined);
   }, [baseMovies]);
 
-  const aiTopPicks = useMemo(() => {
+  // Section 2: Recommended for You (AI match ranking)
+  const recommendedForYou = useMemo(() => {
     return [...baseMovies].sort((a, b) => b.aiInsights.matchScore - a.aiInsights.matchScore);
   }, [baseMovies]);
 
-  const familyFavorites = useMemo(() => {
+  // Section 3: Popular Movies
+  const popularMovies = useMemo(() => {
+    return baseMovies.filter((m) => m.trending || m.rating >= 8.0);
+  }, [baseMovies]);
+
+  // Section 4: Family Picks
+  const familyPicks = useMemo(() => {
     return baseMovies.filter((m) => m.familyFavorite || ['G', 'PG'].includes(m.ageRating));
   }, [baseMovies]);
 
-  const highEnergyMovies = useMemo(() => {
-    return baseMovies.filter((m) => m.moods.includes('Excited') || m.genres.includes('Action'));
-  }, [baseMovies]);
-
+  // Extra Curated Rails
   const quickWatches = useMemo(() => {
     return baseMovies.filter((m) => m.runtimeMinutes <= 100);
   }, [baseMovies]);
 
-  const feelGoodMovies = useMemo(() => {
-    return baseMovies.filter(
-      (m) => m.moods.includes('Happy') || m.moods.includes('Relaxed')
-    );
+  const highEnergyMovies = useMemo(() => {
+    return baseMovies.filter((m) => m.moods.includes('Excited') || m.genres.includes('Action'));
   }, [baseMovies]);
 
   const handleMoodSelect = (mood: MoodType) => {
@@ -91,7 +95,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   return (
     <div className="w-full pb-20 animate-fade-in select-none">
       
-      {/* Hero Cinematic Billboard */}
+      {/* 1. Featured Movie Banner */}
       <HeroBanner
         movie={featuredMovie}
         onSelectMovie={onSelectMovie}
@@ -100,7 +104,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         onToggleWatchlist={onToggleWatchlist}
       />
 
-      {/* Mood Selector Strip */}
+      {/* 2. Browse by Mood Section (Interactive mood selection cards) */}
       <MoodSelector
         selectedMood={activeMoodFilter}
         onSelectMood={handleMoodSelect}
@@ -138,6 +142,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 Deep Tune in Mood Studio →
               </button>
             )}
+            {selectedGenre !== 'All' && onNavigateToGenre && (
+              <button
+                onClick={() => onNavigateToGenre(selectedGenre)}
+                className="text-xs text-neon-cyan hover:underline font-semibold"
+              >
+                Explore in Genres Hub →
+              </button>
+            )}
             <button
               onClick={() => {
                 setSelectedGenre('All');
@@ -151,62 +163,65 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
       )}
 
-      {/* Rail 1: Trending Tonight */}
-      <MovieRail
-        title="Trending Tonight on Fire TV"
-        subtitle="Most streamed across your household network this weekend"
-        icon={<Flame className="w-5 h-5 text-fire-amber" />}
-        movies={trendingMovies}
-        groupName="rail-trending"
-        onSelectMovie={onSelectMovie}
-        watchlistIds={watchlistIds}
-        onToggleWatchlist={onToggleWatchlist}
-        cardSize="standard"
-      />
+      {/* 3. Continue Exploring */}
+      {continueExploringMovies.length > 0 && (
+        <MovieRail
+          title="Continue Exploring"
+          subtitle="Pick up right where your household left off"
+          icon={<PlayCircle className="w-5 h-5 text-fire-amber" />}
+          movies={continueExploringMovies}
+          groupName="rail-continue"
+          onSelectMovie={onSelectMovie}
+          watchlistIds={watchlistIds}
+          onToggleWatchlist={onToggleWatchlist}
+          cardSize="standard"
+          showProgress={true}
+        />
+      )}
 
-      {/* Rail 2: AI Match Recommendations */}
+      {/* 4. Recommended for You */}
       <MovieRail
-        title={`CineMind AI Match for ${activeProfile.name.split(' ')[0]}`}
-        subtitle="Ranked by your viewing interests, preferred pacing, and emotional tone"
+        title={`Recommended for You (${activeProfile.name.split(' ')[0]})`}
+        subtitle="Curated by CineMind AI based on your favorite tones, pacing, and rating safety"
         icon={<Sparkles className="w-5 h-5 text-neon-cyan" />}
-        movies={aiTopPicks}
-        groupName="rail-ai-picks"
+        movies={recommendedForYou}
+        groupName="rail-recommended"
         onSelectMovie={onSelectMovie}
         watchlistIds={watchlistIds}
         onToggleWatchlist={onToggleWatchlist}
         cardSize="standard"
       />
 
-      {/* Rail 3: Family Night Favorites */}
+      {/* 5. Popular Movies */}
       <MovieRail
-        title="Family Night Favorites (G & PG)"
-        subtitle="Crowd-tested masterpieces guaranteed to unite parents and kids"
+        title="Popular Movies"
+        subtitle="Trending with top critic and audience ratings across Fire TV"
+        icon={<Flame className="w-5 h-5 text-fire-amber" />}
+        movies={popularMovies}
+        groupName="rail-popular"
+        onSelectMovie={onSelectMovie}
+        watchlistIds={watchlistIds}
+        onToggleWatchlist={onToggleWatchlist}
+        cardSize="standard"
+      />
+
+      {/* 6. Family Picks */}
+      <MovieRail
+        title="Family Picks (G & PG)"
+        subtitle="Verified safe for all ages with zero content warnings"
         icon={<ShieldCheck className="w-5 h-5 text-emerald-400" />}
-        movies={familyFavorites}
-        groupName="rail-family"
+        movies={familyPicks}
+        groupName="rail-family-picks"
         onSelectMovie={onSelectMovie}
         watchlistIds={watchlistIds}
         onToggleWatchlist={onToggleWatchlist}
         cardSize="standard"
       />
 
-      {/* Rail 4: High Energy & Thrills */}
-      <MovieRail
-        title="High Energy Spectacle & Adrenaline"
-        subtitle="Heart-racing blockbusters with thunderous audio and edge-of-seat action"
-        icon={<Zap className="w-5 h-5 text-orange-500" />}
-        movies={highEnergyMovies}
-        groupName="rail-energy"
-        onSelectMovie={onSelectMovie}
-        watchlistIds={watchlistIds}
-        onToggleWatchlist={onToggleWatchlist}
-        cardSize="standard"
-      />
-
-      {/* Rail 5: Under 95 Minutes Quick Watches */}
+      {/* 7. 90-Minute Quick Watches */}
       <MovieRail
         title="90-Minute Quick Watches"
-        subtitle="Perfect for tight schedules, weeknight dinners, and early bedtimes"
+        subtitle="Fast-paced, satisfying features perfect for bedtime constraints"
         icon={<Clock className="w-5 h-5 text-purple-400" />}
         movies={quickWatches}
         groupName="rail-quick"
@@ -216,13 +231,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         cardSize="standard"
       />
 
-      {/* Rail 6: Cozy & Feel Good */}
+      {/* 8. High Energy Spectacle & Adrenaline */}
       <MovieRail
-        title="Feel-Good Smiles & Cozy Vibes"
-        subtitle="Wholesome, uplifting stories to relax and decompress together"
-        icon={<Heart className="w-5 h-5 text-pink-400" />}
-        movies={feelGoodMovies}
-        groupName="rail-cozy"
+        title="High Energy Spectacle & Adrenaline"
+        subtitle="Blockbusters with dynamic audio mixes and thrilling set pieces"
+        icon={<Zap className="w-5 h-5 text-orange-500" />}
+        movies={highEnergyMovies}
+        groupName="rail-energy"
         onSelectMovie={onSelectMovie}
         watchlistIds={watchlistIds}
         onToggleWatchlist={onToggleWatchlist}

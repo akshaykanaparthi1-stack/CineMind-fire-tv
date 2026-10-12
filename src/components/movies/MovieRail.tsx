@@ -13,6 +13,7 @@ interface MovieRailProps {
   watchlistIds?: string[];
   onToggleWatchlist?: (movie: Movie) => void;
   cardSize?: 'standard' | 'large' | 'compact';
+  showProgress?: boolean;
 }
 
 export const MovieRail: React.FC<MovieRailProps> = ({
@@ -25,6 +26,7 @@ export const MovieRail: React.FC<MovieRailProps> = ({
   watchlistIds = [],
   onToggleWatchlist,
   cardSize = 'standard',
+  showProgress = false,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -91,6 +93,7 @@ export const MovieRail: React.FC<MovieRailProps> = ({
             onSelect={onSelectMovie}
             inWatchlist={watchlistIds.includes(movie.id)}
             onToggleWatchlist={onToggleWatchlist}
+            showProgress={showProgress}
           />
         ))}
       </div>

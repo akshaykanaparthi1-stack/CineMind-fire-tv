@@ -17,6 +17,12 @@ export const MOVIES_DATABASE: Movie[] = [
     cast: ['Shameik Moore', 'Hailee Steinfeld', 'Oscar Isaac', 'Daniel Kaluuya'],
     director: 'Joaquim Dos Santos, Kemp Powers',
     streamingProvider: 'Prime Video',
+    isVerifiedStreaming: true,
+    verifiedStreamingDestination: 'Prime Video (Verified Amazon Catalog)',
+    continueWatchingProgress: {
+      percent: 72,
+      resumeTimeText: '40m remaining'
+    },
     featured: true,
     trending: true,
     familyFavorite: true,
@@ -55,6 +61,12 @@ export const MOVIES_DATABASE: Movie[] = [
     cast: ['Ben Whishaw', 'Hugh Grant', 'Sally Hawkins', 'Hugh Bonneville'],
     director: 'Paul King',
     streamingProvider: 'Prime Video',
+    isVerifiedStreaming: true,
+    verifiedStreamingDestination: 'Prime Video (Verified Amazon Catalog)',
+    continueWatchingProgress: {
+      percent: 45,
+      resumeTimeText: '56m remaining'
+    },
     trending: true,
     familyFavorite: true,
     familySafety: {
@@ -92,6 +104,12 @@ export const MOVIES_DATABASE: Movie[] = [
     cast: ['Matthew McConaughey', 'Anne Hathaway', 'Jessica Chastain', 'Michael Caine'],
     director: 'Christopher Nolan',
     streamingProvider: 'Prime Video',
+    isVerifiedStreaming: true,
+    verifiedStreamingDestination: 'Prime Video (Verified Amazon Catalog)',
+    continueWatchingProgress: {
+      percent: 60,
+      resumeTimeText: '1h 08m remaining'
+    },
     featured: true,
     familySafety: {
       violence: 'Tense survival situations, perilous space travel, minor fistfight.',
@@ -128,6 +146,12 @@ export const MOVIES_DATABASE: Movie[] = [
     cast: ['Daniel Craig', 'Ana de Armas', 'Chris Evans', 'Jamie Lee Curtis'],
     director: 'Rian Johnson',
     streamingProvider: 'Prime Video',
+    isVerifiedStreaming: true,
+    verifiedStreamingDestination: 'Prime Video (Verified Amazon Catalog)',
+    continueWatchingProgress: {
+      percent: 85,
+      resumeTimeText: '20m remaining'
+    },
     trending: true,
     familySafety: {
       violence: 'Murder mystery setting, discussion of death, comedic suspense.',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { Movie } from '../../types';
 import { useTVFocus } from '../../context/TVNavigationContext';
+import { MovieImage } from '../common/MovieImage';
 import { 
   X, 
   Play, 
@@ -11,7 +12,9 @@ import {
   Clock, 
   ShieldCheck, 
   Sparkles, 
-  Info
+  Info,
+  AlertTriangle,
+  Tv
 } from 'lucide-react';
 
 interface MovieDetailModalProps {
@@ -29,8 +32,9 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
   inWatchlist,
   onToggleWatchlist,
 }) => {
-  const [activeTab, setActiveTab] = useState<'ai' | 'safety' | 'cast'>('ai');
+  const [activeTab, setActiveTab] = useState<'overview' | 'ai' | 'safety' | 'cast'>('overview');
   const [isPlayingTrailer, setIsPlayingTrailer] = useState(false);
+  const [showWhereToWatchModal, setShowWhereToWatchModal] = useState(false);
 
   useEffect(() => {
     const handleTVBack = () => {
@@ -45,9 +49,9 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
     onSelect: onClose,
   });
 
-  const playBtn = useTVFocus('modal-btn-play', 'modal-actions', {
+  const watchlistBtn = useTVFocus('modal-btn-watchlist', 'modal-actions', {
     order: 1,
-    onSelect: () => setIsPlayingTrailer(true),
+    onSelect: () => movie && onToggleWatchlist(movie),
   });
 
   const voteBtn = useTVFocus('modal-btn-vote', 'modal-actions', {
@@ -55,9 +59,14 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
     onSelect: () => movie && onStartFamilyVote(movie),
   });
 
-  const watchlistBtn = useTVFocus('modal-btn-watchlist', 'modal-actions', {
+  const watchBtn = useTVFocus('modal-btn-where-to-watch', 'modal-actions', {
     order: 3,
-    onSelect: () => movie && onToggleWatchlist(movie),
+    onSelect: () => setShowWhereToWatchModal(true),
+  });
+
+  const trailerBtn = useTVFocus('modal-btn-trailer', 'modal-actions', {
+    order: 4,
+    onSelect: () => setIsPlayingTrailer(true),
   });
 
   if (!movie) return null;
@@ -79,7 +88,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                 Now Streaming Fire TV Preview
               </h4>
               <p className="text-xs text-slate-400 max-w-md">
-                Simulating high-definition 4K HDR playback for "{movie.title}" on {movie.streamingProvider}.
+                Simulating 4K HDR playback for "{movie.title}" on {movie.streamingProvider}.
               </p>
               <button
                 onClick={() => setIsPlayingTrailer(false)}
@@ -90,9 +99,13 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             </div>
           ) : (
             <>
-              <img
+              <MovieImage
                 src={movie.backdropUrl}
                 alt={movie.title}
+                title={movie.title}
+                year={movie.year}
+                genre={movie.genres[0]}
+                aspectRatio="backdrop"
                 className="w-full h-full object-cover object-center"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-cinematic-900 via-cinematic-900/60 to-transparent" />
@@ -162,21 +175,26 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
         {/* Modal Body */}
         <div className="p-6 sm:p-8 flex-1 flex flex-col">
           
-          {/* Action Buttons Row */}
+          {/* Action Buttons Row: Add to Watchlist, Vote for This Movie, Find Where to Watch */}
           <div className="flex items-center gap-3 pb-6 border-b border-slate-800/80 flex-wrap">
+            
+            {/* 1. Add to Watchlist Button */}
             <button
-              ref={playBtn.ref as any}
-              onClick={() => setIsPlayingTrailer(true)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm tracking-wide transition-all tv-focusable ${
-                playBtn.isFocused
-                  ? 'bg-fire-amber text-black ring-4 ring-fire-amber/60 scale-105 shadow-lg shadow-fire-amber/40'
-                  : 'bg-white text-black hover:bg-slate-200'
+              ref={watchlistBtn.ref as any}
+              onClick={() => onToggleWatchlist(movie)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all tv-focusable ${
+                watchlistBtn.isFocused
+                  ? 'bg-slate-700 text-white ring-4 ring-fire-amber scale-105'
+                  : inWatchlist
+                  ? 'bg-fire-amber text-black font-extrabold shadow-md'
+                  : 'bg-slate-800/90 text-slate-200 hover:bg-slate-700 border border-slate-700'
               }`}
             >
-              <Play className="w-4 h-4 fill-current" />
-              <span>Watch Trailer</span>
+              {inWatchlist ? <Check className="w-4 h-4 stroke-[3]" /> : <Bookmark className="w-4 h-4" />}
+              <span>{inWatchlist ? 'In Your Watchlist' : 'Add to Watchlist'}</span>
             </button>
 
+            {/* 2. Vote for This Movie Button */}
             <button
               ref={voteBtn.ref as any}
               onClick={() => onStartFamilyVote(movie)}
@@ -187,37 +205,105 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
               }`}
             >
               <Vote className="w-4 h-4" />
-              <span>Start Family Vote</span>
+              <span>Vote for This Movie</span>
             </button>
 
+            {/* 3. Find Where to Watch (With Verified Indicator) */}
             <button
-              ref={watchlistBtn.ref as any}
-              onClick={() => onToggleWatchlist(movie)}
-              className={`flex items-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition-all tv-focusable ${
-                watchlistBtn.isFocused
-                  ? 'bg-slate-700 text-white ring-4 ring-fire-amber scale-105'
-                  : inWatchlist
-                  ? 'bg-fire-amber/20 text-fire-amber border border-fire-amber/50'
-                  : 'bg-slate-800/90 text-slate-200 hover:bg-slate-700 border border-slate-700'
+              ref={watchBtn.ref as any}
+              onClick={() => setShowWhereToWatchModal(true)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm tracking-wide transition-all tv-focusable ${
+                watchBtn.isFocused
+                  ? 'bg-fire-amber text-black ring-4 ring-fire-amber/60 scale-105 shadow-lg shadow-fire-amber/40'
+                  : movie.isVerifiedStreaming
+                  ? 'bg-white text-black hover:bg-slate-200'
+                  : 'bg-slate-800 text-slate-300 hover:text-white border border-slate-700'
               }`}
             >
-              {inWatchlist ? <Check className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
-              <span>{inWatchlist ? 'Added to Watchlist' : 'Add to Watchlist'}</span>
+              {movie.isVerifiedStreaming ? (
+                <>
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Find Where to Watch (Verified)</span>
+                </>
+              ) : (
+                <>
+                  <Tv className="w-4 h-4 text-amber-400" />
+                  <span>Find Where to Watch</span>
+                </>
+              )}
+            </button>
+
+            {/* Watch Trailer Preview Button */}
+            <button
+              ref={trailerBtn.ref as any}
+              onClick={() => setIsPlayingTrailer(true)}
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl font-semibold text-xs text-slate-300 hover:text-white bg-slate-900/80 border border-slate-800 transition-all tv-focusable ${
+                trailerBtn.isFocused ? 'tv-focused ring-2 ring-fire-amber' : ''
+              }`}
+            >
+              <Play className="w-3.5 h-3.5" />
+              <span>Preview Trailer</span>
             </button>
           </div>
 
-          {/* Synopsis */}
-          <div className="my-5">
-            <h4 className="text-xs uppercase font-bold tracking-wider text-slate-400 mb-2">
-              Synopsis
-            </h4>
-            <p className="text-sm leading-relaxed text-slate-200">
-              {movie.synopsis}
-            </p>
-          </div>
+          {/* Where to Watch Status Notification if clicked or unverified */}
+          {showWhereToWatchModal && (
+            <div className="my-4 p-4 rounded-2xl bg-slate-800/90 border border-slate-700 animate-fade-in flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {movie.isVerifiedStreaming ? (
+                    <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                  ) : (
+                    <AlertTriangle className="w-5 h-5 text-amber-400" />
+                  )}
+                  <h4 className="text-sm font-bold text-white">
+                    Streaming Availability on Fire TV
+                  </h4>
+                </div>
+                <button
+                  onClick={() => setShowWhereToWatchModal(false)}
+                  className="text-slate-400 hover:text-white text-xs"
+                >
+                  Dismiss
+                </button>
+              </div>
 
-          {/* Tab Switcher: AI Insights / Parental Safety / Cast & Info */}
-          <div className="flex items-center gap-2 mb-4 border-b border-slate-800">
+              {movie.isVerifiedStreaming ? (
+                <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-xs">
+                  <p className="font-semibold text-emerald-300 flex items-center gap-1.5 mb-1">
+                    <Check className="w-4 h-4 text-emerald-400" />
+                    Verified Destination: {movie.streamingProvider}
+                  </p>
+                  <p className="text-slate-300">
+                    This title is verified and ready for instant playback in your Amazon Prime Video library or Fire TV subscription.
+                  </p>
+                </div>
+              ) : (
+                <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/40 text-xs">
+                  <p className="font-semibold text-amber-300 flex items-center gap-1.5 mb-1">
+                    <AlertTriangle className="w-4 h-4 text-amber-400" />
+                    Availability Not Verified
+                  </p>
+                  <p className="text-slate-300">
+                    Live streaming rights for "{movie.title}" on {movie.streamingProvider} have not been verified for your local region. Please search your local Fire TV app store or regional channels.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Tab Switcher: Overview / AI Match / Parental Safety / Cast */}
+          <div className="flex items-center gap-2 my-4 border-b border-slate-800">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`pb-2.5 px-3 text-xs font-bold tracking-wider uppercase transition-colors border-b-2 ${
+                activeTab === 'overview'
+                  ? 'border-fire-amber text-fire-amber'
+                  : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              📖 Overview & Genres
+            </button>
             <button
               onClick={() => setActiveTab('ai')}
               className={`pb-2.5 px-3 text-xs font-bold tracking-wider uppercase transition-colors border-b-2 ${
@@ -236,7 +322,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
-              🛡️ Family Safety & Ratings
+              🛡️ Age Rating & Safety Guide
             </button>
             <button
               onClick={() => setActiveTab('cast')}
@@ -250,7 +336,60 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             </button>
           </div>
 
-          {/* Tab 1: AI Insights */}
+          {/* Tab: Overview */}
+          {activeTab === 'overview' && (
+            <div className="space-y-4 animate-fade-in">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                {/* Poster Card */}
+                <div className="w-40 min-w-[160px] aspect-[2/3] rounded-2xl overflow-hidden shadow-xl border border-slate-700/60 hidden sm:block">
+                  <MovieImage
+                    src={movie.posterUrl}
+                    alt={movie.title}
+                    title={movie.title}
+                    year={movie.year}
+                    genre={movie.genres[0]}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                <div className="flex-1 space-y-3">
+                  <div>
+                    <h4 className="text-xs uppercase font-bold tracking-wider text-slate-400 mb-1">
+                      Overview & Story
+                    </h4>
+                    <p className="text-sm leading-relaxed text-slate-200">
+                      {movie.synopsis}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs uppercase font-bold tracking-wider text-slate-400 mb-1.5">
+                      Genres
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {movie.genres.map((g) => (
+                        <span
+                          key={g}
+                          className="px-3 py-1 rounded-xl text-xs bg-slate-800 text-slate-200 border border-slate-700 font-medium"
+                        >
+                          {g}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <span className="text-xs text-slate-400 font-semibold">Mood Alignment: </span>
+                    <span className="text-xs text-fire-amber font-bold">
+                      {movie.moods.join(' • ')}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Tab: AI Insights */}
           {activeTab === 'ai' && (
             <div className="space-y-4 animate-fade-in">
               <div className="p-4 rounded-2xl bg-cinematic-950/70 border border-fire-amber/30">
@@ -271,7 +410,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
                 </ul>
               </div>
 
-              {/* Tone Meters (Humor, Thrill, Emotion, Pacing) */}
+              {/* Tone Meters */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
@@ -345,7 +484,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             </div>
           )}
 
-          {/* Tab 2: Family Safety Guide */}
+          {/* Tab: Safety Guide */}
           {activeTab === 'safety' && (
             <div className="space-y-3.5 animate-fade-in">
               <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/40">
@@ -389,7 +528,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
             </div>
           )}
 
-          {/* Tab 3: Cast & Metadata */}
+          {/* Tab: Cast & Metadata */}
           {activeTab === 'cast' && (
             <div className="space-y-4 animate-fade-in">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -404,18 +543,11 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
 
                 <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60">
                   <span className="text-xs uppercase font-bold text-slate-400 block mb-2">
-                    Genres
+                    Release Information
                   </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {movie.genres.map((g) => (
-                      <span
-                        key={g}
-                        className="px-2 py-0.5 rounded text-xs bg-slate-700 text-slate-200"
-                      >
-                        {g}
-                      </span>
-                    ))}
-                  </div>
+                  <span className="text-sm text-slate-200">
+                    Year: {movie.year} • Runtime: {movie.runtimeMinutes} min
+                  </span>
                 </div>
               </div>
 
