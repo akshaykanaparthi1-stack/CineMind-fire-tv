@@ -215,6 +215,8 @@ const AppContent: React.FC = () => {
             <FamilyVoteHub
               onSelectMovie={setSelectedMovie}
               preSelectedMovie={familyVoteCandidate}
+              onAddToWatchlist={handleToggleWatchlist}
+              watchlistIds={watchlistIds}
             />
           )}
 
