@@ -4,6 +4,7 @@ import { SAMPLE_PROFILES } from './data/sampleProfiles';
 import { MOVIES_DATABASE } from './data/moviesData';
 import { TVNavigationProvider } from './context/TVNavigationContext';
 import { LeftNavigationRail } from './components/navigation/LeftNavigationRail';
+import { TopSearchBar } from './components/navigation/TopSearchBar';
 import { HomeScreen } from './components/home/HomeScreen';
 import { MoodStudio } from './components/moods/MoodStudio';
 import { GenresScreen } from './components/genres/GenresScreen';
@@ -203,6 +204,22 @@ const AppContent: React.FC = () => {
       {/* 2. Main Screen Viewport (Offset for left-rail on TV display) */}
       <div className="flex-1 w-full pl-20 lg:pl-64 flex flex-col transition-all duration-300">
         
+        {/* Top Omnibar Search Bar & Branding Header */}
+        <TopSearchBar
+          onSelectMovie={setSelectedMovie}
+          onNavigateToSearch={(query) => {
+            setSearchQuery(query);
+            setActiveScreen('search');
+          }}
+          activeProfile={activeProfile}
+          familySafeMode={familySafeMode}
+          onToggleFamilySafeMode={() => setFamilySafeMode((prev) => !prev)}
+          onProfileClick={() => setActiveScreen('profiles')}
+          watchlistCount={watchlist.length}
+          onNavigateToWatchlist={() => setActiveScreen('watchlist')}
+          onNavigateToHome={() => setActiveScreen('home')}
+        />
+
         <main className="flex-1 w-full pb-16">
           {/* Screen 1: Home Screen */}
           {activeScreen === 'home' && (

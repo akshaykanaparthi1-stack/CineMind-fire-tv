@@ -10,7 +10,6 @@ import {
   Bookmark, 
   Users, 
   Settings, 
-  Sparkles, 
   Tv, 
   ShieldCheck,
   ChevronRight
@@ -153,10 +152,15 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
           onClick={() => handleSelect('home')}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="w-11 h-11 rounded-none bg-gradient-to-tr from-fire-amber to-purple-600 p-0.5 shadow-lg shadow-fire-amber/20 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-cinematic-900 rounded-none flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-fire-amber" />
-            </div>
+          <div className="w-11 h-11 rounded-none bg-blue-600/30 p-0.5 border border-blue-500/50 shadow-lg shadow-blue-900/30 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+            <img 
+              src="/cinemind-mark.png" 
+              alt="CineMind Logo" 
+              className="w-full h-full object-cover rounded-none"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = '/cinemind-logo.jpg';
+              }}
+            />
           </div>
           <div
             className={`transition-opacity duration-200 overflow-hidden ${
@@ -170,7 +174,10 @@ export const LeftNavigationRail: React.FC<LeftNavigationRailProps> = ({
             </div>
             <span className="flex items-center gap-1 text-[9px] font-bold tracking-wider uppercase text-slate-400">
               <Tv className="w-3 h-3 text-fire-amber" />
-              Fire TV Edition
+              Fire TV App
+            </span>
+            <span className="text-[9px] text-slate-500 block truncate">
+              by Kanaparthi Akshay
             </span>
           </div>
         </div>
