@@ -26,8 +26,8 @@ export interface BackendResponse<T> {
   source: 'supabase' | 'demo';
 }
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:8000';
-const DEFAULT_TIMEOUT_MS = 4000;
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || (import.meta.env.PROD ? '' : 'http://localhost:8000');
+const DEFAULT_TIMEOUT_MS = 6000;
 
 class ApiClient {
   private baseUrl: string;

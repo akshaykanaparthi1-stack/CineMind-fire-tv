@@ -36,10 +36,11 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS Configuration for Fire TV Web app & Vite development
+# CORS Configuration for Fire TV Web app, Vite development, and Vercel domains
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
+    allow_origin_regex=r"https?://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
