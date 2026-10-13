@@ -125,6 +125,14 @@ class SupabaseService:
 
     def get_status(self) -> Dict[str, Any]:
         """Check whether Supabase is reachable and whether tables are present."""
+        if self.client and self._is_connected and not self._tables_verified:
+            try:
+                res = self.client.table("profiles").select("id").limit(1).execute()
+                if res.data is not None:
+                    self._tables_verified = True
+            except Exception as e:
+                logger.debug(f"Supabase table probe in get_status failed: {e}")
+
         return {
             "is_configured": bool(settings.supabase_url and settings.supabase_secret_key),
             "is_connected": self._is_connected,
@@ -224,6 +232,7 @@ class SupabaseService:
     async def add_to_watchlist(self, item: Dict[str, Any]) -> Tuple[Dict[str, Any], str]:
         """Add item to watchlist."""
         item_copy = dict(item)
+        item_copy.pop("is_family_shared", None)
         if "added_at" not in item_copy:
             item_copy["added_at"] = datetime.now().isoformat()
         if "watched" not in item_copy:
@@ -231,7 +240,9 @@ class SupabaseService:
 
         if self.client:
             try:
-                res = self.client.table("watchlist_items").upsert(item_copy).execute()
+                res = self.client.table("watchlist_items").upsert(
+                    item_copy, on_conflict="profile_id,movie_id"
+                ).execute()
                 if res.data and len(res.data) > 0:
                     self._tables_verified = True
                     return res.data[0], "supabase"
@@ -369,7 +380,9 @@ class SupabaseService:
         participant["session_id"] = session_id
         if self.client:
             try:
-                res = self.client.table("session_participants").upsert(participant).execute()
+                res = self.client.table("session_participants").upsert(
+                    participant, on_conflict="session_id,participant_id"
+                ).execute()
                 if res.data and len(res.data) > 0:
                     self._tables_verified = True
                     return res.data[0], "supabase"
@@ -396,7 +409,9 @@ class SupabaseService:
         }
         if self.client:
             try:
-                res = self.client.table("session_votes").upsert(vote_record).execute()
+                res = self.client.table("session_votes").upsert(
+                    vote_record, on_conflict="session_id,participant_id,movie_id"
+                ).execute()
                 if res.data and len(res.data) > 0:
                     self._tables_verified = True
                     return res.data[0], "supabase"
@@ -427,7 +442,9 @@ class SupabaseService:
                         "participant_breakdowns": [p.dict() if hasattr(p, 'dict') else p for p in r.get("participant_breakdowns", [])],
                         "ai_explanation": r.get("ai_explanation")
                     })
-                res = self.client.table("session_results").upsert(db_records).execute()
+                res = self.client.table("session_results").upsert(
+                    db_records, on_conflict="session_id,movie_id"
+                ).execute()
                 if res.data:
                     self._tables_verified = True
                     return results, "supabase"

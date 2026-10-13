@@ -125,13 +125,26 @@ ALTER TABLE public.session_votes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.session_results ENABLE ROW LEVEL SECURITY;
 
 -- Allow public / anon reading and writing for the household Fire TV app
-CREATE POLICY "Public profiles access" ON public.profiles FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Public preferences access" ON public.profile_preferences FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Public watchlist access" ON public.watchlist_items FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Public sessions access" ON public.family_sessions FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Public participants access" ON public.session_participants FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Public votes access" ON public.session_votes FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Public results access" ON public.session_results FOR ALL USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS public_profiles_access ON public.profiles;
+CREATE POLICY public_profiles_access ON public.profiles FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS public_preferences_access ON public.profile_preferences;
+CREATE POLICY public_preferences_access ON public.profile_preferences FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS public_watchlist_access ON public.watchlist_items;
+CREATE POLICY public_watchlist_access ON public.watchlist_items FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS public_sessions_access ON public.family_sessions;
+CREATE POLICY public_sessions_access ON public.family_sessions FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS public_participants_access ON public.session_participants;
+CREATE POLICY public_participants_access ON public.session_participants FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS public_votes_access ON public.session_votes;
+CREATE POLICY public_votes_access ON public.session_votes FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS public_results_access ON public.session_results;
+CREATE POLICY public_results_access ON public.session_results FOR ALL USING (true) WITH CHECK (true);
 
 -- ====================================================================
 -- INITIAL SEED DATA FOR HOUSEHOLD PROFILES
