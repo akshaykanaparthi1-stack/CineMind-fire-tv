@@ -38,6 +38,10 @@ class ApiClient {
     this.baseUrl = baseUrl.replace(/\/+$/, '');
   }
 
+  getBaseUrl(): string {
+    return this.baseUrl;
+  }
+
   /**
    * Helper to execute fetch with timeout
    */

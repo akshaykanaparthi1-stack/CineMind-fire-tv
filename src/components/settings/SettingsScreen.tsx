@@ -481,11 +481,11 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               🚀 Backend API:
             </span>
             <div className="text-slate-300 space-y-1">
-              <div>Endpoint: <code className="text-neutral-300 font-mono text-[10px]">http://localhost:8000</code></div>
+              <div>Endpoint: <code className="text-neutral-300 font-mono text-[10px]">{apiClient.getBaseUrl() || (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'Production API')}</code></div>
               <div>Status: <span className={backendHealth?.online ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
                 {backendHealth?.online ? 'Healthy (v1.0.0)' : 'Offline / Standalone'}
               </span></div>
-              <div>Interactive Docs: <a href="http://localhost:8000/docs" target="_blank" rel="noreferrer" className="text-amber-400 underline hover:text-white">/docs</a></div>
+              <div>Interactive Docs: <a href={apiClient.getBaseUrl() ? `${apiClient.getBaseUrl()}/docs` : '/docs'} target="_blank" rel="noreferrer" className="text-amber-400 underline hover:text-white">/docs</a></div>
             </div>
           </div>
 
