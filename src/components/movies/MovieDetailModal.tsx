@@ -93,7 +93,7 @@ export const MovieDetailModal: React.FC<MovieDetailModalProps> = ({
       <div className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto no-scrollbar rounded-3xl bg-cinematic-900 border border-slate-700/80 shadow-[0_25px_70px_rgba(0,0,0,0.95)] text-slate-100 flex flex-col">
         
         {/* Backdrop Banner / Video Player */}
-        <div className="relative w-full h-80 sm:h-96 overflow-hidden flex-shrink-0">
+        <div className="keep-dark relative w-full h-80 sm:h-96 overflow-hidden flex-shrink-0">
           {isPlayingTrailer ? (
             <div className="relative w-full h-full bg-black flex flex-col items-center justify-center p-6 text-center">
               <div className="w-16 h-16 rounded-full bg-fire-amber/20 border border-fire-amber flex items-center justify-center mb-3 animate-pulse">

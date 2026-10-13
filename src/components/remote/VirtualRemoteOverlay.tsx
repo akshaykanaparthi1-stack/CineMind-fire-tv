@@ -140,7 +140,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
     return (
       <button
         onClick={() => setIsVirtualRemoteOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 remote-pill bg-neutral-900 border border-neutral-700 text-slate-200 hover:text-white shadow-xl hover:border-neutral-500 transition-all hover:scale-105 group"
+        className="keep-dark fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 remote-pill bg-neutral-900 border border-neutral-700 text-slate-200 hover:text-white shadow-xl hover:border-neutral-500 transition-all hover:scale-105 group"
         title="Open Fire TV Remote with Rounded Curves (Press R)"
       >
         <span className="relative flex h-3 w-3">
@@ -161,7 +161,7 @@ export const VirtualRemoteOverlay: React.FC<VirtualRemoteProps> = ({
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="keep-dark fixed bottom-6 right-6 z-50 flex flex-col items-end">
       
       {/* Real Audio-to-Text Voice HUD when active */}
       {isAudioListening && (

@@ -18,6 +18,7 @@ import {
   ArrowRight,
   TrendingUp
 } from 'lucide-react';
+import { ThemeToggleButton } from '../common/ThemeToggleButton';
 
 interface TopSearchBarProps {
   onSelectMovie: (movie: Movie) => void;
@@ -615,6 +616,9 @@ export const TopSearchBar: React.FC<TopSearchBarProps> = ({
               </span>
             )}
           </button>
+
+          {/* Small Dark / Light Mode Toggle Button */}
+          <ThemeToggleButton />
 
           {/* Active Profile Pill */}
           <button

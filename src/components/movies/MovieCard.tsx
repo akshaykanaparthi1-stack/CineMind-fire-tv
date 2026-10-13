@@ -65,7 +65,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({
       ref={ref as any}
       tabIndex={0}
       onClick={() => onSelect(movie)}
-      className={`relative group flex-shrink-0 cursor-pointer rounded-none overflow-hidden transition-all duration-200 select-none tv-focusable ${widthClass} ${heightClass} ${
+      className={`keep-dark relative group flex-shrink-0 cursor-pointer rounded-none overflow-hidden transition-all duration-200 select-none tv-focusable ${widthClass} ${heightClass} ${
         isFocused
           ? 'scale-104 z-30 shadow-[0_0_0_2px_#ffffff,0_12px_28px_rgba(0,0,0,0.7)]'
           : 'hover:scale-102 border border-white/5'

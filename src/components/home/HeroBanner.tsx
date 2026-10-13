@@ -49,7 +49,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   });
 
   return (
-    <div className="relative w-full h-[580px] lg:h-[640px] overflow-hidden select-none">
+    <div className="keep-dark relative w-full h-[580px] lg:h-[640px] overflow-hidden select-none">
       
       {/* Background Backdrop Image */}
       <div className="absolute inset-0">

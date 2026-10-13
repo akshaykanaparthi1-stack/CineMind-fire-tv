@@ -3,6 +3,7 @@ import type { ActiveScreen, Movie, MoodType, GenreType, WatchlistItem, UserProfi
 import { SAMPLE_PROFILES } from './data/sampleProfiles';
 import { MOVIES_DATABASE } from './data/moviesData';
 import { TVNavigationProvider } from './context/TVNavigationContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { LeftNavigationRail } from './components/navigation/LeftNavigationRail';
 import { TopSearchBar } from './components/navigation/TopSearchBar';
 import { HomeScreen } from './components/home/HomeScreen';
@@ -358,9 +359,11 @@ const AppContent: React.FC = () => {
 
 export function App() {
   return (
-    <TVNavigationProvider>
-      <AppContent />
-    </TVNavigationProvider>
+    <ThemeProvider>
+      <TVNavigationProvider>
+        <AppContent />
+      </TVNavigationProvider>
+    </ThemeProvider>
   );
 }
 

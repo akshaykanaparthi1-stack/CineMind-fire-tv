@@ -15,8 +15,11 @@ import {
   Cpu,
   Database,
   RefreshCw,
-  Server
+  Server,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 interface SettingsScreenProps {
   familySafeMode: boolean;
@@ -31,6 +34,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   onResetWatchlist,
 }) => {
   const { soundEnabled, setSoundEnabled, playFeedbackSound, setIsVirtualRemoteOpen } = useTVNavigation();
+  const { isDarkMode, setTheme } = useTheme();
 
   const [overscanSetting, setOverscanSetting] = useState<'none' | 'moderate' | 'full'>('moderate');
   const [highContrast, setHighContrast] = useState(false);
@@ -149,7 +153,55 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/60">
+          <div>
+            <label className="text-xs uppercase font-bold tracking-wider text-slate-300 block mb-2">
+              Appearance Theme
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => {
+                  playFeedbackSound('select');
+                  setTheme('dark');
+                  showNotification('Switched to Dark Mode');
+                }}
+                className={`p-3 rounded-none border text-left transition-all flex items-center gap-2.5 ${
+                  isDarkMode
+                    ? 'bg-fire-amber text-black font-bold border-fire-amber shadow-md'
+                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-750'
+                }`}
+              >
+                <Moon className="w-4 h-4 flex-shrink-0" />
+                <div>
+                  <span className="text-xs font-bold block">Dark Mode</span>
+                  <span className={`text-[10px] ${isDarkMode ? 'text-black/80' : 'text-slate-400'}`}>
+                    Cinema Obsidian
+                  </span>
+                </div>
+              </button>
+              <button
+                onClick={() => {
+                  playFeedbackSound('select');
+                  setTheme('light');
+                  showNotification('Switched to Light Mode');
+                }}
+                className={`p-3 rounded-none border text-left transition-all flex items-center gap-2.5 ${
+                  !isDarkMode
+                    ? 'bg-fire-amber text-black font-bold border-fire-amber shadow-md'
+                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-750'
+                }`}
+              >
+                <Sun className="w-4 h-4 flex-shrink-0" />
+                <div>
+                  <span className="text-xs font-bold block">Light Mode</span>
+                  <span className={`text-[10px] ${!isDarkMode ? 'text-black/80' : 'text-slate-400'}`}>
+                    Daylight Clean
+                  </span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between p-3.5 rounded-none bg-slate-800/60 border border-slate-700/60">
             <div>
               <span className="text-sm font-bold text-white block">High Contrast TV Text</span>
               <span className="text-xs text-slate-400">Enhance subtitles and card labels for viewing at 12+ feet</span>
@@ -159,12 +211,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 playFeedbackSound('select');
                 setHighContrast(!highContrast);
               }}
-              className={`w-12 h-6 rounded-full transition-colors relative p-0.5 ${
+              className={`w-12 h-6 rounded-none transition-colors relative p-0.5 ${
                 highContrast ? 'bg-fire-amber' : 'bg-slate-700'
               }`}
             >
               <div
-                className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                className={`w-5 h-5 rounded-none bg-white transition-transform ${
                   highContrast ? 'translate-x-6' : 'translate-x-0'
                 }`}
               />
